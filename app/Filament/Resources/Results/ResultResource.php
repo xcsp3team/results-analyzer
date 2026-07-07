@@ -92,6 +92,8 @@ class ResultResource extends Resource
                 SelectFilter::make('solver')
                     ->relationship('solver', 'name')
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
+                    ->preload()
+                ->searchable(),
             ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 EditAction::make(),
