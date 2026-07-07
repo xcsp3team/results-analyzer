@@ -181,6 +181,9 @@
       <path value="$PROJECT_DIR$/vendor/filament/actions" />
       <path value="$PROJECT_DIR$/vendor/filament/widgets" />
       <path value="$PROJECT_DIR$/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/vendor/fruitcake/laravel-debugbar" />
+      <path value="$PROJECT_DIR$/vendor/php-debugbar/php-debugbar" />
+      <path value="$PROJECT_DIR$/vendor/php-debugbar/symfony-bridge" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3">
