@@ -65,4 +65,15 @@ class Competition extends Model
         return $this->belongsToMany(Solver::class, "competition_solver_cop", "competition_id", "solver_id")->withPivot("nb_benchmarks");
     }
 
+    public function displaysolvers() {
+        if(Schema::hasTable("display")) {
+            $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
+            if($tmp->count() > 0) {
+                return $tmp->get();
+            }
+        }
+        return $this->solvers();
+    }
+
+
 }
