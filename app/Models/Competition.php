@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -44,16 +45,14 @@ class Competition extends Model
         return $this->hasMany("App\Models\Benchmark", 'competition_id');
     }
 
-    public function displaysolvers() {
-        if(Schema::hasTable("display")) {
-            $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
-            if($tmp->count() > 0) {
-                return $tmp->get();
-            }
-        }
-        return $this->solvers();
 
+    public function benchmarks2() : HasMany{ // For filament
+        return $this->hasMany(Benchmark::class); // table "benchmarks"
+    }
 
+    public function benchmarksCop(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Benchmark_cop::class); // table "benchmarks_cop"
     }
 
 }

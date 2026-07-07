@@ -35,6 +35,8 @@ class CompetitionResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\Benchmarks2RelationManager::class,
+            RelationManagers\BenchmarksCopRelationManager::class,
         ];
 
     }
