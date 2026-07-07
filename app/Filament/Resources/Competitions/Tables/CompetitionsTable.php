@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Competitions\Tables;
 
+use App\Filament\Pages\MissingResults;
 use App\Models\Competition;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -37,6 +39,8 @@ class CompetitionsTable
                 //
             ])
             ->recordActions([
+                Action::make('Missing')
+                    ->url(fn (Competition $record) => MissingResults::getUrl(['competition' => $record->id])),
                 EditAction::make(),
             ])
             ->toolbarActions([
