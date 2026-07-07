@@ -18,12 +18,14 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class BenchmarkResource extends Resource
 {
     protected static ?string $model = Benchmark::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+protected static string | UnitEnum | null $navigationGroup = "Benchmarks";
+protected static ?string $navigationLabel = "CSP";
+protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {

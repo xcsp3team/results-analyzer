@@ -20,11 +20,14 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class BenchmarkCopResource extends Resource
 {
     protected static ?string $model = Benchmark_cop::class;
-    protected static ?string $label = "Benchmark COP";
+    protected static ?string $navigationLabel = "COP";
+    protected static string | UnitEnum | null $navigationGroup = "Benchmarks";
+    protected static ?string $label = "COP";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

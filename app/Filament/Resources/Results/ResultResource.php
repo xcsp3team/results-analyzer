@@ -22,10 +22,15 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
+use UnitEnum;
 
 class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
+    protected static ?int $navigationSort = 4;
+
+    protected static ?string $navigationLabel = "CSP";
+    protected static string | UnitEnum | null $navigationGroup = "Results";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
