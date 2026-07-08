@@ -17,6 +17,18 @@ use Illuminate\Support\Facades\Schema;
 |
 */
 
+function castIds($rows, array $columns = ['id'])
+{
+    return collect($rows)->map(function ($row) use ($columns) {
+        foreach ($columns as $col) {
+            if (isset($row->$col)) {
+                $row->$col = (int) $row->$col;
+            }
+        }
+        return $row;
+    });
+}
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -105,7 +117,8 @@ Route::get("/competitions/maxsolved/{idc}/{timelimit}", function($idc, $timelimi
 
 Route::get("/displaysolvers/{idc}", function($idc) {
     $c = Competition::findOrFail($idc);
-    return $c->displaysolvers();
+    $tmp =  $c->displaysolvers();
+    return castIds($tmp);
 })->where("idc", "[0-9]*");
 
 
