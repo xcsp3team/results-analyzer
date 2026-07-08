@@ -38,6 +38,8 @@ class SolverResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->numeric(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('version')
@@ -47,6 +49,8 @@ class SolverResource extends Resource
                 TextColumn::make('authors')
                     ->searchable(),
             ])
+            ->defaultSort("name")
+            ->defaultPaginationPageOption(25)
             ->filters([
                 //
             ])
