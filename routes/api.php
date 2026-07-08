@@ -21,9 +21,8 @@ function castIds($rows, array $columns = ['id'])
 {
     return collect($rows)->map(function ($row) use ($columns) {
         foreach ($columns as $col) {
-            if (isset($row->$col)) {
+            if (isset($row->$col))
                 $row->$col = (int) $row->$col;
-            }
         }
         return $row;
     });

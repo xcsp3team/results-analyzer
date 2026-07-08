@@ -76,11 +76,7 @@ class Competition extends Model
                 return $tmp->get();
             }
         }*/
-        $tmp = $this->solvers();
-        foreach ($tmp as $line) {
-            $line['id'] = (int)$line['id'];
-        }
-        return $tmp;
+        return $this->solvers();
     }
 
 
