@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Competition;
@@ -87,16 +88,16 @@ Route::get("/scatter/{idc}/{ids1}/{ids2}/{selection}", function ($idc, $ids1, $i
 })->where("ids1", "[0-9]+")->where("ids2", "[0-9]+");
 
 
-Route::post("/competitions", [\App\Http\Controllers\Admin::class, "storecompetition"]);
+Route::post("/competitions", [Admin::class, "storecompetition"]);
 
 Route::get("/solvers", function() {return Solver::all();});
-Route::post("/solvers", [\App\Http\Controllers\Admin::class, "storesolver"]);
+Route::post("/solvers", [Admin::class, "storesolver"]);
 
 
-Route::post("/competitions/solvers", [\App\Http\Controllers\Admin::class, "storesolverincompetition"]);
+Route::post("/competitions/solvers", [Admin::class, "storesolverincompetition"]);
 
-Route::get("/competitions/exportcop/{idc}",  [\App\Http\Controllers\Admin::class, "exportcop"]);
-Route::get("/competitions/exportcsp/{idc}",  [\App\Http\Controllers\Admin::class, "exportcsp"]);
+Route::get("/competitions/exportcop/{idc}",  [Admin::class, "exportcop"]);
+Route::get("/competitions/exportcsp/{idc}",  [Admin::class, "exportcsp"]);
 
 Route::get("/competitions/maxsolved/{idc}/{timelimit}", function($idc, $timelimit) {
     $c = Competition::findOrFail($idc);

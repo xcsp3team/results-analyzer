@@ -9,7 +9,7 @@ import re
 # import les traces des solveurs lancés avec submit COP/CSP
 # add timestamps to all lines
 
-solver_id = 16
+solver_id = 42
 competition_id = 7
 prefix="/cop/"
 _time = 3 # 3 -> CPU or 2 -> WC
