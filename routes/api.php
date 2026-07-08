@@ -61,7 +61,7 @@ Route::get("/benchmarksincompetition/{id}", function ($id) {
 
 Route::get("/solverresultincompetition/{idc}/{ids}", function ($idc, $ids) {
     $s = Solver::findOrFail($ids);
-    return $s->results($idc);
+    return castIds($s->results($idc), ["bug", "unsupported"]);
 })->where("idc", "[0-9]+")->where("ids", "[0-9]+");
 
 Route::get("/scatter/{idc}/{ids1}/{ids2}/{selection}", function ($idc, $ids1, $ids2, $selection = "ALL") {
