@@ -75,6 +75,8 @@ class Competition extends Model
                 return $tmp->get();
             }
         }*/
+        if($this->type == "cop")
+            return $this->solversCop;
         return $this->solvers2;
     }
 
