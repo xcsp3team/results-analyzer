@@ -15,6 +15,9 @@ class Competition extends Model
 
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public"];
 
+    protected $casts = [
+        'int' => 'integer',
+    ];
 
     public function fullname(): string {
         return $this->name . " " . $this->track;
