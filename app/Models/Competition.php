@@ -75,7 +75,7 @@ class Competition extends Model
                 return $tmp->get();
             }
         }*/
-        return $this->solvers();
+        return $this->solvers2;
     }
 
 
