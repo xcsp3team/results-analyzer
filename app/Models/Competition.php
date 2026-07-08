@@ -69,13 +69,18 @@ class Competition extends Model
     }
 
     public function displaysolvers() {
+
        /* if(Schema::hasTable("display")) {
             $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
             if($tmp->count() > 0) {
                 return $tmp->get();
             }
         }*/
-        return $this->solvers();
+        $tmp = $this->solvers();
+        foreach ($tmp as $line) {
+            $line['id'] = (int)$line['id'];
+        }
+        return $tmp;
     }
 
 
