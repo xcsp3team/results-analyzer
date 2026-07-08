@@ -34,7 +34,7 @@ Route::get("/competitions/{slug}", function ($slug) {
 
 Route::get("/solversincompetition/{id}", function ($id) {
     $c = Competition::findOrFail($id);
-    return $c->solvers();
+    return $c->displaysolvers();
 })->where("id", "[0-9]+");
 
 
