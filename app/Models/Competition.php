@@ -92,7 +92,7 @@ class Competition extends Model
             $nbSAT = 0;
             $nbUNSAT = 0;
             foreach ($solvers as $solver_id) {
-                $result = DB::select("SELECT * FROM results WHERE solver_id=? and benchmark_id=?", [$solver_id, $benchmark->id]); // Easiest way...
+                $result = Result::where("benchmark_id", $benchmark->id)->where("solver_id", $solver_id)->first();
 
                 if ($result == false || $result->bug || $result->unsupported)
                     continue;
@@ -119,8 +119,7 @@ class Competition extends Model
             $minimize = substr(strtoupper($benchmark->type), 0, 3) == "MIN";
             $benchmark->best_bound = null;
             foreach ($solvers as $solver_id) {
-                $result = DB::select("SELECT * FROM results_cop WHERE solver_id=? and benchmark_id=?", [$solver_id, $benchmark->id]);
-                $result = count($result) == 0 ? false : $result[0];
+                $result = Result_cop::where("benchmark_id", $benchmark->id)->where("solver_id", $solver_id)->first();
                 if ($result == false || $result->bug || $result->unsupported)
                     continue;
                 if ($result->time != -1)
