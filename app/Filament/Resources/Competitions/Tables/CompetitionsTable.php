@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Competitions\Tables;
 
+use App\Filament\Pages\Bugs;
 use App\Filament\Pages\MissingResults;
 use App\Models\Competition;
 use Filament\Actions\Action;
@@ -61,6 +62,8 @@ class CompetitionsTable
                     );
                     $record->initResults($ids);
                 }),
+                Action::make('Errors')
+                    ->url(fn (Competition $record) => Bugs::getUrl(['competition' => $record->id])),
                 Action::make('Missing')
                     ->url(fn (Competition $record) => MissingResults::getUrl(['competition' => $record->id])),
                 EditAction::make(),
