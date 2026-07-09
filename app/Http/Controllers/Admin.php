@@ -207,40 +207,6 @@ class Admin extends Controller {
     }
 
 
-    public function initBB(Request $request) {
-        $competition = Competition::findOrFail($request->input("competition"));
-        foreach($competition->benchmarks as $benchmark){
-            $benchmark->optim = 0;
-            $minimize = substr( strtoupper($benchmark->type), 0, 3) == "MIN";
-            $benchmark->best_bound = null;
-            foreach($request->input("solvers") as $solver_id) {
-                $pdo = DB::getPdo();
-                $query = $pdo->prepare("SELECT * FROM results_cop WHERE solver_id=? and benchmark_id=?"); // Easiest way...
-                $query->execute([$solver_id, $benchmark->id]);
-                $result = $query->fetch(PDO::FETCH_OBJ);
-                if($result == false || $result->bug || $result->unsupported)
-                    continue;
-                if($result->time != -1)
-                    $benchmark->optim = 1;
-                $bounds = json_decode(str_replace( "'", '"',$result->bounds));
-                if(count($bounds) == 0)
-                    continue;
-                $best = $bounds[count($bounds) - 1];
-                if($benchmark->best_bound == null || ($minimize && $benchmark->best_bound > $best->bound) ||
-                    (!$minimize && $benchmark->best_bound < $best->bound))
-                    $benchmark->best_bound = $best->bound;
-            }
-            $benchmark->save();
-
-            /*if(($bench->optim == 0 && r['time'] != -1)
-                || $bench->best_bound == null || (str_starts_with(strtoupper($bench->type), "MIN") && $last < $bench->best_bound)
-                || (str_starts_with(strtoupper($bench->type), "MAX") && $last > $bench->best_bound)) {
-                $bench->best_bound = $last;
-                $bench->optim = $r['time'] == "-1" ? 0 : 1;
-                $bench->save();
-            }*/
-        }
-    }
 
     public function bestBounds($idc) {
         $c = Competition::findOrFail($idc);

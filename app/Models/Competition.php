@@ -80,4 +80,63 @@ class Competition extends Model
     }
 
 
+    public function initResults($solvers) {
+        if($this->type == "cop")
+            $this->initBestBounds($solvers);
+        else $this->initSAT($solvers);
+    }
+
+    public function initSAT($solvers) {
+        foreach ($this->benchmarks as $benchmark) {
+            $nbSAT = 0;
+            $nbUNSAT = 0;
+            foreach ($solvers as $solver_id) {
+                $pdo = DB::getPdo();
+                $query = $pdo->prepare("SELECT * FROM results WHERE solver_id=? and benchmark_id=?"); // Easiest way...
+                $query->execute([$solver_id, $benchmark->id]);
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                if ($result == false || $result->bug || $result->unsupported)
+                    continue;
+                if ($result->status == "SAT")
+                    $nbSAT++;
+                if ($result->status == "UNSAT")
+                    $nbUNSAT++;
+
+            }
+            if($nbSAT > 0 && $nbUNSAT > 0)
+                $benchmark->status = "UNKNOWN";
+            else {
+                if ($nbSAT > 0)
+                    $benchmark->status = "SAT";
+                else
+                    $benchmark->status = "UNSAT";
+            }
+            $benchmark->save();
+        }
+    }
+    public function initBestBounds($solvers) {
+        foreach ($this->benchmarks as $benchmark) {
+            $benchmark->optim = 0;
+            $minimize = substr(strtoupper($benchmark->type), 0, 3) == "MIN";
+            $benchmark->best_bound = null;
+            foreach ($solvers as $solver_id) {
+                $pdo = DB::getPdo();
+                $query = $pdo->prepare("SELECT * FROM results_cop WHERE solver_id=? and benchmark_id=?"); // Easiest way...
+                $query->execute([$solver_id, $benchmark->id]);
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                if ($result == false || $result->bug || $result->unsupported)
+                    continue;
+                if ($result->time != -1)
+                    $benchmark->optim = 1;
+                $bounds = json_decode(str_replace("'", '"', $result->bounds));
+                if (count($bounds) == 0)
+                    continue;
+                $best = $bounds[count($bounds) - 1];
+                if ($benchmark->best_bound == null || ($minimize && $benchmark->best_bound > $best->bound) ||
+                    (!$minimize && $benchmark->best_bound < $best->bound))
+                    $benchmark->best_bound = $best->bound;
+            }
+            $benchmark->save();
+        }
+    }
 }
