@@ -88,14 +88,12 @@ class Competition extends Model
     }
 
     public function initSAT($solvers) {
-        foreach ($this->benchmarks as $benchmark) {
+        foreach ($this->benchmarks2 as $benchmark) {
             $nbSAT = 0;
             $nbUNSAT = 0;
             foreach ($solvers as $solver_id) {
-                $pdo = DB::getPdo();
-                $query = $pdo->prepare("SELECT * FROM results WHERE solver_id=? and benchmark_id=?"); // Easiest way...
-                $query->execute([$solver_id, $benchmark->id]);
-                $result = $query->fetch(PDO::FETCH_OBJ);
+                $result = DB::select("SELECT * FROM results WHERE solver_id=? and benchmark_id=?", [$solver_id, $benchmark->id]); // Easiest way...
+
                 if ($result == false || $result->bug || $result->unsupported)
                     continue;
                 if ($result->status == "SAT")
@@ -116,15 +114,13 @@ class Competition extends Model
         }
     }
     public function initBestBounds($solvers) {
-        foreach ($this->benchmarks as $benchmark) {
+        foreach ($this->benchmarksCop as $benchmark) {
             $benchmark->optim = 0;
             $minimize = substr(strtoupper($benchmark->type), 0, 3) == "MIN";
             $benchmark->best_bound = null;
             foreach ($solvers as $solver_id) {
-                $pdo = DB::getPdo();
-                $query = $pdo->prepare("SELECT * FROM results_cop WHERE solver_id=? and benchmark_id=?"); // Easiest way...
-                $query->execute([$solver_id, $benchmark->id]);
-                $result = $query->fetch(PDO::FETCH_OBJ);
+                $result = DB::select("SELECT * FROM results_cop WHERE solver_id=? and benchmark_id=?", [$solver_id, $benchmark->id]);
+                $result = count($result) == 0 ? false : $result[0];
                 if ($result == false || $result->bug || $result->unsupported)
                     continue;
                 if ($result->time != -1)
