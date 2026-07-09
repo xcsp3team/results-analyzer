@@ -19,6 +19,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
@@ -42,9 +43,6 @@ class ResultResource extends Resource
                     ->relationship('solver', 'name')
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
                     ->required(),
-                TextInput::make('solver_id')
-                    ->required()
-                    ->numeric(),
                 TextInput::make('benchmark_id')
                     ->required()
                     ->numeric(),
@@ -99,6 +97,7 @@ class ResultResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
                     ->preload()
                 ->searchable(),
+                Filter::make('bug'),
             ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 EditAction::make(),
