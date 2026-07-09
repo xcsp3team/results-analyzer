@@ -57,7 +57,9 @@ Route::get("/solver/{id}", function ($id) {
 
 Route::get("/benchmarksincompetition/{id}", function ($id) {
     $c = Competition::findOrFail($id);
-    return $c->benchmarks;
+    if($c->type=="cop")
+        return $c->benchmarksCop;
+    return $c->benchmarks2;
 })->where("id", "[0-9]+");
 
 Route::get("/solverresultincompetition/{idc}/{ids}", function ($idc, $ids) {
