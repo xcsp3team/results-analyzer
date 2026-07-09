@@ -41,12 +41,15 @@ class SolversCopRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
+                TextColumn::make("id"),
                 TextColumn::make('name')
                     ->state(fn($record) => $record->name . " " . $record->version)
                     ->searchable(),
                 TextColumn::make('nb_benchmarks')->label('Nb benchmarks')
                     ->numeric()
             ])
+            ->extraAttributes(['class' => 'divide-y divide-gray-200'])
+            ->recordClasses(fn ($record) => 'hover:bg-gray-50 dark:hover:bg-white/5 transition-colors')
             ->filters([
                 //
             ])
