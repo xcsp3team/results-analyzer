@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Results;
 use App\Filament\Resources\Results\Pages\ManageResults;
 use App\Models\Result;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -21,8 +22,10 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use UnitEnum;
 
 class ResultResource extends Resource
@@ -97,10 +100,20 @@ class ResultResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
                     ->preload()
                 ->searchable(),
-                Filter::make('bug'),
+                TernaryFilter::make('bug')->label('Bug')
+                    ->trueLabel('Buggy results')
+                    ->falseLabel('Non buggy results')
+                    ->placeholder('All results'),
             ], layout: FiltersLayout::AboveContent)
             ->recordActions([
+                Action::make("family")
+                    ->label("Make family buggy")
+                    ->action(function($record) {
+                        DB::update("UPDATE results set bug=1 where solver_id = ? and benchmark_id in (SELECT id from benchmarks where competition_id=? and family=?)",
+                            [$record->solver_id, $record->benchmark->competition_id, $record->benchmark->family]);
+                    }),
                 EditAction::make(),
+
                 DeleteAction::make(),
             ])
             ->toolbarActions([
