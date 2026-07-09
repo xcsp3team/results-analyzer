@@ -9,8 +9,8 @@ import csv
 
 #CD_ID,CD_SCRIPT,RS_WCTIME,RS_CPUTIME,RS_USERTIME,RS_SYSTEMTIME,RS_CPUUSAGE,RS_MAXVM,RS_TIMEOUT,RS_MEMOUT,SC_instance_name,SC_track,SC_checker,SC_o_lines
 solver_id = 44
-competition_id = 3
-prefix="/minicsp/"
+competition_id = 2
+prefix="/csp/"
 _time = 3 # 3 -> CPU or 2 -> WC
 results = []
 status = "UNKNOWN"
@@ -34,10 +34,12 @@ with open(sys.argv[1]+"results.csv") as csvfile:
         if row[12] == "S_UNSUPPORTED":
             unsupported = 1
             status = "UNSUPPORTED"
+#        if row[12] == "ERR_UNKNOWN":
+#            bug = 1
         time = row[_time]
         bench =  prefix + os.path.basename(row[1]).removesuffix("_c26.sh").removesuffix("-mc26.sh").removesuffix("_mc26.sh")
         print(bench)
-        results.append({'name': bench, "status": status, "time": time if sat == 1 else 10000, 'unsupported': unsupported})
+        results.append({'name': bench, "status": status, "time": time if sat == 1 else 10000, 'unsupported': unsupported, "bug": bug})
 
 result= {
     "competition" : competition_id,

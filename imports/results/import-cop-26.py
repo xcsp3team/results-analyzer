@@ -9,9 +9,9 @@ import re
 # import les traces des solveurs lancés avec submit COP/CSP
 # add timestamps to all lines
 
-solver_id = 48
-competition_id = 7
-prefix="/cop/"
+solver_id = 8
+competition_id = 6
+prefix="/parallelcop/"
 _time = 3 # 3 -> CPU or 2 -> WC
 
 
@@ -61,8 +61,8 @@ with open(sys.argv[1]+"results.csv") as csvfile:
             sat = 0
         if row[12] == "S_UNSUPPORTED":
             unsupported = 1
-        if row[12] == "ERR_UNKNOWN":
-            bug = 1
+#        if row[12] == "ERR_UNKNOWN":
+#            bug = 1
 
         bench =  prefix + os.path.basename(row[1]).removesuffix("_c26.sh").removesuffix("-mc26.sh").removesuffix("_mc26.sh")
         results.append({'name': bench, "time": -1 if sat == 1 else time, "bounds": bounds, 'unsupported': unsupported, 'bug': bug})

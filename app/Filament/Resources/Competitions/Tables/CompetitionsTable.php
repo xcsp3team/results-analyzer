@@ -29,7 +29,10 @@ class CompetitionsTable
                 TextColumn::make('defaulttime')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make("benchmarks_count")->label("Nb benchs")->counts("benchmarks")->numeric(),
+                TextColumn::make("benchmarks_count")
+                    ->label("Nb benchs")
+                    ->state(fn($record) => $record->type=="csp" ? $record->benchmarks2()->count(): $record->benchmarksCop()->count())
+                    ->numeric(),
                 TextColumn::make("solvers")->state(fn(Competition $record) => count($record->solvers()))->numeric(),
                 IconColumn::make('public')
                     ->boolean(),
