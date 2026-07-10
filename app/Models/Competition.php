@@ -122,12 +122,18 @@ class Competition extends Model
                 $result = Result_cop::where("benchmark_id", $benchmark->id)->where("solver_id", $solver_id)->first();
                 if ($result == false || $result->bug || $result->unsupported)
                     continue;
-                if ($result->time != -1)
-                    $benchmark->optim = 1;
+
+
                 $bounds = json_decode(str_replace("'", '"', $result->bounds));
                 if (count($bounds) == 0)
                     continue;
                 $best = $bounds[count($bounds) - 1];
+                if ($result->time != -1) {
+                    $benchmark->optim = 1;
+                    $benchmark->best_bound = $best->bound;
+                    $benchmark->save();
+                    break;
+                }
                 if ($benchmark->best_bound == null || ($minimize && $benchmark->best_bound > $best->bound) ||
                     (!$minimize && $benchmark->best_bound < $best->bound))
                     $benchmark->best_bound = $best->bound;
