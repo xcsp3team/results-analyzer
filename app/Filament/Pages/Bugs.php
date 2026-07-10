@@ -41,6 +41,8 @@ class Bugs extends Page implements HasTable
             ->whereColumn('r1.id', '<', 'r2.id')
             ->where('r1.status', '!=', 'UNKNOWN')
             ->where('r2.status', '!=', 'UNKNOWN')
+            ->where('r1.status', '!=', 'UNSUPPORTED')
+            ->where('r2.status', '!=', 'UNSUPPORTED')
             ->whereColumn('r1.status', '!=', 'r2.status')
             ->where('benchmarks.competition_id', $this->competition->id)
             ->select([
