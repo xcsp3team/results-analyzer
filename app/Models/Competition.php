@@ -14,7 +14,7 @@ class Competition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public"];
+    protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
 
     protected $casts = [
         'int' => 'integer',
