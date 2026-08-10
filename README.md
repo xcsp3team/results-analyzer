@@ -1,58 +1,44 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Result Analyzer Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is the backend part of the result analyzer framework.
+This framwork is used to compare results from solvers (optimisation, satisfaction...)
+on a set of benchmarks.
 
-## About Laravel
+The backend part is based on [Laravel](https://laravel.com). The frontend part is based on [React](https://react.dev/).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requirements for the backend part
+ - PHP 8.3+
+ - composer
+ - Database (sqlite, Mysql....)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation (local usage)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+ 1. Clone the project : git clone #TODO
+ 2. `composer install`
+ 3. `cp .env.example .env` 
+ 4. `php artisan key:generate` 
+ 5. Modify the .env file (database, cache, session). 
+ 5. Migrate the database `php artisan migrate`  
+ 6. Create an admin user `php artisan make:filament-user` 
+ 7. Optionally: create an evaluation example (XCSP 2026 competition) `php artisan db:seed`
 
-## Learning Laravel
+For a production deployement, please see [the documentation](https://laravel.com/docs/13.x/deployment).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Serve the application
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+`php artisan serve`
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Backend part
 
-## Agentic Development
+The admin part is http://localhost:8000. Log in. You have different menus:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Evaluations: the list of available evaluation. You can see the missing results, the buggy results. You can also initialize the best results among some selected solvers. You can edit the competition and see all solvers abd benchmarks of it. Finally, you can create a competition.
+- Solvers: the list of available solvers. You can edit them or add a solver.
+- Benchmarks: the list of all benchmarks.
+- Results : All results, you can filter them using different possibilities.
 
-```bash
-composer require laravel/boost --dev
+## Adding data
 
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ - First of all, create the evaluation: https://xcsp26.alfweb.net/admin/competitions/create
+ - Add benchmarks to the evaluation. You can add them one by one :(. 
+ - Add results to the evaluation. The best way is to use the Python script (you need the package TODO).
