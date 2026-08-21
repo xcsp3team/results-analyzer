@@ -32,10 +32,10 @@
         <div class="mt-3">
             <label class="text-xs  px-1 ">Time limit</label>
             <input type="text" wire:change='change("time_limit",$event.target.value)'
-                   value={{$filters->time_limit}} class="bg-neutral-secondary-medium border border-default-medium
-                   text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-2
-                   shadow-xs"
-            placeholder="Expression" required />
+                   value="{{$filters->time_limit}}"
+                   class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm block
+                   w-full px-3 py-2"
+                   placeholder="Expression" required/>
         </div>
     </div>
 

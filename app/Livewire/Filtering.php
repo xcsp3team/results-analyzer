@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class Filtering extends Component {
     public $evaluation;
+
     #[Reactive]
     public $filters;
 
@@ -31,7 +32,7 @@ class Filtering extends Component {
         $this->dispatch("filters_change", ["field" => $field, "value" => $value]);
     }
 
-   
+
     public function toggle_selected_solver($id)
     {
         $this->dispatch("toggle_selected_solver", $id);

@@ -10,17 +10,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PDO;
 
-class Competition extends Model
-{
+class Competition extends Model {
     use HasFactory;
 
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
 
+    protected $_all_results = null;
     protected $casts = [
         'int' => 'integer',
     ];
 
-    public function fullname(): string {
+    public function fullname(): string
+    {
         return $this->name . " " . $this->track;
     }
 
@@ -53,7 +54,8 @@ class Competition extends Model
 
     // Used with Filament Table
 
-    public function benchmarks2() : HasMany{
+    public function benchmarks2(): HasMany
+    {
         return $this->hasMany(Benchmark::class); // table "benchmarks"
     }
 
@@ -62,32 +64,38 @@ class Competition extends Model
         return $this->hasMany(Benchmark_cop::class); // table "benchmarks_cop"
     }
 
-    public function solvers2(): BelongsToMany {
+    public function solvers2(): BelongsToMany
+    {
         return $this->belongsToMany(Solver::class, "competition_solver", "competition_id", "solver_id")->withPivot("nb_benchmarks");
     }
-    public function solversCop(): BelongsToMany {
+
+    public function solversCop(): BelongsToMany
+    {
         return $this->belongsToMany(Solver::class, "competition_solver_cop", "competition_id", "solver_id")->withPivot("nb_benchmarks");
     }
 
-    public function displaysolvers() {
+    public function displaysolvers()
+    {
 
-       /* if(Schema::hasTable("display")) {
-            $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
-            if($tmp->count() > 0) {
-                return $tmp->get();
-            }
-        }*/
+        /* if(Schema::hasTable("display")) {
+             $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
+             if($tmp->count() > 0) {
+                 return $tmp->get();
+             }
+         }*/
         return $this->solvers();
     }
 
 
-    public function initResults($solvers) {
-        if($this->type == "cop")
+    public function initResults($solvers)
+    {
+        if ($this->type == "cop")
             $this->initBestBounds($solvers);
         else $this->initSAT($solvers);
     }
 
-    public function initSAT($solvers) {
+    public function initSAT($solvers)
+    {
         foreach ($this->benchmarks2 as $benchmark) {
             $nbSAT = 0;
             $nbUNSAT = 0;
@@ -102,7 +110,7 @@ class Competition extends Model
                     $nbUNSAT++;
 
             }
-            if($nbSAT > 0 && $nbUNSAT > 0)
+            if ($nbSAT > 0 && $nbUNSAT > 0)
                 $benchmark->status = "UNKNOWN";
             else {
                 if ($nbSAT > 0)
@@ -113,7 +121,9 @@ class Competition extends Model
             $benchmark->save();
         }
     }
-    public function initBestBounds($solvers) {
+
+    public function initBestBounds($solvers)
+    {
         foreach ($this->benchmarksCop as $benchmark) {
             $benchmark->optim = 0;
             $minimize = substr(strtoupper($benchmark->type), 0, 3) == "MIN";
@@ -140,5 +150,20 @@ class Competition extends Model
             }
             $benchmark->save();
         }
+    }
+
+    public function all_results()
+    {
+        if ($this->_all_results != null)
+            return $this->_all_results;
+        $this->_all_results = [];
+        foreach ($this->solvers2 as $solver) {
+            $tmp = $solver->results($this);
+            foreach ($tmp as $data) {
+                $data->time = round($data->time);
+                $this->_all_results[$data->solver_id][$data->benchmark_id] = $data;
+            }
+        }
+        return $this->_all_results;
     }
 }
