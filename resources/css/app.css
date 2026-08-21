@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import "flowbite/src/themes/default";
+
 @source "../../node_modules/flowbite";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -14,6 +15,14 @@
 
 .table {
     @apply w-full text-left text-sm text-body;
+}
+
+.button-blue {
+    @apply text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4  font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
+}
+
+.button-gray {
+    @apply text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
 }
 
 .thead {

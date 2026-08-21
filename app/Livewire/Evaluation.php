@@ -190,6 +190,24 @@ class Evaluation extends Component {
         $this->createDetailedResults();
     }
 
+    #[On("none-solvers")]
+    public function none_solvers()
+    {
+        $this->selected_solvers = [];
+        $this->createSummary();
+        $this->createDetailedResults();
+    }
+
+    #[On("all-solvers")]
+    public function all_solvers()
+    {
+        foreach ($this->evaluation->solvers2 as $solver)
+            $this->selected_solvers[$solver->id] = $solver->id;
+        $this->createSummary();
+        $this->createDetailedResults();
+    }
+
+
     public function isFiltered($benchmark)
     {
         return false;
