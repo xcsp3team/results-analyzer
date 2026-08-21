@@ -10,7 +10,8 @@
                     >
                         <div class="flex {{$th->align=="text-right" ? "justify-end" : "justify-start"}}">
                             <span class="mr-2">{{$th->value}}</span>
-                            <span class="w-4">{{$sort_field==$i ? ($sort_direction== 'asc' ? svg('heroicon-o-arrow-down') : svg('heroicon-o-arrow-up')):''}}</span>
+                            <span
+                                class="w-4">{{$sort_field==$i ? ($sort_direction== 'asc' ? svg('heroicon-o-arrow-down') : svg('heroicon-o-arrow-up')):svg('heroicon-o-arrows-up-down')}}</span>
                         </div>
                     </th>
                 @endforeach

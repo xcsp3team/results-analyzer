@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Competition;
+use Hamcrest\Core\Set;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -12,7 +13,7 @@ class Evaluation extends Component {
 
     public $summary;
     public $header_summary;
-    public $selected_solvers;
+    public $selected_solvers = [];
     public $solvers = [];
 
     public $all_results = [];
@@ -27,7 +28,7 @@ class Evaluation extends Component {
         $this->evaluation = Competition::where('slug', $slug)->firstOrFail();
         foreach ($this->evaluation->solvers2 as $solver) {
             $this->solvers[$solver->id] = $solver;
-            $this->selected_solvers[] = $solver->id;
+            $this->selected_solvers[$solver->id] = $solver->id;
         }
         $this->filters = new Filters($this->evaluation->defaulttime);
         $this->initialize();
@@ -178,13 +179,15 @@ class Evaluation extends Component {
         $this->createDetailedResults();
     }
 
-    #[On('toggle_selected_solver"')]
+    #[On('toggle_selected_solver')]
     public function toggle_selected_solver($id)
     {
-        
+        if (isset($this->selected_solvers[$id]))
+            unset($this->selected_solvers[$id]);
+        else
+            $this->selected_solvers[$id] = $id;
         $this->createSummary();
         $this->createDetailedResults();
-
     }
 
     public function isFiltered($benchmark)

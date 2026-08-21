@@ -31,11 +31,7 @@ class Filtering extends Component {
         $this->dispatch("filters_change", ["field" => $field, "value" => $value]);
     }
 
-    public function is_selected_solver($id)
-    {
-        return in_array($id, $this->selected_solvers);
-    }
-
+   
     public function toggle_selected_solver($id)
     {
         $this->dispatch("toggle_selected_solver", $id);
