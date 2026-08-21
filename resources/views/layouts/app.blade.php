@@ -61,7 +61,8 @@
 
     </nav>
 
-    <div class="px-4 mx-auto max-w-8xl lg:px-4 pt-16">
+
+    <div class="">
         {{ $slot }}
     </div>
         @livewireScripts

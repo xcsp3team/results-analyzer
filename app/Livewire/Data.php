@@ -47,3 +47,4 @@ class DataHeader implements Wireable {
         return new static($value['value'],  $value['align'], $value['sortable']);
     }
 }
+
