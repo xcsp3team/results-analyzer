@@ -24,11 +24,13 @@ class Evaluation extends Component {
 
 
     #[On('filters_change')]
-    public function change_filtering($changes)
+    public function change_filtering($field, $value)
     {
-        $f = $changes["field"];
-        $v = $changes["value"];
-        $this->filters->$f = $v;
+        if ($field == "status" && $this->filters->status != "ALL") {
+            $this->filters->status = "ALL";
+            return;
+        }
+        $this->filters->$field = $value;
     }
 
     #[On('toggle_selected_solver')]

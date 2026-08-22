@@ -13,12 +13,15 @@
         </div>
 
         <div class="mt-3 inline-flex rounded-base shadow-xs -space-x-px" role="group">
-            <button type="button"
-                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-sm text-sm px-3 py-2 focus:outline-none">
+            <button
+                wire:click="$dispatch('filters_change', { field: 'status', value: 'SAT'})"
+                type="button"
+                class="{{$filters->status == "SAT"  ? "button-blue" : "button-gray"}} rounded-s-xs">
                 SAT
             </button>
             <button type="button"
-                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-e-sm text-sm px-3 py-2 focus:outline-none">
+                    wire:click="$dispatch('filters_change', { field: 'status', value: 'UNSAT'})"
+                    class="{{$filters->status == "UNSAT"  ? "button-blue" : "button-gray"}} rounded-e-xs">
                 UNSAT
             </button>
         </div>
@@ -31,7 +34,8 @@
 
         <div class="mt-3">
             <label class="text-xs  px-1 ">Time limit</label>
-            <input type="text" wire:change='change("time_limit",$event.target.value)'
+            <input type="text"
+                   wire:change="$dispatch('filters_change', { field: 'time_limit', value: $event.target.value })"
                    value="{{$filters->time_limit}}"
                    class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm block
                    w-full px-3 py-2"

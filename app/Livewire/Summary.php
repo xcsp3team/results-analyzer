@@ -101,8 +101,6 @@ class Summary extends Component {
 
     public function render()
     {
-        logger("CCC " . $this->evaluation);
-
         $this->createSummary();
         return view('livewire.summary');
     }

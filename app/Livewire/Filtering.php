@@ -29,7 +29,7 @@ class Filtering extends Component {
 
     public function change($field, $value)
     {
-        $this->dispatch("filters_change", ["field" => $field, "value" => $value]);
+        $this->dispatch("filters_change", $field, $value);
     }
 
 
