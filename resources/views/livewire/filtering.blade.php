@@ -56,33 +56,4 @@
         </button>
     </div>
 
-    <div class="border-t border-default pt-4 mt-4">
-        <div class="mb-3 flex flex-col items-center">
-            <h4>Solvers</h4>
-
-            <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
-                <button type="button"
-                        wire:click="$dispatch('all-solvers')"
-                        {{count($selected_solvers) == count($evaluation->solvers2)  ? "disabled" :""}}
-                        class="{{count($selected_solvers) != count($evaluation->solvers2)  ? "button-blue" : "button-gray"}} rounded-s-xs">
-                    All
-                </button>
-                <button
-                    wire:click="$dispatch('none-solvers')"
-                    type="button"
-                    {{count($selected_solvers) == 0  ? "disabled" : ""}}
-                    class="{{count($selected_solvers) > 0  ? "button-blue" : "button-gray"}} rounded-e-xs">
-                    None
-                </button>
-            </div>
-        </div>
-        @foreach($evaluation->solvers2 as $solver)
-            <div
-                wire:key="Str::random()"
-                wire:click="toggle_selected_solver({{$solver->id}})"
-                class="{{ isset($selected_solvers[$solver->id]) ? "bg-neutral-tertiary" : "" }}  px-2 py-1.5 text-body  hover:bg-neutral-tertiary  group">
-                {{$solver->name . " " . $solver->version}}
-            </div>
-        @endforeach
-    </div>
 </div>
