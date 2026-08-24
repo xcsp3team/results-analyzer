@@ -11,7 +11,7 @@
     <div class="p-4 sm:ml-64 mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
         <div class="p-4">
             <h3 class=" m-2 text-2xl font-bold text-heading">Ranking of solvers</h3>
-            <h4 class="m-2 text-1xl font-bold text-heading">Number of selected instances:</h4>
+            <h4 class="m-2 text-1xl font-bold text-heading">Number of selected instances: {{$nb_benchmarks}}</h4>
             <livewire:summary :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
             />
 

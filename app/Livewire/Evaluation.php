@@ -11,6 +11,7 @@ class Evaluation extends Component {
     public $evaluation;
     public $selected_solvers = [];
     public $filters;
+    public $nb_benchmarks;
 
 
     public function mount(string $slug)
@@ -30,6 +31,7 @@ class Evaluation extends Component {
         $this->filters->time_limit = $this->evaluation->defaulttime;
         $this->filters->status = "ALL";
         $this->filters->families = $this->evaluation->families();
+        $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
     }
 
     #[On('filters_change')]
@@ -42,6 +44,10 @@ class Evaluation extends Component {
                 $value = "ALL";
         }
         $this->filters->$field = $value;
+        $this->nb_benchmarks = 0;
+        foreach ($this->evaluation->benchmarks2 as $benchmark)
+            if ($this->filters->is_filtered($benchmark) == false)
+                $this->nb_benchmarks++;
     }
 
     #[On('toggle_selected_solver')]
