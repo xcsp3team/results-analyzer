@@ -12,6 +12,7 @@ class Evaluation extends Component {
     public $selected_solvers = [];
     public $filters;
     public $nb_benchmarks;
+    public $display_sidebar = true;
 
 
     public function mount(string $slug)
@@ -64,6 +65,12 @@ class Evaluation extends Component {
             $this->selected_solvers[$id] = $id;
     }
 
+    #[On("toggle_sidebar")]
+    public function toggle_sidebar()
+    {
+        $this->display_sidebar = !$this->display_sidebar;
+    }
+
     #[On("none-solvers")]
     public function none_solvers()
     {
@@ -80,6 +87,6 @@ class Evaluation extends Component {
 
     public function render()
     {
-        return view('livewire.evaluation')->title($this->evaluation->name . ". Track " . $this->evaluation->track);
+        return view('livewire.evaluation', ["title" => $this->evaluation->name . ". Track " . $this->evaluation->track])->title($this->evaluation->name . ". Track " . $this->evaluation->track);
     }
 }

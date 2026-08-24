@@ -42,7 +42,7 @@ class Summary extends Component {
             new DataHeader("#UNSAT"),
             new DataHeader("#Exclusive"),
             new DataHeader("#Fastest"),
-            new DataHeader("#UNSUPPORTED"),
+            new DataHeader("#Unsupported"),
             new DataHeader("#PAR2")
         ];
     }
