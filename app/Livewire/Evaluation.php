@@ -80,6 +80,6 @@ class Evaluation extends Component {
 
     public function render()
     {
-        return view('livewire.evaluation');
+        return view('livewire.evaluation')->title($this->evaluation->name . ". Track " . $this->evaluation->track);
     }
 }
