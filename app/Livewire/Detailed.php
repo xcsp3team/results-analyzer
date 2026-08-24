@@ -10,6 +10,7 @@ class Detailed extends Component {
     public $header_results = [];
     public $solvers;
     public $evaluation;
+    public $instance_name = null;
 
     #[Reactive]
     public $filters;
@@ -43,7 +44,7 @@ class Detailed extends Component {
         }
 
         foreach ($this->evaluation->benchmarks2 as $benchmark) {
-            if ($this->filters->is_filtered($benchmark))
+            if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
             $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->status)];
 
