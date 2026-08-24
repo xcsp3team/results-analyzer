@@ -19,16 +19,26 @@ class Evaluation extends Component {
         foreach ($this->evaluation->solvers2 as $solver) {
             $this->selected_solvers[$solver->id] = $solver->id;
         }
-        $this->filters = new Filters($this->evaluation->defaulttime);
+        $this->filters = new Filters();
+        $this->initialize_filtering();
     }
 
+
+    public function initialize_filtering()
+    {
+        $this->filters->time_limit = $this->evaluation->defaulttime;
+        $this->filters->status = "ALL";
+        $this->filters->families = $this->evaluation->families();
+    }
 
     #[On('filters_change')]
     public function change_filtering($field, $value)
     {
         if ($field == "status" && $this->filters->status != "ALL") {
-            $this->filters->status = "ALL";
-            return;
+            if ($this->filters->status == "UNSAT" && $value == "UNSAT")
+                $value = "ALL";
+            if ($this->filters->status == "SAT" && $value == "SAT")
+                $value = "ALL";
         }
         $this->filters->$field = $value;
     }

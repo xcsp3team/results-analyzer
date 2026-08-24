@@ -3,7 +3,14 @@
         <div>Filters</div>
         <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
             <button type="button"
-                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-sm text-sm px-3 py-2 focus:outline-none">
+                    wire:click="$dispatch('openModal',
+                    {
+                    component: 'problems',
+                    arguments: { all_families: {{json_encode($all_families)}}, selected_families: {{json_encode($filters->families)}} }
+                    })"
+                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium
+                hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-sm
+                text-sm px-3 py-2 focus:outline-none">
                 Problems
             </button>
             <button type="button"

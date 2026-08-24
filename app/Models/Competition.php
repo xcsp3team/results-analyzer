@@ -16,6 +16,7 @@ class Competition extends Model {
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
 
     protected $_all_results = null;
+    protected $_families = null;
     protected $casts = [
         'int' => 'integer',
     ];
@@ -165,5 +166,17 @@ class Competition extends Model {
             }
         }
         return $this->_all_results;
+    }
+
+    public function families()
+    {
+        if ($this->_families != null)
+            return $this->_families;
+        $this->_families = DB::table('benchmarks')
+            ->where('competition_id', $this->id)
+            ->distinct()
+            ->pluck('family')
+            ->toArray();
+        return $this->_families;
     }
 }
