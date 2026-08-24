@@ -1,17 +1,49 @@
 <div>
     <h4>Filtering problems</h4>
     <div>
-        <div class="flex flex-wrap">
-            @foreach($all_families as $family)
-                <div class="flex items-center mb-4">
-                    <input type="checkbox" value=""
-                           {{ in_array($family, $selected_families) ? "checked": "" }}
-                           class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft">
-                    <label for="default-checkbox" class="select-none ms-2 text-sm font-medium text-heading">
-                        {{ $family }}
-                    </label>
+        <form wire:submit="save">
+
+            <div class="flex justify-center mb-4">
+                <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
+                    <button type="button"
+                            wire:click="select('all')"
+                            class="{{count($selected_families) < count($all_families)   ? "button-blue" : "button-gray"}} rounded-s-xs">
+                        All
+                    </button>
+                    <button type="button"
+                            wire:click="select('none')"
+                            class="{{count($selected_families) > 0  ? "button-blue" : "button-gray"}} rounded-e-xs">
+                        None
+                    </button>
                 </div>
-            @endforeach
-        </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+
+                @foreach($all_families as $family)
+                    <div class="flex items-center m-4">
+                        <input type="checkbox"
+                               wire:model.live="selected_families"
+                               value="{{$family}}"
+                               class="checkbox">
+                        <label for="default-checkbox" class="select-none ms-2 text-heading">
+                            {{ $family }}
+                        </label>
+                    </div>
+                @endforeach
+
+
+            </div>
+            <div class="flex justify-end">
+                <button type="submit"
+                        class="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-xs text-sm px-4 py-1.5 focus:outline-none mr-2">
+                    Save
+                </button>
+                <button type="button"
+                        wire:click="$dispatch('closeModal')"
+                        class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-xs text-sm px-4 py-1.5 focus:outline-none">
+                    Cancel
+                </button>
+            </div>
+        </form>
     </div>
 </div>

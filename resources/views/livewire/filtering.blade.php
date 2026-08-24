@@ -8,9 +8,7 @@
                     component: 'problems',
                     arguments: { all_families: {{json_encode($all_families)}}, selected_families: {{json_encode($filters->families)}} }
                     })"
-                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium
-                hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-sm
-                text-sm px-3 py-2 focus:outline-none">
+                    class="{{count($filters->families) < count($all_families) ? "button-blue" : "button-gray"}} rounded-s-xs">
                 Problems
             </button>
             <button type="button"
