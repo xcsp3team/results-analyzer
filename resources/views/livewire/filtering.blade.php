@@ -46,6 +46,14 @@
                    w-full px-3 py-2"
                    placeholder="Expression" required/>
         </div>
+
+
+        <button
+            wire:click="$dispatch('initialize_filters')"
+            type="button"
+            class="mt-3 button-blue rounded-xs">
+            Reset filters
+        </button>
     </div>
 
     <div class="border-t border-default pt-4 mt-4">

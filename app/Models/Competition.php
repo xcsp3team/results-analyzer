@@ -17,6 +17,8 @@ class Competition extends Model {
 
     protected $_all_results = null;
     protected $_families = null;
+
+    protected $_constraints = null;
     protected $casts = [
         'int' => 'integer',
     ];
@@ -179,4 +181,14 @@ class Competition extends Model {
             ->toArray();
         return $this->_families;
     }
+
+    public function constraints()
+    {
+        if ($this->_constraints != null)
+            return $this->_constraints;
+        $this->_constraints = [];
+        
+    }
+
+
 }

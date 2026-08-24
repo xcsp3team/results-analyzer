@@ -24,6 +24,7 @@ class Evaluation extends Component {
     }
 
 
+    #[On('initialize_filters')]
     public function initialize_filtering()
     {
         $this->filters->time_limit = $this->evaluation->defaulttime;
