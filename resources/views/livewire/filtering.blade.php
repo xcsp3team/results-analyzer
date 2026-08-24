@@ -12,7 +12,12 @@
                 Problems
             </button>
             <button type="button"
-                    class="text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 rounded-e-sm text-sm px-3 py-2 focus:outline-none">
+                    wire:click="$dispatch('openModal',
+                    {
+                    component: 'constraints',
+                    arguments: { all_constraints: {{json_encode($all_constraints)}}, selected_constraints: {{json_encode($filters->constraints)}}, forbidden: {{$filters->are_forbidden}} }
+                    })"
+                    class="{{count($filters->constraints) > 0 ? "button-blue" : "button-gray"}} rounded-e-xs">
                 Constraints
             </button>
         </div>

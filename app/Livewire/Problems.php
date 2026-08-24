@@ -8,7 +8,6 @@ class Problems extends ModalComponent {
 
     public $all_families;
     public $selected_families;
-    public $choices = [];
 
     public function mount($all_families, $selected_families)
     {

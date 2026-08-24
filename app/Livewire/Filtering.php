@@ -14,12 +14,14 @@ class Filtering extends Component {
     public $filters;
 
     public $all_families;
+    public $all_constraints;
 
     public function mount($filters, $evaluation)
     {
         $this->filters = $filters;
         $this->evaluation = $evaluation;
         $this->all_families = $this->evaluation->families();
+        $this->all_constraints = $this->evaluation->constraints();
     }
 
     public function render()

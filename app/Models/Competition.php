@@ -186,8 +186,13 @@ class Competition extends Model {
     {
         if ($this->_constraints != null)
             return $this->_constraints;
-        $this->_constraints = [];
-        
+        $tmp = [];
+        foreach ($this->benchmarks as $benchmark) {
+            preg_match_all('/#(\w+):/', $benchmark->info_constraints, $matches);
+            $tmp = array_merge($tmp, $matches[1]);
+        }
+        $this->_constraints = array_values(array_unique($tmp));
+        return $this->_constraints;
     }
 
 

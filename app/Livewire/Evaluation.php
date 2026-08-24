@@ -31,17 +31,22 @@ class Evaluation extends Component {
         $this->filters->time_limit = $this->evaluation->defaulttime;
         $this->filters->status = "ALL";
         $this->filters->families = $this->evaluation->families();
+        $this->filters->constraints = [];
+        $this->filters->are_forbidden = true;
         $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
     }
 
     #[On('filters_change')]
-    public function change_filtering($field, $value)
+    public function change_filtering($field, $value, $forbidden = false)
     {
         if ($field == "status" && $this->filters->status != "ALL") {
             if ($this->filters->status == "UNSAT" && $value == "UNSAT")
                 $value = "ALL";
             if ($this->filters->status == "SAT" && $value == "SAT")
                 $value = "ALL";
+        }
+        if ($field == "constraints") {
+            $this->filters->are_forbidden = $forbidden;
         }
         $this->filters->$field = $value;
         $this->nb_benchmarks = 0;
