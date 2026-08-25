@@ -23,10 +23,11 @@
                 @foreach($all_constraints as $constraint)
                     <div class="flex items-center m-4">
                         <input type="checkbox"
+                               id="{{$constraint}}"
                                wire:model.live="selected_constraints"
                                value="{{$constraint}}"
                                class="checkbox">
-                        <label for="default-checkbox" class="select-none ms-2 text-heading">
+                        <label for="{{$constraint}}" class="select-none ms-2 text-heading">
                             {{ $constraint }}
                         </label>
                     </div>

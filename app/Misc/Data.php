@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Misc;
 
 use Livewire\Wireable;
 
-class Data implements Wireable {
+class Data implements Wireable
+{
     public $value;
     public $class;
 

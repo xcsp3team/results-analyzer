@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Misc\Data;
+use App\Misc\DataHeader;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class Detailed extends Component {
+class Detailed extends Component
+{
     public $detailed_results = [];
     public $header_results = [];
     public $solvers;

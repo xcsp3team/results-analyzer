@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Misc;
 
 use Livewire\Wireable;
 
-class DataHeader implements Wireable {
+class DataHeader implements Wireable
+{
     public $value;
     public $sortable;
     public $align;

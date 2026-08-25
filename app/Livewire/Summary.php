@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Misc\Data;
+use App\Misc\DataHeader;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class Summary extends Component {
+class Summary extends Component
+{
     public $summary;
     public $header_summary;
     public $solvers;
@@ -50,7 +53,7 @@ class Summary extends Component {
     public function createSummary()
     {
         $this->summary = [];
-        if(count($this->selected_solvers) == 0)
+        if (count($this->selected_solvers) == 0)
             return;
 
         $all_results = $this->evaluation->all_results();
@@ -110,47 +113,47 @@ class Summary extends Component {
         foreach ($this->evaluation->benchmarks2 as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
-        $sat = false;
-        $unsat = false;
-        $tl = $this->evaluation->defaulttime;
-        $unsupported = true;
-        foreach ($this->selected_solvers as $id) {
-            $selectedSolver = $this->solvers[$id];
-            $data = $all_results[$selectedSolver->id][$benchmark->id];
-            if($data->unsupported !== "UNSUPPORTED")
-                $unsupported = false;
-            if ($data->status === "SAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
-                $sat = true;
-                if ($tl > $data->time)
-                    $tl = $data->time;
+            $sat = false;
+            $unsat = false;
+            $tl = $this->evaluation->defaulttime;
+            $unsupported = true;
+            foreach ($this->selected_solvers as $id) {
+                $selectedSolver = $this->solvers[$id];
+                $data = $all_results[$selectedSolver->id][$benchmark->id];
+                if ($data->unsupported !== "UNSUPPORTED")
+                    $unsupported = false;
+                if ($data->status === "SAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
+                    $sat = true;
+                    if ($tl > $data->time)
+                        $tl = $data->time;
+                }
+                if ($data->status === "UNSAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
+                    $unsat = true;
+                    if ($tl > $data->time)
+                        $tl = $data->time;
+                }
             }
-            if ($data->status === "UNSAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
-                $unsat = true;
-                if ($tl > $data->time)
-                    $tl = $data->time;
+
+            if ($unsupported) $vbs[self::UNSUPPORTED]++;
+            if ($sat) $vbs[self::SAT]->value++;
+            if ($unsat) $vbs[self::UNSAT]->value++;
+            $vbs[self::PAR2]->value += ($sat || $unsat) ? $tl : ($this->filters->time_limit * 2);
+            if ($sat || $unsat) $vbs[self::TOTAL]->value++;
+
+            $position = 0;
+            foreach ($this->selected_solvers as $id) {
+                $selectedSolver = $this->solvers[$id];
+                $data = $all_results[$selectedSolver->id][$benchmark->id];
+                if ($data->time === $tl && $tl !== $this->filters->time_limit && $data->bug === 0)
+                    $this->summary[$position][self::BEST]->value++;
+                $position++;
             }
+
         }
-
-        if($unsupported) $vbs[self::UNSUPPORTED]++;
-        if ($sat)  $vbs[self::SAT]->value++;
-        if ($unsat)  $vbs[self::UNSAT]->value++;
-        $vbs[self::PAR2]->value += ($sat || $unsat) ? $tl : ($this->filters->time_limit * 2);
-        if ($sat || $unsat) $vbs[self::TOTAL]->value++;
-
-        $position = 0;
-        foreach($this->selected_solvers as $id) {
-            $selectedSolver = $this->solvers[$id];
-            $data = $all_results[$selectedSolver->id][$benchmark->id];
-            if ($data->time === $tl && $tl !== $this->filters->time_limit && $data->bug === 0)
-                $this->summary[$position][self::BEST]->value++;
-            $position++;
-        }
-
-    }
-    $vbs[self::BEST]->value = $vbs[self::TOTAL]->value;
-    foreach($this->summary as $tmp)
-        $vbs[self::UNIQUE]->value += $tmp[self::UNIQUE]->value;
-    $this->summary[] = $vbs;
+        $vbs[self::BEST]->value = $vbs[self::TOTAL]->value;
+        foreach ($this->summary as $tmp)
+            $vbs[self::UNIQUE]->value += $tmp[self::UNIQUE]->value;
+        $this->summary[] = $vbs;
     }
 
 

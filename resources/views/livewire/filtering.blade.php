@@ -38,8 +38,10 @@
         <div class="mt-3">
             <label class="text-xs  px-1">Expression</label>
             <input type="text"
+                   value="{{$filters->expression}}"
+                   wire:change="$dispatch('filters_change', { field: 'expression', value: $event.target.value})"
                    class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-1 shadow-xs placeholder:text-body"
-                   placeholder="Expression" required/>
+                   placeholder="d > 0 && v > 0 && c > 0" required/>
         </div>
 
         <div class="mt-3">

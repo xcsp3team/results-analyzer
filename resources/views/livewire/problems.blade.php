@@ -22,10 +22,11 @@
                 @foreach($all_families as $family)
                     <div class="flex items-center m-4">
                         <input type="checkbox"
+                               id="{{$family}}"
                                wire:model.live="selected_families"
                                value="{{$family}}"
                                class="checkbox">
-                        <label for="default-checkbox" class="select-none ms-2 text-heading">
+                        <label for="{{$family}}" class="select-none ms-2 text-heading">
                             {{ $family }}
                         </label>
                     </div>

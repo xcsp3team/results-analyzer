@@ -2,11 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Misc\Filters;
 use App\Models\Competition;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Evaluation extends Component {
+class Evaluation extends Component
+{
 
     public $evaluation;
     public $selected_solvers = [];
@@ -35,6 +37,7 @@ class Evaluation extends Component {
         $this->filters->constraints = [];
         $this->filters->are_forbidden = true;
         $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
+        $this->filters->expression = "d > 0 and v > 0 and c > 0";
     }
 
     #[On('filters_change')]
