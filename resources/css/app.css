@@ -26,7 +26,7 @@
 }
 
 .thead {
-    @apply text-sm text-body bg-neutral-secondary-medium border-b border-default-medium;
+    @apply text-sm text-body bg-neutral-secondary-medium border-t border-b border-default-medium;
 }
 
 .th {

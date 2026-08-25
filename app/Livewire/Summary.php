@@ -103,9 +103,9 @@ class Summary extends Component {
         // VBS
         $vbs = [];
         for ($i = 0; $i <= 7; $i++)
-            $vbs[] = new Data();
+            $vbs[] = new Data(0, "bg-green-300");
         $vbs[self::NAME]->value = "Virtual Best Solver";
-        $vbs[self::NAME]->class = "italic";
+        $vbs[self::NAME]->class = "bg-green-300 italic";
 
         foreach ($this->evaluation->benchmarks2 as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
