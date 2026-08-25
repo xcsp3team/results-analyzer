@@ -22,7 +22,7 @@
 }
 
 .button-gray {
-    @apply text-body bg-neutral-primary-soft border border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
+    @apply text-body bg-neutral-primary-soft border border-default hover:bg-blue-500 hover:text-white hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
 }
 
 .thead {
