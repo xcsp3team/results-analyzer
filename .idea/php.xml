@@ -28,7 +28,6 @@
       <path value="$PROJECT_DIR$/vendor/fakerphp/faker" />
       <path value="$PROJECT_DIR$/vendor/hamcrest/hamcrest-php" />
       <path value="$PROJECT_DIR$/vendor/carbonphp/carbon-doctrine-types" />
-      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/vendor/sebastian/type" />
       <path value="$PROJECT_DIR$/vendor/fruitcake/php-cors" />
       <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
@@ -190,6 +189,7 @@
       <path value="$PROJECT_DIR$/vendor/php-debugbar/php-debugbar" />
       <path value="$PROJECT_DIR$/vendor/php-debugbar/symfony-bridge" />
       <path value="$PROJECT_DIR$/vendor/wire-elements/modal" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php82" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3">

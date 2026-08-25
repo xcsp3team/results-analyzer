@@ -96,6 +96,58 @@ class Summary extends Component {
                 $this->summary[$unique][self::UNIQUE]->value++;
 
         }
+
+        // VBS
+        $vbs = [];
+        for ($i = 0; $i <= 7; $i++)
+            $vbs[] = new Data();
+        $vbs[self::NAME]->value = "Virtual Best Solver";
+        $vbs[self::NAME]->class = "italic";
+
+        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+            if ($this->filters->is_filtered($benchmark))
+                continue;
+        $sat = false;
+        $unsat = false;
+        $tl = $this->evaluation->defaulttime;
+        $unsupported = true;
+        foreach ($this->selected_solvers as $id) {
+            $selectedSolver = $this->solvers[$id];
+            $data = $all_results[$selectedSolver->id][$benchmark->id];
+            if($data->unsupported !== "UNSUPPORTED")
+                $unsupported = false;
+            if ($data->status === "SAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
+                $sat = true;
+                if ($tl > $data->time)
+                    $tl = $data->time;
+            }
+            if ($data->status === "UNSAT" && $data->time < $this->filters->time_limit && $data->bug === 0) {
+                $unsat = true;
+                if ($tl > $data->time)
+                    $tl = $data->time;
+            }
+        }
+
+        if($unsupported) $vbs[self::UNSUPPORTED]++;
+        if ($sat)  $vbs[self::SAT]->value++;
+        if ($unsat)  $vbs[self::UNSAT]->value++;
+        $vbs[self::PAR2]->value += ($sat || $unsat) ? $tl : ($this->filters->time_limit * 2);
+        if ($sat || $unsat) $vbs[self::TOTAL]->value++;
+
+        $position = 0;
+        foreach($this->selected_solvers as $id) {
+            $selectedSolver = $this->solvers[$id];
+            $data = $all_results[$selectedSolver->id][$benchmark->id];
+            if ($data->time === $tl && $tl !== $this->filters->time_limit && $data->bug === 0)
+                $this->summary[$position][self::BEST]->value++;
+            $position++;
+        }
+
+    }
+    $vbs[self::BEST]->value = $vbs[self::TOTAL]->value;
+    foreach($this->summary as $tmp)
+        $vbs[self::UNIQUE]->value += $tmp[self::UNIQUE]->value;
+    $this->summary[] = $vbs;
     }
 
 
