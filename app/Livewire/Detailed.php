@@ -63,20 +63,21 @@ class Detailed extends Component {
                     continue;
                 }
                 if ($data->bug) {
-                    $tmp[] = new Data($data->time, "bug");
+                    $tmp[] = new Data($data->time, "bg-red-500 opacity-50");
                     continue;
                 }
                 if ($data->time <= $best && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data($data->time, "text.emerald-600");
+                    $tmp[] = new Data($data->time, "text-green-500");
                     continue;
                 }
                 if ($data->time <= $this->filters->time_limit)
                     $tmp[] = new Data($data->time);
                 else
-                    $tmp[] = new Data("-");
+                    $tmp[] = new Data("-", "opacity-30");
             }
             $this->detailed_results[] = $tmp;
         }
+
     }
 
     public function render()

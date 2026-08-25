@@ -20,7 +20,7 @@
             <h4 class="m-2 text-1xl font-bold text-heading">Number of selected instances: {{$nb_benchmarks}}</h4>
             <livewire:summary :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
             />
-            
+
 
             <livewire:detailed :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
             />

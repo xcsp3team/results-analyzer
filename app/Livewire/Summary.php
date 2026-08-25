@@ -50,6 +50,9 @@ class Summary extends Component {
     public function createSummary()
     {
         $this->summary = [];
+        if(count($this->selected_solvers) == 0)
+            return;
+
         $all_results = $this->evaluation->all_results();
 
         // Nb solved

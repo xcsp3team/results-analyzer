@@ -22,7 +22,7 @@
         @foreach($table as $row)
             <tr class="tr">
                 @foreach($row as $i => $cell)
-                    <td class="td  {{$header[$i]->align ?? ""}}">
+                    <td class="td  {{$header[$i]->align ?? ""}} {{$cell->class}}">
                         {!! $cell->value !!}
                     </td>
                 @endforeach
