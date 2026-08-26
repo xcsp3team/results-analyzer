@@ -13,8 +13,9 @@ class Evaluation extends Component
     public $evaluation;
     public $selected_solvers = [];
     public $filters;
-    public $nb_benchmarks;
     public $display_sidebar = true;
+
+    public $view = 3;
 
 
     public function mount(string $slug)
@@ -53,10 +54,6 @@ class Evaluation extends Component
             $this->filters->are_forbidden = $forbidden;
         }
         $this->filters->$field = $value;
-        $this->nb_benchmarks = 0;
-        foreach ($this->evaluation->benchmarks2 as $benchmark)
-            if ($this->filters->is_filtered($benchmark) == false)
-                $this->nb_benchmarks++;
     }
 
     #[On('toggle_selected_solver')]

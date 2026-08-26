@@ -15,18 +15,19 @@
         </div>
     </aside>
     <div class="p-4 {{$display_sidebar == false ? "": "ml-64"}} mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
-        <div class="p-4 mb-4">
-            <h3 class=" m-2 text-2xl font-bold text-heading">Ranking of solvers</h3>
-            <h4 class="m-2 text-1xl font-bold text-heading">Number of selected instances: {{$nb_benchmarks}}</h4>
-            <livewire:summary :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
-            />
-
-            <livewire:cactus :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
-            />
-
-            <livewire:detailed :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
-            />
-
-        </div>
+        @switch($view)
+            @case(1)
+                <livewire:table-view :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                />
+                @break
+            @case(2)
+                <livewire:radar :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                />
+                @break
+            @case(3)
+                <livewire:one-vs-one :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                />
+                @break
+        @endswitch
     </div>
 </div>

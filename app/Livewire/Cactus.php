@@ -57,7 +57,6 @@ class Cactus extends Component
         $this->xaxis = [];
         for ($i = 1; $i <= $max; $i++)
             $this->xaxis[] = $i;
-        logger("ici");
         $this->dispatch('cactus-updated',
             series: array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $this->series),
             xaxis: $this->xaxis
