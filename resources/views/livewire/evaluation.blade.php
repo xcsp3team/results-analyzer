@@ -21,6 +21,8 @@
             <livewire:summary :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
             />
 
+            <livewire:cactus :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+            />
 
             <livewire:detailed :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
             />
