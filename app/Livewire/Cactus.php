@@ -29,7 +29,6 @@ class Cactus extends Component
         $this->evaluation = $evaluation;
         foreach ($this->evaluation->solvers2 as $solver)
             $this->solvers[$solver->id] = $solver;
-        $this->create_cactus();
     }
 
     public function create_cactus()
@@ -58,10 +57,16 @@ class Cactus extends Component
         $this->xaxis = [];
         for ($i = 1; $i <= $max; $i++)
             $this->xaxis[] = $i;
+        logger("ici");
+        $this->dispatch('cactus-updated',
+            series: array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $this->series),
+            xaxis: $this->xaxis
+        );
     }
 
     public function render()
     {
+        $this->create_cactus();
         return view('livewire.cactus');
     }
 }
