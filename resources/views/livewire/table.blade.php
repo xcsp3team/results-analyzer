@@ -22,7 +22,7 @@
         @foreach($table as $row)
             <tr class="tr">
                 @foreach($row as $i => $cell)
-                    <td class="td  {{$header[$i]->align ?? ""}} {{$cell->class}}">
+                    <td class="td  {{$header[$i]->align ?? ""}} {{$cell->class}} {{ is_numeric($cell->value) ? "tabular-nums" : "" }}">
                         {!!  is_numeric($cell->value) ? number_format((int)$cell->value, 0, ",", "&nbsp;") : $cell->value !!}
                     </td>
                 @endforeach
