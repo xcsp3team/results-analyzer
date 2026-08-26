@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Misc\DataCactus;
+use App\Models\Solver;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
@@ -23,6 +24,9 @@ class OneVsOne extends Component
     public $solver_x = 7;
     public $solver_y = 40;
 
+    public $name_x = null;
+    public $name_y = null;
+
     public function mount($filters, $evaluation, $selected_solvers)
     {
         $this->filters = $filters;
@@ -35,6 +39,12 @@ class OneVsOne extends Component
         if ($this->solver_x == $this->solver_y) {
             $this->solver_x = null;
             $this->solver_y = null;
+        } else {
+            $tmp = Solver::find($this->solver_x);
+            $this->name_x = $tmp->name . " " . $tmp->version;
+            $tmp = Solver::find($this->solver_y);
+            $this->name_y = $tmp->name . " " . $tmp->version;
+
         }
     }
 
