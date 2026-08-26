@@ -21,8 +21,8 @@ class OneVsOne extends Component
 
     public $series;
 
-    public $solver_x = 7;
-    public $solver_y = 40;
+    public $solver_x = null;//7;
+    public $solver_y = null;//40;
 
     public $name_x = null;
     public $name_y = null;
@@ -75,7 +75,7 @@ class OneVsOne extends Component
         $this->dispatch('scatter-updated',
             series: array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $this->series),
         );
-        
+
     }
 
     public function render()

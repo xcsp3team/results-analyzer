@@ -190,6 +190,7 @@
       <path value="$PROJECT_DIR$/vendor/php-debugbar/symfony-bridge" />
       <path value="$PROJECT_DIR$/vendor/wire-elements/modal" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/vendor/afatmustafa/blade-hugeicons" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3">

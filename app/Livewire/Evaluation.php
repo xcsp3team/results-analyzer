@@ -84,6 +84,11 @@ class Evaluation extends Component
             $this->selected_solvers[$solver->id] = $solver->id;
     }
 
+    #[On("view")]
+    public function view($view)
+    {
+        $this->view = $view;
+    }
 
     public function render()
     {

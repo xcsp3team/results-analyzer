@@ -1,5 +1,5 @@
 <div>
-
+    <h2 class="text-2xl mb-8">One to one comparison</h2>
     @if($solver_x != null)
         <div wire:ignore x-data="{
             chart: null,
@@ -92,7 +92,7 @@ xaxis: { numeric: event.xaxis }
                 </select>
             </div>
             <div class="flex justify-center">
-                <button class="button-blue rounded-sm" type="submit">Submit
+                <button class="button-blue rounded-sm" type="submit">Compare
                 </button>
             </div>
         </form>
