@@ -22,7 +22,7 @@
         <div
             wire:key="Str::random()"
             wire:click="toggle_selected_solver({{$solver->id}})"
-            class="{{ isset($selected_solvers[$solver->id]) ? "bg-neutral-tertiary" : "" }}  px-2 py-1.5 text-body  hover:bg-neutral-tertiary  group">
+            class="{{ isset($selected_solvers[$solver->id]) ? "bg-neutral-tertiary hover:bg-neutral-secondary-soft text-blue-500" : "text-body" }}  px-2 py-1.5   hover:bg-neutral-tertiary  group">
             {{$solver->name . " " . $solver->version}}
         </div>
     @endforeach

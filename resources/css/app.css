@@ -18,7 +18,7 @@
 }
 
 .button-blue {
-    @apply text-white bg-blue-500 box-border border border-transparent hover:bg-blue-600 focus:ring-4  font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
+    @apply text-white bg-blue-500 box-border border hover:bg-blue-600 focus:ring-4  font-medium leading-5 text-sm px-3 py-1 ;
 }
 
 .button-gray {

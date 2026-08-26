@@ -64,8 +64,12 @@ class Filters implements Wireable
 
         if ($this->expression != "d > 0 && v > 0 && c > 0") {
             $eval = new ExprEvaluator(['d' => $benchmark->max_degree(), 'c' => $benchmark->nb_clauses, 'v' => $benchmark->nb_variables]);
-            if ($eval->evaluate($this->expression) == false)
-                return true;
+            try {
+                if ($eval->evaluate($this->expression) == false)
+                    return true;
+            } catch (ExprEvaluatorException $e) {
+                
+            }
         }
 
         return false;
