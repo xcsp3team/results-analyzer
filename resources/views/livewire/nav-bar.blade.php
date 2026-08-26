@@ -18,7 +18,7 @@
                 <li class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 2})">
                     @svg('hugeicons-chart-radar')
                 </li>
-                <li class="hover:text-gray-500">
+                <li class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 4})">
                     @svg('hugeicons-help-circle')
                 </li>
                 <li class="hover:text-gray-500">

@@ -28,6 +28,10 @@
                 <livewire:one-vs-one :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
                 />
                 @break
+            @case(4)
+                <livewire:help
+                />
+                @break
         @endswitch
     </div>
 </div>
