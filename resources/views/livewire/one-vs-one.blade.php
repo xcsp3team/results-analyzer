@@ -23,15 +23,31 @@
         '</div>';
             }
         },
-        markers: { size: 5 },
+        markers: { size: 5   },
+        grid: {
+            xaxis: {
+                lines: {
+                    show: true
+                }
+            }
+        },
         xaxis: {
-            tickAmount: 4,
-            title: {text: 'AA'},
+            title: {text: '{{$name_x}}'},
+            logarithmic: true,
+            type: 'numeric',
+            min: 1,
+
+            max : {{$filters->time_limit}}
         },
         yaxis: {
-            title: {text: 'BB'},
+            title: {text: '{{$name_y}}'},
+            type: 'numeric',
+            logarithmic: true,
+            min: 1,
+
+            max : {{$filters->time_limit}}
         },
-        legend: { show: true, position: 'bottom' },
+        legend: { show: true, position: 'top' },
         zoom: {
             enabled: true,
             type: 'xy',
