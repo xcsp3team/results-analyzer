@@ -1,3 +1,3 @@
 <div>
-    {{-- Waste no more time arguing what a good man should be, be one. - Marcus Aurelius --}}
+    <h2 class="h2">Radar per families</h2>
 </div>

@@ -50,3 +50,7 @@
 .h3 {
     @apply text-xl font-medium mb-4;
 }
+
+.h2 {
+    @apply text-2xl font-bold mb-6;
+}

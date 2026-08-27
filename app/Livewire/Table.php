@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Cookie;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
-class Table extends Component {
+class Table extends Component
+{
 
     public $_table;
     public $header;
@@ -56,7 +57,14 @@ class Table extends Component {
 
     }
 
-
-
-
+    public function export()
+    {
+        $csvFileName = "data.csv";
+        $csvFile = fopen($csvFileName, 'w');
+        fputcsv($csvFile, array_map(fn($h) => $h->value, $this->header));
+        foreach ($this->_table as $row)
+            fputcsv($csvFile, array_map(fn($h) => $h->value, $row));
+        fclose($csvFile);
+        return response()->download($csvFileName)->deleteFileAfterSend();
+    }
 }
