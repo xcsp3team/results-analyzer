@@ -7,7 +7,7 @@
             tooltip: { shared: true, intersect: false },
             markers: { size: 2 },
             legend: { show: true, position: 'bottom' },
-            series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, 'group' => $s->groupe], $series)),
+            series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series)),
             xaxis: { numeric: @js($xaxis) }
         });
         this.chart.render();
