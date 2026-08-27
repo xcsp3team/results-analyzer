@@ -94,7 +94,7 @@ xaxis: { numeric: event.xaxis }
             legend: { show: true, position: 'bottom' },
             series: @js(array_values(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, "group" => $s->group], $per_families))),
             xaxis: {
-                categories: ['SAT', 'UNSAT']
+                categories: @js($selected_families)
             }
         });
         this.chart.render();
@@ -102,7 +102,7 @@ xaxis: { numeric: event.xaxis }
         Livewire.on('per_families-updated', (event) => {
             this.chart.updateOptions({
                 series: event.series,
-                xaxis: { numeric: event.xaxis }
+                xaxis: { categories: event.selected_families }
             });
         });
     }
