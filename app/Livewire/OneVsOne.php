@@ -134,6 +134,7 @@ class OneVsOne extends Component
                     $this->per_families["UNSATY"]->data[$pos]++;
             }
         }
+
         $categories = array_flip($this->selected_families); // pos => famille
         ksort($categories);
         $categories = array_values($categories); // liste ordonnée par position
@@ -142,6 +143,7 @@ class OneVsOne extends Component
             series: array_values(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, "group" => $s->group], $this->per_families)),
             selected_families: $categories,
         );
+
     }
 
     public function render()

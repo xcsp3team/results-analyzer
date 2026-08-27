@@ -20,7 +20,7 @@
     </div>
     @foreach($evaluation->solvers2 as $solver)
         <div
-            wire:key="Str::random()"
+            wire:key="{{Str::random()}}"
             wire:click="toggle_selected_solver({{$solver->id}})"
             class="{{ isset($selected_solvers[$solver->id]) ? "bg-neutral-tertiary hover:bg-white text-blue-500" : "text-gray-400" }}  px-2 py-1.5   hover:bg-neutral-tertiary  group">
             {{$solver->name . " " . $solver->version}}
