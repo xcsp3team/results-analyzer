@@ -15,7 +15,7 @@ class Evaluation extends Component
     public $filters;
     public $display_sidebar = true;
 
-    public $view = 2;
+    public $view = 1;
 
 
     public function mount(string $slug)

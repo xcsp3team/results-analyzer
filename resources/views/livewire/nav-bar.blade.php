@@ -21,10 +21,14 @@
                 <li class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 4})">
                     @svg('hugeicons-help-circle')
                 </li>
-                <li class="hover:text-gray-500">
-                    @svg('hugeicons-sun-03')
-
-                </li>
+                <div id="theme-toggle">
+                    <li id="theme-toggle-dark-icon" class="hidden  hover:text-gray-500">
+                        @svg('hugeicons-moon-02')
+                    </li>
+                    <li id="theme-toggle-light-icon" class="hidden hover:text-gray-500">
+                        @svg('hugeicons-sun-03')
+                    </li>
+                </div>
             </ul>
         </div>
     </div>
