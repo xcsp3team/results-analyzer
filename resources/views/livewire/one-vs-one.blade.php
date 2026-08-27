@@ -60,7 +60,33 @@
         </div>
 
         <h3 class="h3">Comparison per constraints</h3>
-        <div x-ref="constraints"></div>
+
+        <div wire:key="families-chart"
+             wire:ignore x-data="{
+            chart: null,
+            init() {
+                if (this.chart) this.chart.destroy();
+                this.chart = new ApexCharts(this.$refs.constraints, {
+                    chart: { type: 'bar', height: '400px', stacked: true, animations: { enabled: false } },
+                    plotOptions: { bar: { horizontal: false } },
+                    stroke: { width: 1 },
+                    tooltip: { shared: true, intersect: false },
+                    markers: { size: 2 },
+                    legend: { show: true, position: 'bottom' },
+                    series: @js(array_values(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, 'group' => $s->group], $per_constraints))),
+                    xaxis: { categories: @js($selected_constraints) }
+                });
+                this.chart.render();
+
+                Livewire.on('per_constraints-updated', (event) => {
+                    this.chart.updateOptions({ series: [], xaxis: { categories: event.selected_constraints } }, false, false);
+                    this.chart.updateOptions({ series: event.series }, false, false);
+                });
+            }
+        }">
+            <div x-ref="constraints"></div>
+        </div>
+
 
         <h3 class="h3">Comparison per families</h3>
 
