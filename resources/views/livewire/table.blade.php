@@ -1,4 +1,4 @@
-<div class="relative overflow-x-auto shadow-md ">
+<div class="relative overflow-x-auto shadow-md relative">
     <table class="table">
         @if($header != null && count($header) > 0)
             <thead class="thead">

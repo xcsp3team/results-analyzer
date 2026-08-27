@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Misc\DataCactus;
+use App\Misc\DataPlot;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
@@ -39,7 +39,7 @@ class Cactus extends Component
         $this->series = [];
         foreach ($this->selected_solvers as $id) {
             $selectedSolver = $this->solvers[$id];
-            $tmp = new DataCactus($selectedSolver->name . " " . $selectedSolver->version);
+            $tmp = new DataPlot($selectedSolver->name . " " . $selectedSolver->version);
             $values = [];
             foreach ($this->evaluation->benchmarks2 as $benchmark) {
                 if ($this->filters->is_filtered($benchmark))

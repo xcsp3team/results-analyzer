@@ -1,6 +1,6 @@
-<div>
+<div class="text-base">
     <h2 class="text-3xl font-bold mb-6 text-heading">Help</h2>
-    <h3 class="text-xl font-medium mb-4">Displaying results on CSP instances</h3>
+    <h3 class="h3">Displaying results on CSP instances</h3>
     <p class="mb-2">On the left, you have a panel for applying some filters (described below) and one for selecting
         solvers. Once a
         selection is performed, you can see:
@@ -30,7 +30,7 @@
         selected, the scatter plot is displayed, with details made visible when hovering over a dot.
     </p>
 
-    <h3 class="text-xl font-medium mb-4"> Displaying results on COP instances</h3>
+    <h3 class="h3"> Displaying results on COP instances</h3>
     <p class="mb-2">On the left, you have a panel for applying some filters (described below) and one for selecting
         solvers. Once a
         selection is performed, you can see:</p>

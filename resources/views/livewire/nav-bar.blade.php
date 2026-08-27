@@ -1,7 +1,7 @@
 <nav class="bg-blue-300 fixed w-full z-20 top-0 start-0 border-b border-default">
     <div class="ml-6 mr-6 flex flex-wrap items-center justify-between mx-auto p-4">
         <h1 class="text-xl flex justify-around items-center">
-                <span wire:click="$dispatch('toggle_sidebar')" class="w-6 h-6 mr-4">
+                <span wire:click="$dispatch('toggle_sidebar')" class="w-6 h-6 mr-4 hover:text-gray-500">
                     @svg('heroicon-m-bars-3')
                 </span>
             <a href="{{route("home")}}" class="text-base font-medium text-xl">Result Analyzer</a>
