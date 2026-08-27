@@ -10,14 +10,14 @@ class DataPlot implements Wireable
     public $name;
     public $data;
     public $group;
-    public $colors;
+    public $color;
 
     public function __construct($n, $d = [], $g = null, $c = null)
     {
         $this->name = $n;
         $this->data = $d;
         $this->group = $g;
-        $this->colors = $c;
+        $this->color = $c;
     }
 
     public function toLivewire()
@@ -26,7 +26,7 @@ class DataPlot implements Wireable
             'name' => $this->name,
             'data' => $this->data,
             'group' => $this->group,
-            'colors' => $this->colors,
+            'color' => $this->color,
         ];
     }
 
