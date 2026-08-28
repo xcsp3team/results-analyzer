@@ -21,14 +21,15 @@
                 <li title="Help me!" class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 4})">
                     @svg('hugeicons-help-circle')
                 </li>
-                <div id="theme-toggle">
-                    <li id="theme-toggle-dark-icon" class="hidden  hover:text-gray-500">
+                <button type="button" x-data="{ theme: Theme.get() }"
+                        @click="theme = theme === 'light' ? 'dark' : 'light'; Theme.set(theme);">
+                    <li x-show="theme == 'light'" class="hover:text-gray-500">
                         @svg('hugeicons-moon-02')
                     </li>
-                    <li id="theme-toggle-light-icon" class="hidden hover:text-gray-500">
+                    <li x-show="theme == 'dark'" class="hover:text-gray-500">
                         @svg('hugeicons-sun-03')
                     </li>
-                </div>
+                </button>
             </ul>
         </div>
     </div>
