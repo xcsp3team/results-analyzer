@@ -16,7 +16,7 @@
             <input type="text"
                    wire:model.live.debounce.500ms="instance_name"
                    class="block w-full max-w-96 ps-9 pe-3 py-2 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body"
-                   placeholder="Instance name">
+                   placeholder="Search for instances">
             <button
                 type="button"
                 wire:click="$set('instance_name', null)"
