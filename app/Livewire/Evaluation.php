@@ -17,6 +17,7 @@ class Evaluation extends Component
     public $display_sidebar = true;
 
     public $view = 1;
+    public $first = true;
 
 
     public function mount(string $slug)
@@ -40,7 +41,10 @@ class Evaluation extends Component
         $this->filters->are_forbidden = true;
         $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
         $this->filters->expression = "d > 0 and v > 0 and c > 0";
-        Toaster::success('Filters initialized.');
+        if ($this->first == false)
+            Toaster::success('Filters initialized.');
+        $this->first = false;
+
     }
 
     #[On('filters_change')]
