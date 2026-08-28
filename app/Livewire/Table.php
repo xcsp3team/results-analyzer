@@ -6,6 +6,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class Table extends Component
 {
@@ -65,6 +66,7 @@ class Table extends Component
         foreach ($this->_table as $row)
             fputcsv($csvFile, array_map(fn($h) => $h->value, $row));
         fclose($csvFile);
+        Toaster::success("Data exported.");
         return response()->download($csvFileName)->deleteFileAfterSend();
     }
 }
