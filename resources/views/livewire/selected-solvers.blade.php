@@ -1,6 +1,6 @@
-<div class="border-t border-default pt-4 mt-4">
+<div class="border-t border-default dark:border-t-gray-400 pt-4 mt-4">
     <div class="mb-3 flex flex-col items-center">
-        <h4>Solvers</h4>
+        <h4 class="dark:text-gray-400">Solvers</h4>
 
         <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
             <button type="button"

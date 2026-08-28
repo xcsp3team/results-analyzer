@@ -1,6 +1,6 @@
-<div>
+<div class="mb-4">
     <div class="flex items-center  flex-col">
-        <div>Filters</div>
+        <div class="dark:text-gray-400">Filters</div>
         <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
             <button type="button"
                     wire:click="$dispatch('openModal',
@@ -40,7 +40,7 @@
             <input type="text"
                    value="{{$filters->expression}}"
                    wire:change="$dispatch('filters_change', { field: 'expression', value: $event.target.value})"
-                   class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-1 shadow-xs placeholder:text-body"
+                   class="dark:border-gray-400 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm focus:ring-brand focus:border-brand block w-full px-3 py-1 shadow-xs placeholder:text-body"
                    placeholder="d > 0 && v > 0 && c > 0" required/>
         </div>
 
@@ -49,7 +49,7 @@
             <input type="text"
                    wire:change="$dispatch('filters_change', { field: 'time_limit', value: $event.target.value })"
                    value="{{$filters->time_limit}}"
-                   class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm block
+                   class="dark:border-gray-400 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm block
                    w-full px-3 py-2"
                    placeholder="Expression" required/>
         </div>

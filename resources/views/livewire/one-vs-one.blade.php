@@ -1,5 +1,5 @@
 <div>
-    <h2 class="text-3xl font-bold mb-8">One to one comparison</h2>
+    <h2 class="h2">One to one comparison</h2>
     @if($solver_x != null)
         <h3 class="h3">Scatter plot</h3>
         <div
@@ -119,15 +119,15 @@
         <form wire:submit="set_solvers">
             <div class="mx-auto w-1/2 flex justify-around items-center mb-4">
                 <select wire:model="solver_x"
-                        class="block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                        class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
                     @foreach($evaluation->solvers2 as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>
                     @endforeach
                 </select>
-                <div>Versus</div>
+                <div class="dark:text-gray-400">Versus</div>
                 <select wire:model="solver_y"
-                        class="block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                        class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
                     @foreach($evaluation->solvers2 as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>

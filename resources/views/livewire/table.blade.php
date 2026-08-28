@@ -1,5 +1,5 @@
 <div class="relative">
-    <span class="absolute right-3 -top-8" wire:click="export">@svg('hugeicons-xls-02')</span>
+    <span class="absolute right-3 -top-8 dark:text-gray-400 " wire:click="export">@svg('hugeicons-xls-02')</span>
     <div class="overflow-x-auto shadow-md relative">
         <table class="table">
             @if($header != null && count($header) > 0)
