@@ -14,6 +14,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "*",
+        "masmerise/livewire-toaster": "*",
         "wire-elements/modal": "*"
     },
     "require-dev": {

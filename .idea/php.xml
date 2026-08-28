@@ -191,6 +191,7 @@
       <path value="$PROJECT_DIR$/vendor/wire-elements/modal" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php82" />
       <path value="$PROJECT_DIR$/vendor/afatmustafa/blade-hugeicons" />
+      <path value="$PROJECT_DIR$/vendor/masmerise/livewire-toaster" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3">

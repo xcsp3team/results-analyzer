@@ -179,6 +179,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/wire-elements/modal" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php82" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/afatmustafa/blade-hugeicons" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/masmerise/livewire-toaster" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

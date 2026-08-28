@@ -6,6 +6,7 @@ use App\Misc\Filters;
 use App\Models\Competition;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class Evaluation extends Component
 {
@@ -39,6 +40,7 @@ class Evaluation extends Component
         $this->filters->are_forbidden = true;
         $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
         $this->filters->expression = "d > 0 and v > 0 and c > 0";
+        Toaster::success('Filters initialized.');
     }
 
     #[On('filters_change')]
@@ -54,6 +56,7 @@ class Evaluation extends Component
             $this->filters->are_forbidden = $forbidden;
         }
         $this->filters->$field = $value;
+        Toaster::success('Filters updated.');
     }
 
     #[On('toggle_selected_solver')]
@@ -63,6 +66,7 @@ class Evaluation extends Component
             unset($this->selected_solvers[$id]);
         else
             $this->selected_solvers[$id] = $id;
+        Toaster::success('Selected solvers updated.');
     }
 
     #[On("toggle_sidebar")]
@@ -75,6 +79,7 @@ class Evaluation extends Component
     public function none_solvers()
     {
         $this->selected_solvers = [];
+        Toaster::success('Selected solvers updated.');
     }
 
     #[On("all-solvers")]
@@ -82,6 +87,8 @@ class Evaluation extends Component
     {
         foreach ($this->evaluation->solvers2 as $solver)
             $this->selected_solvers[$solver->id] = $solver->id;
+        Toaster::success('Selected solvers updated.');
+
     }
 
     #[On("view")]

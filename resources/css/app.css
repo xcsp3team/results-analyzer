@@ -4,7 +4,7 @@
 @source "../../node_modules/flowbite";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
-
+@source '../../vendor/masmerise/livewire-toaster/resources/views/*.blade.php';
 @custom-variant dark (&:where(.dark, .dark *));
 
 
