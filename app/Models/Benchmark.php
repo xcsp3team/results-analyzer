@@ -12,9 +12,9 @@ class Benchmark extends Model
     protected $fillable = ['name', 'fullname', 'family', 'status', 'nb_variables', 'nb_constraints', 'useles_vars',
         'info_variables', 'info_constraints'];
 
-    public function competition()
+    public function evaluation()
     {
-        return $this->belongsTo(Competition::class);
+        return $this->belongsTo(Evaluation::class);
     }
 
     public function max_degree()

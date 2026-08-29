@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Competitions\Tables;
 
 use App\Filament\Pages\Bugs;
 use App\Filament\Pages\MissingResults;
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -32,9 +32,9 @@ class CompetitionsTable
                     ->sortable(),
                 TextColumn::make("benchmarks_count")
                     ->label("Nb benchs")
-                    ->state(fn($record) => $record->type=="csp" ? $record->benchmarks2()->count(): $record->benchmarksCop()->count())
+                    ->state(fn($record) => $record->type == "csp" ? $record->benchmarks2()->count() : $record->benchmarksCop()->count())
                     ->numeric(),
-                TextColumn::make("solvers")->state(fn(Competition $record) => count($record->solvers()))->numeric(),
+                TextColumn::make("solvers")->state(fn(Evaluation $record) => count($record->solvers()))->numeric(),
                 IconColumn::make('public')
                     ->boolean(),
                 TextColumn::make('slug')
@@ -45,27 +45,27 @@ class CompetitionsTable
             ])
             ->recordActions([
                 Action::make("init")
-                ->label("Init results")
-                ->schema(function($record) {
-                    $tmp = [];
-                    foreach($record->solvers() as $solver) {
-                        $tmp[] = Checkbox::make("s_" . $solver->id)
-                                    ->label($solver->name . " " . $solver->version)
-                                    ->default(true);
-                    }
-                    return $tmp;
-                })
-                ->action(function(array $data, Competition $record) {
-                    $ids = array_map(
-                        fn($key) => (int) substr($key, 2),
-                        array_keys(array_filter($data))
-                    );
-                    $record->initResults($ids);
-                }),
+                    ->label("Init results")
+                    ->schema(function ($record) {
+                        $tmp = [];
+                        foreach ($record->solvers() as $solver) {
+                            $tmp[] = Checkbox::make("s_" . $solver->id)
+                                ->label($solver->name . " " . $solver->version)
+                                ->default(true);
+                        }
+                        return $tmp;
+                    })
+                    ->action(function (array $data, Evaluation $record) {
+                        $ids = array_map(
+                            fn($key) => (int)substr($key, 2),
+                            array_keys(array_filter($data))
+                        );
+                        $record->initResults($ids);
+                    }),
                 Action::make('Errors')
-                    ->url(fn (Competition $record) => Bugs::getUrl(['competition' => $record->id])),
+                    ->url(fn(Evaluation $record) => Bugs::getUrl(['competition' => $record->id])),
                 Action::make('Missing')
-                    ->url(fn (Competition $record) => MissingResults::getUrl(['competition' => $record->id])),
+                    ->url(fn(Evaluation $record) => MissingResults::getUrl(['competition' => $record->id])),
                 EditAction::make(),
             ])
             ->toolbarActions([

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -20,16 +20,16 @@ class MissingResults extends Page implements HasTable
 
     public static ?string $slug = 'competitions/{competition}/missing-results';
 
-    public Competition $competition;
+    public Evaluation $competition;
 
-    public function mount(Competition $competition): void
+    public function mount(Evaluation $competition): void
     {
         $this->competition = $competition;
     }
 
     public function getTitle(): string
     {
-        return "Missing results – {$this->competition->name}" . " " . $this->competition->track ;
+        return "Missing results – {$this->competition->name}" . " " . $this->competition->track;
     }
 
 

@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Misc\Filters;
-use App\Models\Competition;
+use App\Models\Evaluation as EvaluationModel;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
@@ -22,8 +22,8 @@ class Evaluation extends Component
 
     public function mount(string $slug)
     {
-        $this->evaluation = Competition::where('slug', $slug)->firstOrFail();
-        foreach ($this->evaluation->solvers2 as $solver) {
+        $this->evaluation = EvaluationModel::where('slug', $slug)->firstOrFail();
+        foreach ($this->evaluation->solvers as $solver) {
             $this->selected_solvers[$solver->id] = $solver->id;
         }
         $this->filters = new Filters();

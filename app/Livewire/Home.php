@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Livewire\Component;
 
 class Home extends Component
@@ -10,19 +10,22 @@ class Home extends Component
     public $evaluations;
     public $evaluation = null;
 
-    public function mount() {
-        $this->evaluations = Competition::all();
+    public function mount()
+    {
+        $this->evaluations = Evaluation::all();
         $this->evaluation = null;
     }
 
-    public function render() {
+    public function render()
+    {
         return view('livewire.home');
     }
 
-    public function load() {
-        $tmp = Competition::findOrFail($this->evaluation);
+    public function load()
+    {
+        $tmp = Evaluation::findOrFail($this->evaluation);
         $this->evaluation = null;
-        if($tmp->type == "cop")
+        if ($tmp->type == "cop")
             $this->redirectRoute('evaluations_cop', ['slug' => $tmp->slug]);
         else
             $this->redirectRoute('evaluations', ['slug' => $tmp->slug]);

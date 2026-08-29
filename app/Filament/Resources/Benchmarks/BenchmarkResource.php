@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Benchmarks;
 use App\Filament\Pages\MissingResults;
 use App\Filament\Resources\Benchmarks\Pages\ManageBenchmarks;
 use App\Models\Benchmark;
-use App\Models\Competition;
+use App\Models\Evaluation;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -25,9 +25,9 @@ use UnitEnum;
 class BenchmarkResource extends Resource
 {
     protected static ?string $model = Benchmark::class;
-protected static string | UnitEnum | null $navigationGroup = "Benchmarks";
-protected static ?string $navigationLabel = "CSP";
-protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|UnitEnum|null $navigationGroup = "Benchmarks";
+    protected static ?string $navigationLabel = "CSP";
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {
@@ -40,8 +40,8 @@ protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRect
                 TextInput::make('family')
                     ->required(),
                 Select::make('competition_id')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn ($query) => $query->where("type", "cop"))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
+                    ->relationship('competition', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
                     ->required(),
                 TextInput::make('status')
                     ->required(),
@@ -88,8 +88,8 @@ protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRect
             ])->defaultPaginationPageOption(25)
             ->filters([
                 SelectFilter::make('competition')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn ($query) => $query->where("type", "csp"))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
+                    ->relationship('competition', 'name', modifyQueryUsing: fn($query) => $query->where("type", "csp"))
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
 
             ])
             ->deferFilters(false)

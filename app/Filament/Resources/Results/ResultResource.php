@@ -34,7 +34,7 @@ class ResultResource extends Resource
     protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = "CSP";
-    protected static string | UnitEnum | null $navigationGroup = "Results";
+    protected static string|UnitEnum|null $navigationGroup = "Results";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -44,7 +44,7 @@ class ResultResource extends Resource
             ->components([
                 Select::make('solver_id')
                     ->relationship('solver', 'name')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->version}")
                     ->required(),
                 TextInput::make('benchmark_id')
                     ->required()
@@ -90,16 +90,16 @@ class ResultResource extends Resource
             ])->defaultPaginationPageOption(50)
             ->filters([
                 SelectFilter::make('competition')
-                    ->label('Competition')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
-                    ->relationship('benchmark.competition', 'name',  modifyQueryUsing: fn ($query) => $query->where("type", "csp"))
+                    ->label('Evaluation')
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
+                    ->relationship('benchmark.competition', 'name', modifyQueryUsing: fn($query) => $query->where("type", "csp"))
                     ->preload()
                     ->searchable(),
                 SelectFilter::make('solver')
                     ->relationship('solver', 'name')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->version}")
                     ->preload()
-                ->searchable(),
+                    ->searchable(),
                 TernaryFilter::make('bug')->label('Bug')
                     ->trueLabel('Buggy results')
                     ->falseLabel('Non buggy results')
@@ -108,7 +108,7 @@ class ResultResource extends Resource
             ->recordActions([
                 Action::make("family")
                     ->label("Make family buggy")
-                    ->action(function($record) {
+                    ->action(function ($record) {
                         DB::update("UPDATE results set bug=1 where solver_id = ? and benchmark_id in (SELECT id from benchmarks where competition_id=? and family=?)",
                             [$record->solver_id, $record->benchmark->competition_id, $record->benchmark->family]);
                     }),

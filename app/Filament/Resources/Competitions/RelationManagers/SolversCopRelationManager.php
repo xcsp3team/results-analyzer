@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Competitions\RelationManagers;
 
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Actions\Action;
 use Filament\Actions\AttachAction;
 use Filament\Actions\BulkActionGroup;
@@ -23,7 +23,7 @@ class SolversCopRelationManager extends RelationManager
 {
     protected static string $relationship = 'solversCop';
 
-    public static function canViewForRecord(Competition|\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): bool
+    public static function canViewForRecord(Evaluation|\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): bool
     {
         return $ownerRecord->type === 'cop';
     }
@@ -49,7 +49,7 @@ class SolversCopRelationManager extends RelationManager
                     ->numeric()
             ])
             ->extraAttributes(['class' => 'divide-y divide-gray-200'])
-            ->recordClasses(fn ($record) => 'hover:bg-gray-50 dark:hover:bg-white/5 transition-colors')
+            ->recordClasses(fn($record) => 'hover:bg-gray-50 dark:hover:bg-white/5 transition-colors')
             ->filters([
                 //
             ])

@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Competitions\Pages;
 
 use App\Filament\Pages\MissingResults;
 use App\Filament\Resources\Competitions\CompetitionResource;
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -25,7 +25,7 @@ class EditCompetition extends EditRecord
         return [
             ...parent::getFormActions(),
             Action::make('Missing')
-                ->url(fn (Competition $record) => MissingResults::getUrl(['competition' => $record->id])),
+                ->url(fn(Evaluation $record) => MissingResults::getUrl(['competition' => $record->id])),
         ];
     }
 }

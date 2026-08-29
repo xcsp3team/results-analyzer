@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -14,21 +14,22 @@ use Illuminate\Support\Facades\DB;
 class Bugs extends Page implements HasTable
 {
     use InteractsWithTable;
+
     protected string $view = 'filament.pages.bugs';
     protected static bool $shouldRegisterNavigation = false; // si tu n'y accèdes que via un lien depuis une autre page
 
     public static ?string $slug = 'competitions/{competition}/bugs';
 
-    public Competition $competition;
+    public Evaluation $competition;
 
-    public function mount(Competition $competition): void
+    public function mount(Evaluation $competition): void
     {
         $this->competition = $competition;
     }
 
     public function getTitle(): string
     {
-        return "Bugs in results – {$this->competition->name} {$this->competition->track}" ;
+        return "Bugs in results – {$this->competition->name} {$this->competition->track}";
     }
 
     public function table(Table $table): Table
@@ -68,8 +69,8 @@ class Bugs extends Page implements HasTable
         return $table
             ->query($model->newQuery()->fromSub($query, 'divergences'))
             ->columns([
-               TextColumn::make('benchmark_name')->label('Benchmark')->sortable()->searchable(),
-               TextColumn::make('s1_name')->label('Solver 1')->sortable(),
+                TextColumn::make('benchmark_name')->label('Benchmark')->sortable()->searchable(),
+                TextColumn::make('s1_name')->label('Solver 1')->sortable(),
                 TextColumn::make('s1_version')->label('Version 1'),
                 TextColumn::make('r1_status')->label('Statut 1')->badge(),
                 TextColumn::make('s2_name')->label('Solver 2')->sortable(),

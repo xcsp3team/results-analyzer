@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PDO;
 
-class Competition extends Model {
+class Evaluation extends Model
+{
     use HasFactory;
 
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
@@ -28,65 +29,16 @@ class Competition extends Model {
         return $this->name . " " . $this->track;
     }
 
-    public function solvers()
-    {
-        if ($this->type == "cop")
-            return DB::select("select distinct solvers.* from solvers " .
-                "inner join results_cop on solvers.id=solver_id " .
-                "inner join benchmarks_cop on benchmarks_cop.id=benchmark_id " .
-                "inner join competitions on competition_id=competitions.id " .
-                "where competitions.id= ? order by solvers.name, solvers.version",
-                [$this->id]);
-
-        return DB::select("select distinct solvers.* from solvers " .
-            'inner join results on solvers.id=solver_id ' .
-            "inner join benchmarks on benchmarks.id=benchmark_id " .
-            "inner join competitions on competition_id=competitions.id " .
-            "where competitions.id= ? order by solvers.name, solvers.version", [$this->id]);
-    }
-
 
     public function benchmarks()
     {
-        if ($this->type == "cop")
-            return $this->hasMany(Benchmark_cop::class, 'competition_id');
-
-        return $this->hasMany("App\Models\Benchmark", 'competition_id');
+        return $this->hasMany("App\Models\Benchmark", 'evaluation_id');
     }
 
 
-    // Used with Filament Table
-
-    public function benchmarks2(): HasMany
+    public function solvers(): BelongsToMany
     {
-        return $this->hasMany(Benchmark::class); // table "benchmarks"
-    }
-
-    public function benchmarksCop(): HasMany   // For Filament
-    {
-        return $this->hasMany(Benchmark_cop::class); // table "benchmarks_cop"
-    }
-
-    public function solvers2(): BelongsToMany
-    {
-        return $this->belongsToMany(Solver::class, "competition_solver", "competition_id", "solver_id")->withPivot("nb_benchmarks");
-    }
-
-    public function solversCop(): BelongsToMany
-    {
-        return $this->belongsToMany(Solver::class, "competition_solver_cop", "competition_id", "solver_id")->withPivot("nb_benchmarks");
-    }
-
-    public function displaysolvers()
-    {
-
-        /* if(Schema::hasTable("display")) {
-             $tmp = $this->belongsToMany("App\Models\Solver", "display", "competition_id", "solver_id");
-             if($tmp->count() > 0) {
-                 return $tmp->get();
-             }
-         }*/
-        return $this->solvers();
+        return $this->belongsToMany(Solver::class, "evaluation_solver", "evaluation_id", "solver_id")->withPivot("nb_benchmarks");
     }
 
 
@@ -160,7 +112,7 @@ class Competition extends Model {
         if ($this->_all_results != null)
             return $this->_all_results;
         $this->_all_results = [];
-        foreach ($this->solvers2 as $solver) {
+        foreach ($this->solvers as $solver) {
             $tmp = $solver->results($this);
             foreach ($tmp as $data) {
                 $data->time = round($data->time);
@@ -194,6 +146,4 @@ class Competition extends Model {
         $this->_constraints = array_values(array_unique($tmp));
         return $this->_constraints;
     }
-
-
 }
