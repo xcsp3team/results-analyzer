@@ -27,7 +27,7 @@ class Radar extends Component
         $this->filters = $filters;
         $this->selected_solvers = $selected_solvers;
         $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers2 as $solver)
+        foreach ($this->evaluation->solvers as $solver)
             $this->solvers[$solver->id] = $solver;
     }
 
@@ -45,7 +45,7 @@ class Radar extends Component
 
 
         $all_results = $this->evaluation->all_results();
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             $s_id = 0;

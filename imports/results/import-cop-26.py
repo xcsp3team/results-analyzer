@@ -10,8 +10,8 @@ import re
 # add timestamps to all lines
 
 solver_id = 8
-competition_id = 6
-prefix="/parallelcop/"
+evaluation_id = 6
+prefix="/fastcop/"
 _time = 3 # 3 -> CPU or 2 -> WC
 
 
@@ -67,7 +67,7 @@ with open(sys.argv[1]+"results.csv") as csvfile:
         bench =  prefix + os.path.basename(row[1]).removesuffix("_c26.sh").removesuffix("-mc26.sh").removesuffix("_mc26.sh")
         results.append({'name': bench, "time": -1 if sat == 1 else time, "bounds": bounds, 'unsupported': unsupported, 'bug': bug})
 result= {
-    "competition" : competition_id,
+    "evaluation" : evaluation_id,
     "solver" : solver_id,
     "trust" : 1, # if 1 we trust results of the solver and update status on bench and best bound. If no trust can be removed
     "results" : results
@@ -75,7 +75,7 @@ result= {
 
 
 print(result)
-url = "https://xcsp26.alfweb.net/api"
+url = "https://localhost:8000/api"
 response = requests.post(url + "/competitions/solvers", json = result)
 print(response.status_code)
 print(response.json())

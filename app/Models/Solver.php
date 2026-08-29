@@ -18,13 +18,8 @@ class Solver extends Model
         if (gettype($c) == "string")
             $c = Evaluation::findOrFail($c);
 
-        if ($c->type == "cop")
-            return DB::select("select results_cop.*, benchmarks_cop.* " .
-                "from benchmarks_cop left join results_cop on benchmark_id=benchmarks_cop.id " .
-                "where  competition_id=? and solver_id=? order by benchmark_id", [$c->id, $this->id]);
-
         return DB::select("select results.*, benchmarks.name, benchmarks.nb_variables, benchmarks.nb_clauses,benchmarks.info_domains,benchmarks.info_constraints, benchmarks.family "
-            . "from benchmarks left join results on benchmark_id=benchmarks.id where competition_id=? and solver_id=? order by benchmark_id"
+            . "from benchmarks left join results on benchmark_id=benchmarks.id where evaluation_id=? and solver_id=? order by benchmark_id"
             , [$c->id, $this->id]);
     }
 

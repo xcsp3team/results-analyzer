@@ -39,7 +39,7 @@ class Evaluation extends Component
         $this->filters->families = $this->evaluation->families();
         $this->filters->constraints = [];
         $this->filters->are_forbidden = true;
-        $this->nb_benchmarks = $this->evaluation->benchmarks2()->count();
+        $this->nb_benchmarks = $this->evaluation->benchmarks()->count();
         $this->filters->expression = "d > 0 and v > 0 and c > 0";
         if ($this->first == false)
             Toaster::success('Filters initialized.');

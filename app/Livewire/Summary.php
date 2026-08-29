@@ -35,7 +35,7 @@ class Summary extends Component
         $this->filters = $filters;
         $this->selected_solvers = $selected_solvers;
         $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers2 as $solver)
+        foreach ($this->evaluation->solvers as $solver)
             $this->solvers[$solver->id] = $solver;
 
         $this->header_summary = [
@@ -65,7 +65,7 @@ class Summary extends Component
             for ($i = 0; $i <= 7; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
-            foreach ($this->evaluation->benchmarks2 as $benchmark) {
+            foreach ($this->evaluation->benchmarks as $benchmark) {
                 if ($this->filters->is_filtered($benchmark))
                     continue;
                 $data = $all_results[$selectedSolver->id][$benchmark->id];
@@ -84,7 +84,7 @@ class Summary extends Component
 
         // Unique
         $nbBenchmarks = 0;
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             $unique = -1;
@@ -110,7 +110,7 @@ class Summary extends Component
         $vbs[self::NAME]->value = "Virtual Best Solver";
         $vbs[self::NAME]->class = "bg-green-300 italic";
 
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             $sat = false;

@@ -127,7 +127,7 @@ class Evaluation extends Model
         if ($this->_families != null)
             return $this->_families;
         $this->_families = DB::table('benchmarks')
-            ->where('competition_id', $this->id)
+            ->where('evaluation_id', $this->id)
             ->distinct()
             ->pluck('family')
             ->toArray();

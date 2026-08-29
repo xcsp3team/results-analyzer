@@ -27,7 +27,7 @@ class Cactus extends Component
         $this->filters = $filters;
         $this->selected_solvers = $selected_solvers;
         $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers2 as $solver)
+        foreach ($this->evaluation->solvers as $solver)
             $this->solvers[$solver->id] = $solver;
     }
 
@@ -41,7 +41,7 @@ class Cactus extends Component
             $selectedSolver = $this->solvers[$id];
             $tmp = new DataPlot($selectedSolver->name . " " . $selectedSolver->version);
             $values = [];
-            foreach ($this->evaluation->benchmarks2 as $benchmark) {
+            foreach ($this->evaluation->benchmarks as $benchmark) {
                 if ($this->filters->is_filtered($benchmark))
                     continue;
                 $data = $all_results[$selectedSolver->id][$benchmark->id];

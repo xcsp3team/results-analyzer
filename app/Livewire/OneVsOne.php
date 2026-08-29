@@ -63,7 +63,7 @@ class OneVsOne extends Component
         $this->scatter = [];
         $this->scatter[] = new DataPlot("SAT");
         $this->scatter[] = new DataPlot("UNSAT");
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             $data_x = $all_results[$this->solver_x][$benchmark->id];
@@ -98,7 +98,7 @@ class OneVsOne extends Component
         $this->per_constraints["UNSATY"] = new DataPlot($this->name_y . " UNSAT", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
 
         $all_results = $this->evaluation->all_results();
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             preg_match_all('/#(\w+):/', $benchmark->info_constraints, $matches);
@@ -149,7 +149,7 @@ class OneVsOne extends Component
         $this->per_families["UNSATY"] = new DataPlot($this->name_y . " UNSAT", array_fill(0, count($this->selected_families), 0), $this->name_y);
 
         $all_results = $this->evaluation->all_results();
-        foreach ($this->evaluation->benchmarks2 as $benchmark) {
+        foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             $family = $benchmark->family;

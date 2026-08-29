@@ -121,7 +121,7 @@
                 <select wire:model="solver_x"
                         class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
-                    @foreach($evaluation->solvers2 as $solver)
+                    @foreach($evaluation->solvers as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>
                     @endforeach
                 </select>
@@ -129,7 +129,7 @@
                 <select wire:model="solver_y"
                         class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
-                    @foreach($evaluation->solvers2 as $solver)
+                    @foreach($evaluation->solvers as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>
                     @endforeach
                 </select>

@@ -28,7 +28,7 @@ class TableView extends Component
     public function render()
     {
         $this->nb_benchmarks = 0;
-        foreach ($this->evaluation->benchmarks2 as $benchmark)
+        foreach ($this->evaluation->benchmarks as $benchmark)
             if ($this->filters->is_filtered($benchmark) == false)
                 $this->nb_benchmarks++;
 

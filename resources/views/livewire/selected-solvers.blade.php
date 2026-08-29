@@ -5,8 +5,8 @@
         <div class="mt-3 inline-flex rounded-xs shadow-xs -space-x-px" role="group">
             <button type="button"
                     wire:click="$dispatch('all-solvers')"
-                    {{count($selected_solvers) == count($evaluation->solvers2)  ? "disabled" :""}}
-                    class="{{count($selected_solvers) != count($evaluation->solvers2)  ? "button-blue" : "button-gray"}} rounded-s-xs">
+                    {{count($selected_solvers) == count($evaluation->solvers)  ? "disabled" :""}}
+                    class="{{count($selected_solvers) != count($evaluation->solvers)  ? "button-blue" : "button-gray"}} rounded-s-xs">
                 All
             </button>
             <button
@@ -18,7 +18,7 @@
             </button>
         </div>
     </div>
-    @foreach($evaluation->solvers2 as $solver)
+    @foreach($evaluation->solvers as $solver)
         <div
             wire:key="{{Str::random()}}"
             wire:click="toggle_selected_solver({{$solver->id}})"
