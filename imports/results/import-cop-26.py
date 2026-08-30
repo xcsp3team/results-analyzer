@@ -9,8 +9,8 @@ import re
 # import les traces des solveurs lancés avec submit COP/CSP
 # add timestamps to all lines
 
-solver_id = 8
-evaluation_id = 6
+solver_id = 7
+evaluation_id = 5
 prefix="/fastcop/"
 _time = 3 # 3 -> CPU or 2 -> WC
 
@@ -75,7 +75,7 @@ result= {
 
 
 print(result)
-url = "https://localhost:8000/api"
+url = "http://localhost:8000/api"
 response = requests.post(url + "/competitions/solvers", json = result)
 print(response.status_code)
 print(response.json())
