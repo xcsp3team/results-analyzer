@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Competitions\RelationManagers;
+namespace App\Filament\Resources\Evaluations\RelationManagers;
 
 use App\Models\Evaluation;
 use Filament\Actions\Action;
@@ -57,7 +57,7 @@ class SolversCopRelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make("remove")->action(function ($record) {
-                    DB::delete("DELETE FROM results_cop WHERE solver_id = ? and benchmark_id in (SELECT id from benchmarks_cop where competition_id=?)", [$record->solver_id, $record->competition_id]);
+                    DB::delete("DELETE FROM results WHERE solver_id = ? and benchmark_id in (SELECT id from benchmarks_cop where evaluation_id=?)", [$record->solver_id, $record->evaluation_id]);
                 })
             ])
             ->toolbarActions([

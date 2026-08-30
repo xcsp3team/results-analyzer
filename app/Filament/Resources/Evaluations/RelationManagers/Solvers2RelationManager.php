@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Competitions\RelationManagers;
+namespace App\Filament\Resources\Evaluations\RelationManagers;
 
 use App\Models\Evaluation;
 use Filament\Actions\Action;
@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
 
 class Solvers2RelationManager extends RelationManager
 {
-    protected static string $relationship = 'solvers2';
+    protected static string $relationship = 'solvers';
     protected static ?string $title = "Solvers";
 
     public static function canViewForRecord(Evaluation|\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): bool
@@ -58,7 +58,7 @@ class Solvers2RelationManager extends RelationManager
             ])
             ->recordActions([
                 Action::make("remove")->action(function ($record) {
-                    DB::delete("DELETE FROM results WHERE solver_id = ? and benchmark_id in (SELECT id from benchmarks where competition_id=?)", [$record->solver_id, $record->competition_id]);
+                    DB::delete("DELETE FROM results WHERE solver_id = ? and benchmark_id in (SELECT id from benchmarks where evaluation_id=?)", [$record->solver_id, $record->evaluation_id]);
                 })
             ])
             ->toolbarActions([

@@ -18,26 +18,26 @@ class MissingResults extends Page implements HasTable
     protected string $view = 'filament.pages.missing-results';
     protected static bool $shouldRegisterNavigation = false; // si tu n'y accèdes que via un lien depuis une autre page
 
-    public static ?string $slug = 'competitions/{competition}/missing-results';
+    public static ?string $slug = 'evaluations/{evaluation}/missing-results';
 
-    public Evaluation $competition;
+    public Evaluation $evaluation;
 
-    public function mount(Evaluation $competition): void
+    public function mount(Evaluation $evaluation): void
     {
-        $this->competition = $competition;
+        $this->evaluation = $evaluation;
     }
 
     public function getTitle(): string
     {
-        return "Missing results – {$this->competition->name}" . " " . $this->competition->track;
+        return "Missing results – {$this->evaluation->name}" . " " . $this->evaluation->track;
     }
 
 
     public function table(Table $table): Table
     {
-        $solvers = $this->competition->solvers();
-        $r = $this->competition->type === 'cop' ? 'results_cop' : 'results';
-        $b = $this->competition->type === 'cop' ? 'benchmarks_cop' : 'benchmarks';
+        $solvers = $this->evaluation->solvers;
+        $r = 'results';
+        $b = 'benchmarks';
 
         $union = null;
 
@@ -47,7 +47,7 @@ class MissingResults extends Page implements HasTable
                     "? as sid, ? as sname, ? as sversion, $b.id as bid, $b.name as bname, CONCAT(?, '-', $b.id) as id",
                     [$s->id, $s->name, $s->version, $s->id]
                 )
-                ->where('competition_id', $this->competition->id)
+                ->where('evaluation_id', $this->evaluation->id)
                 ->whereNotIn('id', function ($q) use ($r, $s) {
                     $q->select('benchmark_id')->from($r)->where('solver_id', $s->id);
                 });

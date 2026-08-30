@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Competitions\RelationManagers;
+namespace App\Filament\Resources\Evaluations\RelationManagers;
 
 use App\Filament\Resources\Benchmarks\BenchmarkResource;
 use App\Models\Evaluation;
@@ -10,7 +10,7 @@ use Filament\Tables\Table;
 
 class Benchmarks2RelationManager extends RelationManager
 {
-    protected static string $relationship = 'benchmarks2';
+    protected static string $relationship = 'benchmarks';
 
     protected static ?string $relatedResource = BenchmarkResource::class;
 

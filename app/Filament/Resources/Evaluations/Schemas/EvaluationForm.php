@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Competitions\Schemas;
+namespace App\Filament\Resources\Evaluations\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
-class CompetitionForm
+class EvaluationForm
 {
     public static function configure(Schema $schema): Schema
     {

@@ -39,8 +39,8 @@ class BenchmarkResource extends Resource
                     ->required(),
                 TextInput::make('family')
                     ->required(),
-                Select::make('competition_id')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
+                Select::make('evaluation_id')
+                    ->relationship('evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
                     ->required(),
                 TextInput::make('status')
@@ -63,8 +63,8 @@ class BenchmarkResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('competition')
-                    ->state(fn(Benchmark $record) => $record->competition->fullname())
+                TextColumn::make('evaluation')
+                    ->state(fn(Benchmark $record) => $record->evaluation->fullname())
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
@@ -87,8 +87,8 @@ class BenchmarkResource extends Resource
                     ->sortable(),
             ])->defaultPaginationPageOption(25)
             ->filters([
-                SelectFilter::make('competition')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn($query) => $query->where("type", "csp"))
+                SelectFilter::make('evaluation')
+                    ->relationship('evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "csp"))
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
 
             ])

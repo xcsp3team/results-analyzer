@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Competitions\Tables;
+namespace App\Filament\Resources\Evaluations\Tables;
 
 use App\Filament\Pages\Bugs;
 use App\Filament\Pages\MissingResults;
@@ -14,7 +14,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class CompetitionsTable
+class EvaluationsTable
 {
     public static function configure(Table $table): Table
     {
@@ -32,13 +32,13 @@ class CompetitionsTable
                     ->sortable(),
                 TextColumn::make("benchmarks_count")
                     ->label("Nb benchs")
-                    ->state(fn($record) => $record->type == "csp" ? $record->benchmarks2()->count() : $record->benchmarksCop()->count())
-                    ->numeric(),
-                TextColumn::make("solvers")->state(fn(Evaluation $record) => count($record->solvers()))->numeric(),
-                IconColumn::make('public')
-                    ->boolean(),
-                TextColumn::make('slug')
-                    ->searchable(),
+                    ->state(fn($record) => $record->benchmarks()->count())
+                    ->numeric()
+                //TextColumn::make("solvers")->state(fn(Evaluation $record) => count($record->solvers()))->numeric(),
+                //IconColumn::make('public')
+                //    ->boolean(),
+                //TextColumn::make('slug')
+                //    ->searchable()
             ])
             ->filters([
                 //
@@ -63,9 +63,9 @@ class CompetitionsTable
                         $record->initResults($ids);
                     }),
                 Action::make('Errors')
-                    ->url(fn(Evaluation $record) => Bugs::getUrl(['competition' => $record->id])),
+                    ->url(fn(Evaluation $record) => Bugs::getUrl(['evaluation' => $record->id])),
                 Action::make('Missing')
-                    ->url(fn(Evaluation $record) => MissingResults::getUrl(['competition' => $record->id])),
+                    ->url(fn(Evaluation $record) => MissingResults::getUrl(['evaluation' => $record->id])),
                 EditAction::make(),
             ])
             ->toolbarActions([

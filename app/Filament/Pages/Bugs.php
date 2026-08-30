@@ -18,18 +18,18 @@ class Bugs extends Page implements HasTable
     protected string $view = 'filament.pages.bugs';
     protected static bool $shouldRegisterNavigation = false; // si tu n'y accèdes que via un lien depuis une autre page
 
-    public static ?string $slug = 'competitions/{competition}/bugs';
+    public static ?string $slug = 'evaluations/{evaluation}/bugs';
 
-    public Evaluation $competition;
+    public Evaluation $evaluation;
 
-    public function mount(Evaluation $competition): void
+    public function mount(Evaluation $evaluation): void
     {
-        $this->competition = $competition;
+        $this->evaluation = $evaluation;
     }
 
     public function getTitle(): string
     {
-        return "Bugs in results – {$this->competition->name} {$this->competition->track}";
+        return "Bugs in results – {$this->evaluation->name} {$this->evaluation->track}";
     }
 
     public function table(Table $table): Table
@@ -45,7 +45,7 @@ class Bugs extends Page implements HasTable
             ->where('r1.status', '!=', 'UNSUPPORTED')
             ->where('r2.status', '!=', 'UNSUPPORTED')
             ->whereColumn('r1.status', '!=', 'r2.status')
-            ->where('benchmarks.competition_id', $this->competition->id)
+            ->where('benchmarks.evaluation_id', $this->evaluation->id)
             ->select([
                 DB::raw("CONCAT(r1.id, '-', r2.id) as id"),
                 'benchmarks.id as benchmark_id',

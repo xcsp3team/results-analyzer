@@ -20,16 +20,24 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 use UnitEnum;
 
 class BenchmarkCopResource extends Resource
 {
-    protected static ?string $model = Benchmark_cop::class;
+    protected static ?string $model = Benchmark::class;
     protected static ?string $navigationLabel = "COP";
-    protected static string | UnitEnum | null $navigationGroup = "Benchmarks";
+    protected static string|UnitEnum|null $navigationGroup = "Benchmarks";
     protected static ?string $label = "COP";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            //return DB::table('benchmark')
+            ->whereRaw("evaluation_id in (SELECT id from evaluations where type='cop')");//->ddRawSql();
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -41,18 +49,17 @@ class BenchmarkCopResource extends Resource
                     ->required(),
                 TextInput::make('family')
                     ->required(),
-                Select::make('competition_id')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn ($query) => $query->where("type", "cop"))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
+                Select::make('evaluation_id')
+                    ->relationship('evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
                     ->required(),
                 TextInput::make('best_bound')
                     ->required(),
-                Toggle::make('optim')->label("Optimum ?")
-                    ->required(),
+                Select::make('status')->label("Status")->options(["SAT", "UNSAT", "OPTIMUM", "UNKNOWN"]),
                 TextInput::make('nb_variables')
                     ->required()
                     ->numeric(),
-                TextInput::make('nb_constraints')
+                TextInput::make('nb_clauses')
                     ->required()
                     ->numeric(),
                 TextInput::make('info_domains'),
@@ -67,8 +74,8 @@ class BenchmarkCopResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('competition')
-                    ->state(fn(Benchmark_cop $record) => $record->competition->fullname())
+                TextColumn::make('evaluation')
+                    ->state(fn(Benchmark $record) => $record->evaluation->fullname())
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
@@ -79,13 +86,12 @@ class BenchmarkCopResource extends Resource
                 TextColumn::make('best_bound')
                     ->label("Best Bound")
                     ->searchable(),
-                TextColumn::make('optim')
-                    ->label("Optimum ?"),
+                TextColumn::make('status'),
                 TextColumn::make('nb_variables')
                     ->alignEnd()
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('nb_constraints')->alignEnd()
+                TextColumn::make('nb_clauses')->alignEnd()
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('info_domains')
@@ -97,9 +103,9 @@ class BenchmarkCopResource extends Resource
                     ->sortable(),
             ])->defaultPaginationPageOption(25)
             ->filters([
-                SelectFilter::make('competition')
-                    ->relationship('competition', 'name', modifyQueryUsing: fn ($query) => $query->where("type", "cop"))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
+                SelectFilter::make('evaluation')
+                    ->relationship('evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
 
             ])
             ->deferFilters(false)

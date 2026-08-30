@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Competitions;
+namespace App\Filament\Resources\Evaluations;
 
-use App\Filament\Resources\Competitions\Pages\CreateCompetition;
-use App\Filament\Resources\Competitions\Pages\EditCompetition;
-use App\Filament\Resources\Competitions\Pages\ListCompetitions;
-use App\Filament\Resources\Competitions\Schemas\CompetitionForm;
-use App\Filament\Resources\Competitions\Tables\CompetitionsTable;
+use App\Filament\Resources\Evaluations\Pages\CreateEvaluation;
+use App\Filament\Resources\Evaluations\Pages\EditEvaluation;
+use App\Filament\Resources\Evaluations\Pages\ListEvaluation;
+use App\Filament\Resources\Evaluations\Schemas\EvaluationForm;
+use App\Filament\Resources\Evaluations\Tables\EvaluationsTable;
 use App\Models\Evaluation;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -14,7 +14,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class CompetitionResource extends Resource
+class EvaluationResource extends Resource
 {
     protected static ?string $model = Evaluation::class;
 
@@ -25,12 +25,12 @@ class CompetitionResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return CompetitionForm::configure($schema);
+        return EvaluationForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return CompetitionsTable::configure($table);
+        return EvaluationsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -38,8 +38,8 @@ class CompetitionResource extends Resource
         return [
             RelationManagers\Benchmarks2RelationManager::class,
             RelationManagers\BenchmarksCopRelationManager::class,
-            RelationManagers\Solvers2RelationManager::class,
-            RelationManagers\SolversCopRelationManager::class,
+            //RelationManagers\Solvers2RelationManager::class,
+            //RelationManagers\SolversCopRelationManager::class,
         ];
 
     }
@@ -47,9 +47,9 @@ class CompetitionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListCompetitions::route('/'),
-            'create' => CreateCompetition::route('/create'),
-            'edit' => EditCompetition::route('/{record}/edit'),
+            'index' => ListEvaluation::route('/'),
+            'create' => CreateEvaluation::route('/create'),
+            'edit' => EditEvaluation::route('/{record}/edit'),
         ];
     }
 }
