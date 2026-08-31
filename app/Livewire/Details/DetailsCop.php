@@ -1,45 +1,24 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Details;
 
 use App\Misc\Data;
 use App\Misc\DataHeader;
-use Livewire\Attributes\Reactive;
-use Livewire\Component;
 
-class Detailed extends Component
+
+class DetailsCop extends AbstractDetails
 {
-    public $detailed_results = [];
-    public $header_results = [];
-    public $solvers;
-    public $evaluation;
-    public $instance_name = null;
 
-    #[Reactive]
-    public $filters;
-
-    #[Reactive]
-    public $selected_solvers;
-
-    public function mount($filters, $evaluation, $selected_solvers)
+    public function create_detailed_results()
     {
-        $this->filters = $filters;
-        $this->selected_solvers = $selected_solvers;
-        $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers as $solver)
-            $this->solvers[$solver->id] = $solver;
-
-    }
-
-    public function createDetailedResults()
-    {
-        $all_results = $this->evaluation->all_results();
+        $all_results = $this->evaluation->all_results_cop($this->filters->time_limit);
         $this->detailed_results = [];
         $this->header_results = [
             new DataHeader("Instance", "left"),
             new DataHeader("V"),
             new DataHeader("C"),
-            new DataHeader("Status")
+            new DataHeader("Optimisation", "left"),
+            new DataHeader("Best Bound"),
         ];
         foreach ($this->selected_solvers as $id) {
             $selectedSolver = $this->solvers[$id];
@@ -49,7 +28,7 @@ class Detailed extends Component
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
-            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->status)];
+            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->type), new Data($benchmark->bounds)];
 
             $best = $this->filters->time_limit;
             foreach ($this->selected_solvers as $id) {
@@ -65,16 +44,32 @@ class Detailed extends Component
                     $tmp[] = new Data("U");
                     continue;
                 }
+
+                // UNSAT CASE
+                if ($data->status == "UNSAT" && $data->time <= $this->filters->time_limit) {
+                    $cell = new Data("UNSAT (1) " . $data->time, "text-green-500");
+                    continue;
+                }
+
+                // No bound found
+                if ($data->bound == null) {
+                    $tmp[] = new Data("-", "opacity-30");
+                    continue;
+                }
+
+                $cell = $data->bound;
+                $score =
+
                 if ($data->bug) {
-                    $tmp[] = new Data($data->time, "bg-red-500 opacity-50");
+                    $tmp[] = new Data($cell, "bg-red-500 opacity-50");
                     continue;
                 }
                 if ($data->time <= $best && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data($data->time, "text-green-500");
+                    $tmp[] = new Data($cell, "text-green-500");
                     continue;
                 }
                 if ($data->time <= $this->filters->time_limit)
-                    $tmp[] = new Data($data->time);
+                    $tmp[] = new Data($cell);
                 else
                     $tmp[] = new Data("-", "opacity-30");
             }
@@ -83,9 +78,4 @@ class Detailed extends Component
 
     }
 
-    public function render()
-    {
-        $this->createDetailedResults();
-        return view('livewire.detailed');
-    }
 }

@@ -9,7 +9,8 @@
     <livewire:cactus :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
     />
 
-    <livewire:detailed :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
+    <livewire:is :component=$details_component :filters=$filters :evaluation=$evaluation
+                 :selected_solvers=$selected_solvers
     />
 
 </div>
