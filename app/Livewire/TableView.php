@@ -5,12 +5,13 @@ namespace App\Livewire;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class TableView extends Component
-{
+class TableView extends Component {
     public $evaluation;
 
     #[Reactive]
     public $filters;
+
+    public $summary_component;
 
     #[Reactive]
     public $selected_solvers;
@@ -23,6 +24,7 @@ class TableView extends Component
         $this->filters = $filters;
         $this->selected_solvers = $selected_solvers;
         $this->evaluation = $evaluation;
+        $this->summary_component = "summary.summary-" . $this->evaluation->get_type();
     }
 
     public function render()

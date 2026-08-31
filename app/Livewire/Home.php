@@ -25,9 +25,6 @@ class Home extends Component
     {
         $tmp = Evaluation::findOrFail($this->evaluation);
         $this->evaluation = null;
-        if ($tmp->type == "cop")
-            $this->redirectRoute('evaluations_cop', ['slug' => $tmp->slug]);
-        else
-            $this->redirectRoute('evaluations', ['slug' => $tmp->slug]);
+        $this->redirectRoute('evaluations', ['slug' => $tmp->slug]);
     }
 }

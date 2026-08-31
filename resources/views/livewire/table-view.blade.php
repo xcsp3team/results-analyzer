@@ -1,7 +1,9 @@
 <div class="p-4 mb-4">
     <h3 class=" text-2xl font-medium mb-2 dark:text-gray-400">Ranking of solvers</h3>
     <h4 class=" text-1xl font-bold mb-6 dark:text-gray-400">Number of selected instances: {{$nb_benchmarks}}</h4>
-    <livewire:summary :filters=$filters :evaluation=$evaluation :selected_solvers=$selected_solvers
+
+    <livewire:is :component=$summary_component :filters=$filters :evaluation=$evaluation
+                 :selected_solvers=$selected_solvers wire:key={{Str::random()}}
     />
 
     <livewire:cactus :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation

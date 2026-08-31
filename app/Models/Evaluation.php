@@ -122,6 +122,28 @@ class Evaluation extends Model
         return $this->_all_results;
     }
 
+    public function all_results_cop($time_limit)
+    {
+        $time_limit = 18;
+        if ($this->_all_results != null)
+            return $this->_all_results;
+        $this->all_results();
+        foreach ($this->_all_results as $key => $data_solver) {
+            foreach ($data_solver as $data) {
+
+                $json = str_replace("'", '"', $data->bounds);
+                $bounds = json_decode($json);
+                $data->bound = null;
+                foreach ($bounds as $b)
+                    if ($b->time <= $time_limit)
+                        $data->bound = $b->bound;
+                unset($data->bounds);
+            }
+        }
+        return $this->_all_results;
+    }
+
+
     public function families()
     {
         if ($this->_families != null)
@@ -145,5 +167,12 @@ class Evaluation extends Model
         }
         $this->_constraints = array_values(array_unique($tmp));
         return $this->_constraints;
+    }
+
+    public function get_type()
+    {
+        if ($this->type == "sat" || $this->type == "csp")
+            return "sat";
+        return "cop";
     }
 }

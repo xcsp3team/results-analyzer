@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Summary;
+
 
 use App\Misc\Data;
 use App\Misc\DataHeader;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class Summary extends Component
-{
-    public $summary;
-    public $header_summary;
-    public $solvers;
+class SummarySat extends AbstractSummary {
+
 
     const int NAME = 0;
     const int TOTAL = 1;
@@ -22,22 +20,10 @@ class Summary extends Component
     const int UNSUPPORTED = 6;
     const int PAR2 = 7;
 
-    public $evaluation;
-
-    #[Reactive]
-    public $filters;
-
-    #[Reactive]
-    public $selected_solvers;
 
     public function mount($filters, $evaluation, $selected_solvers)
     {
-        $this->filters = $filters;
-        $this->selected_solvers = $selected_solvers;
-        $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers as $solver)
-            $this->solvers[$solver->id] = $solver;
-
+        parent::mount($filters, $evaluation, $selected_solvers);
         $this->header_summary = [
             new DataHeader("Solver", "left"),
             new DataHeader("#Solved"),
@@ -50,7 +36,7 @@ class Summary extends Component
         ];
     }
 
-    public function createSummary()
+    public function create_summary()
     {
         $this->summary = [];
         if (count($this->selected_solvers) == 0)
@@ -157,9 +143,4 @@ class Summary extends Component
     }
 
 
-    public function render()
-    {
-        $this->createSummary();
-        return view('livewire.summary');
-    }
 }
