@@ -48,7 +48,7 @@ class EvaluationsTable
                     ->label("Init results")
                     ->schema(function ($record) {
                         $tmp = [];
-                        foreach ($record->solvers() as $solver) {
+                        foreach ($record->solvers as $solver) {
                             $tmp[] = Checkbox::make("s_" . $solver->id)
                                 ->label($solver->name . " " . $solver->version)
                                 ->default(true);

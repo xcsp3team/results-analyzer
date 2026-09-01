@@ -51,7 +51,7 @@ class Evaluation extends Model
 
     public function initSAT($solvers)
     {
-        foreach ($this->benchmarks2 as $benchmark) {
+        foreach ($this->benchmarks as $benchmark) {
             $nbSAT = 0;
             $nbUNSAT = 0;
             foreach ($solvers as $solver_id) {
@@ -79,30 +79,21 @@ class Evaluation extends Model
 
     public function initBestBounds($solvers)
     {
-        foreach ($this->benchmarksCop as $benchmark) {
-            $benchmark->optim = 0;
-            $minimize = substr(strtoupper($benchmark->type), 0, 3) == "MIN";
+        foreach ($this->benchmarks as $benchmark) {
+            if (str_contains(strtoupper($benchmark->type), "MAX"))
+                $type = "MAXIMIZE";
+            else
+                $type = "MINIMIZE";
             $benchmark->best_bound = null;
-            foreach ($solvers as $solver_id) {
-                $result = Result_cop::where("benchmark_id", $benchmark->id)->where("solver_id", $solver_id)->first();
-                if ($result == false || $result->bug || $result->unsupported)
-                    continue;
-
-
-                $bounds = json_decode(str_replace("'", '"', $result->bounds));
-                if (count($bounds) == 0)
-                    continue;
-                $best = $bounds[count($bounds) - 1];
-                if ($result->time != -1) {
-                    $benchmark->optim = 1;
-                    $benchmark->best_bound = $best->bound;
-                    $benchmark->save();
-                    break;
-                }
-                if ($benchmark->best_bound == null || ($minimize && $benchmark->best_bound > $best->bound) ||
-                    (!$minimize && $benchmark->best_bound < $best->bound))
-                    $benchmark->best_bound = $best->bound;
-            }
+            $benchmark->status = "UNKNOWN";
+            $best_bound = $this->best_bound_cop($benchmark->id, $type, $solvers, $this->defaulttime);
+            $benchmark->best_bound = $best_bound->bound;
+            if ($best_bound->unsat)
+                $benchmark->status = "UNSAT";
+            if ($best_bound->optimum)
+                $benchmark->status = "OPTIMUM";
+            else if ($best_bound->bound != null)
+                $benchmark->status = "SAT";
             $benchmark->save();
         }
     }
