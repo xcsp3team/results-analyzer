@@ -28,7 +28,11 @@ class DetailsCop extends AbstractDetails
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
-            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->type), new Data($benchmark->bounds)];
+            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->type)];
+            if ($benchmark->status == "UNSAT")
+                $tmp[] = new Data("UNSAT", "text-green-500");
+            else
+                $tmp[] = new Data($benchmark->best_bound, $benchmark->status == "OPTIMUM" ? "text-green-500" : "");
 
             foreach ($this->selected_solvers as $id) {
                 $selectedSolver = $this->solvers[$id];
@@ -40,13 +44,13 @@ class DetailsCop extends AbstractDetails
 
                 // UNSAT CASE
                 if ($data->status == "UNSAT" && $data->time <= $this->filters->time_limit) {
-                    $cell = new Data("UNSAT (1) " . $data->time, "text-green-500");
+                    $tmp[] = new Data("UNSAT (1) " . $data->time . "s", "text-green-500");
                     continue;
                 }
 
                 // No bound found
-                if ($data->bound == null) {
-                    $tmp[] = new Data("-", "opacity-30");
+                if ($data->bound === null) {
+                    $tmp[] = new Data("(0)", "opacity-30");
                     continue;
                 }
 
@@ -56,7 +60,6 @@ class DetailsCop extends AbstractDetails
                     $type = "MINIMIZE";
                 $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
                 $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
-
                 $nb = $score->optimum + $score->bb1 + $score->bb2;
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit)
                     $time = $data->bound_time . "s - " . $data->time . "s";

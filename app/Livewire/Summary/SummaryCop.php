@@ -55,13 +55,13 @@ class SummaryCop extends AbstractSummary
                     $type = "MAXIMIZE";
                 else
                     $type = "MINIMIZE";
-                if ($benchmark->status == "UNSAT") {
+
+                $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
+                if ($data->status == "UNSAT") {
                     $tmp[self::UNSAT]->value += 1;
                     continue;
                 }
-
-                $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
-                if ($best_bound->bound == null)
+                if ($best_bound->bound === null)
                     continue;
                 $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
                 $tmp[self::OPTIMUM]->value += $score->optimum;

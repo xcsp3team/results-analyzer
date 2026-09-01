@@ -118,7 +118,7 @@ class Evaluation extends Model
         if ($this->_all_results != null)
             return $this->_all_results;
         $this->all_results();
-        foreach ($this->_all_results as $key => $data_solver) {
+        foreach ($this->_all_results as $data_solver) {
             foreach ($data_solver as $data) {
 
                 $json = str_replace("'", '"', $data->bounds);
@@ -130,6 +130,8 @@ class Evaluation extends Model
                         $data->bound_time = $b->time;
                     }
                 unset($data->bounds);
+                //if ($data->benchmark_id == 701)
+                //    dd($data);
             }
         }
         return $this->_all_results;
@@ -175,7 +177,13 @@ class Evaluation extends Model
         $tmp = (object)["bound" => null, "optimum" => false, "unsat" => false];
         foreach ($selected_solvers as $solver_id) {
             $data = $all_results[$solver_id][$benchmark_id];
-            if ($data->bound == null) continue;
+            if ($data->bug)
+                continue;
+            if ($data->status == "UNSAT") {
+                $tmp->unsat = true;
+                return $tmp;
+            }
+            if ($data->bound === null) continue;
             if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound)) {
                 $tmp->bound = $data->bound;
                 if ($data->time != -1 && $data->time <= $time_limit) {
@@ -200,7 +208,7 @@ class Evaluation extends Model
         }
         if ($best_bound->optimum == false)
             $tmp->bb1++;
-        else $tmp->bb2 += 0.5;
+        else $tmp->bb2 += 1;
         return $tmp;
     }
 }
