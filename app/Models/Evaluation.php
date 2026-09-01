@@ -124,7 +124,6 @@ class Evaluation extends Model
 
     public function all_results_cop($time_limit)
     {
-        $time_limit = 18;
         if ($this->_all_results != null)
             return $this->_all_results;
         $this->all_results();
@@ -135,8 +134,10 @@ class Evaluation extends Model
                 $bounds = json_decode($json);
                 $data->bound = null;
                 foreach ($bounds as $b)
-                    if ($b->time <= $time_limit)
+                    if ($b->time <= $time_limit) {
                         $data->bound = $b->bound;
+                        $data->bound_time = $b->time;
+                    }
                 unset($data->bounds);
             }
         }
@@ -175,4 +176,46 @@ class Evaluation extends Model
             return "sat";
         return "cop";
     }
+
+
+    public function best_bound_cop($benchmark_id, $type, $selected_solvers, $time_limit)
+    {
+        $all_results = $this->all_results_cop($time_limit);
+        $tmp = (object)["bound" => null, "optimum" => false, "unsat" => false];
+        foreach ($selected_solvers as $solver_id) {
+            $data = $all_results[$solver_id][$benchmark_id];
+            if ($data->bound == null) continue;
+            if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound)) {
+                $tmp->bound = $data->bound;
+                if ($data->time != -1 && $data->time <= $time_limit) {
+                    $tmp->optimum = true;
+                    return $tmp;
+                }
+            }
+        }
+        return $tmp;
+    }
+
+    public function score_cop($benchmark_id, $solver_id, $type, $best_bound, $time_limit)
+    {
+        $tmp = (object)["optimum" => 0, "bb1" => 0, "bb2" => 0];
+        $all_results = $this->all_results_cop($time_limit);
+        $data = $all_results[$solver_id][$benchmark_id];
+        if (($type == "MAXIMIZE" && $best_bound->bound > $data->bound) || ($type == "MINIMIZE" && $best_bound->bound < $data->bound))
+            return $tmp;
+        if ($data->time != -1 && $data->time <= $time_limit) {
+            $tmp->optimum = 1;
+            return $tmp;
+        }
+        if ($best_bound->optimum == false)
+            $tmp->bb1++;
+        else $tmp->bb2 += 0.5;
+        return $tmp;
+    }
 }
+
+
+
+
+
+

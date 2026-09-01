@@ -89,7 +89,7 @@ class Evaluation extends Component
     #[On("all-solvers")]
     public function all_solvers()
     {
-        foreach ($this->evaluation->solvers2 as $solver)
+        foreach ($this->evaluation->solvers as $solver)
             $this->selected_solvers[$solver->id] = $solver->id;
         Toaster::success('Selected solvers updated.');
 

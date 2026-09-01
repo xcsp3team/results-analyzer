@@ -30,24 +30,6 @@ class SummaryCop extends AbstractSummary
         ];
     }
 
-    public function best_score($benchmark_id, $type)
-    {
-        $all_results = $this->evaluation->all_results_cop($this->filters->time_limit);
-        $tmp = (object)["bound" => null, "optimum" => false, "unsat" => false];
-        foreach ($this->selected_solvers as $id) {
-            $selectedSolver = $this->solvers[$id];
-            $data = $all_results[$selectedSolver->id][$benchmark_id];
-            if ($data->bound == null) continue;
-            if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound)) {
-                $tmp->bound = $data->bound;
-                if ($data->time != -1 && $data->time <= $this->filters->time_limit) {
-                    $tmp->optimum = true;
-                    return $tmp;
-                }
-            }
-        }
-        return $tmp;
-    }
 
     public function create_summary()
     {
@@ -78,18 +60,13 @@ class SummaryCop extends AbstractSummary
                     continue;
                 }
 
-                $best_score = $this->best_score($benchmark->id, $type);
-                if ($best_score->bound == null)
+                $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
+                if ($best_bound->bound == null)
                     continue;
-                if (($type == "MAXIMIZE" && $best_score->bound > $data->bound) || ($type == "MINIMIZE" && $best_score->bound < $data->bound))
-                    continue;
-                if ($data->time != -1 && $data->time <= $this->filters->time_limit) {
-                    $tmp[self::OPTIMUM]->value++;
-                    continue;
-                }
-                if ($best_score->optimum == false)
-                    $tmp[self::BB1]->value++;
-                else $tmp[self::BB2]->value++;
+                $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
+                $tmp[self::OPTIMUM]->value += $score->optimum;
+                $tmp[self::BB1]->value += $score->bb1;
+                $tmp[self::BB2]->value += $score->bb2;
             }
 
             $tmp[self::SCORE]->value = $tmp[self::OPTIMUM]->value + $tmp[self::BB1]->value + $tmp[self::BB2]->value / 2 + $tmp[self::UNSAT]->value;
