@@ -202,13 +202,16 @@ class Evaluation extends Model
         $data = $all_results[$solver_id][$benchmark_id];
         if (($type == "MAXIMIZE" && $best_bound->bound > $data->bound) || ($type == "MINIMIZE" && $best_bound->bound < $data->bound))
             return $tmp;
+        if ($data->bound === null)
+            return $tmp;
+
         if ($data->time != -1 && $data->time <= $time_limit) {
             $tmp->optimum = 1;
             return $tmp;
         }
         if ($best_bound->optimum == false)
             $tmp->bb1++;
-        else $tmp->bb2 += 1;
+        else $tmp->bb2++;
         return $tmp;
     }
 }
