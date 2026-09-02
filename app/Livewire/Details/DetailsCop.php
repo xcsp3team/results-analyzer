@@ -25,10 +25,15 @@ class DetailsCop extends AbstractDetails
             $this->header_results[] = new DataHeader($selectedSolver->name . " " . $selectedSolver->version);
         }
 
+        $selected_solvers_string = implode(",", $this->selected_solvers);
+
+
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
-            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->type)];
+            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses)];
+            $tmp[] = new Data($benchmark->type, "", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
+
             if ($benchmark->status == "UNSAT")
                 $tmp[] = new Data("UNSAT", "text-green-500");
             else
