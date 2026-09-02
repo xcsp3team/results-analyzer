@@ -36,7 +36,7 @@
         });
         this.chart.render();
 
-        Livewire.on('cactus-opt-updated', (event) => {
+        Livewire.on('cactus-search-updated', (event) => {
             this.chart.updateOptions({
                 series: event.series_search,
             });
