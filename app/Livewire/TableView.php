@@ -14,6 +14,7 @@ class TableView extends Component
 
     public $summary_component;
     public $details_component;
+    public $cactus_component;
 
     #[Reactive]
     public $selected_solvers;
@@ -28,6 +29,7 @@ class TableView extends Component
         $this->evaluation = $evaluation;
         $this->summary_component = "summary.summary-" . $this->evaluation->get_type();
         $this->details_component = "details.details-" . $this->evaluation->get_type();
+        $this->cactus_component = "cactus.cactus-" . $this->evaluation->get_type();
     }
 
     public function render()

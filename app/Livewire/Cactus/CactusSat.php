@@ -1,36 +1,14 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Cactus;
 
 use App\Misc\DataPlot;
-use Livewire\Attributes\Reactive;
-use Livewire\Component;
 
-class Cactus extends Component
+class CactusSat extends AbstractCactus
 {
-    public $evaluation;
-
-    #[Reactive]
-    public $filters;
-
-    public $solvers;
-
-    #[Reactive]
-    public $selected_solvers;
-
     public $xaxis;
 
     public $series;
-
-    public function mount($filters, $evaluation, $selected_solvers)
-    {
-        $this->filters = $filters;
-        $this->selected_solvers = $selected_solvers;
-        $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers as $solver)
-            $this->solvers[$solver->id] = $solver;
-    }
-
     public function create_cactus()
     {
         $max = 0;

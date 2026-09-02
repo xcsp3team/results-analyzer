@@ -6,7 +6,7 @@
                  :selected_solvers=$selected_solvers wire:key={{Str::random()}}
     />
 
-    <livewire:cactus :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+    <livewire:is :component=$cactus_component :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
     />
 
     <livewire:is :component=$details_component :filters=$filters :evaluation=$evaluation
