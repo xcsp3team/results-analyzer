@@ -27,12 +27,15 @@ class DetailsCop extends AbstractDetails
 
         $selected_solvers_string = implode(",", $this->selected_solvers);
 
+        $icon_min = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 17.3497C9 17.3497 15.9383 17.8924 16.9154 16.9154C17.8924 15.9383 17.3496 9 17.3496 9M16.5 16.5L6.5 6.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>';
+        $icon_max = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>';
 
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
+            $icon = str_contains(strtoupper($benchmark->type), "MIN") ? $icon_min : $icon_max;
             $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses)];
-            $tmp[] = new Data($benchmark->type, "", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
+            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})' );
 
             if ($benchmark->status == "UNSAT")
                 $tmp[] = new Data("UNSAT", "text-green-500");
