@@ -16,8 +16,11 @@ class Evaluation extends Component
     public $filters;
     public $display_sidebar = true;
 
-    public $view = 1;
+    public $view = 2;
     public $first = true;
+
+    public $radar_component;
+
 
 
     public function mount(string $slug)
@@ -28,6 +31,7 @@ class Evaluation extends Component
         }
         $this->filters = new Filters();
         $this->initialize_filtering();
+        $this->radar_component = "radar.radar-" . $this->evaluation->get_type();
     }
 
 

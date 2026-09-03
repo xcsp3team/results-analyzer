@@ -57,7 +57,7 @@ class SummaryCop extends AbstractSummary
                     $type = "MINIMIZE";
 
                 $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
-                if ($data->status == "UNSAT") {
+                if ($data->status == "UNSAT" && $data->time < $this->filters->time_limit) {
                     $tmp[self::UNSAT]->value += 1;
                     continue;
                 }

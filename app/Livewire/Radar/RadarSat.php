@@ -1,36 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Radar;
 
 use App\Misc\DataPlot;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class Radar extends Component
+class RadarSat extends AbstractRadar
 {
-    public $evaluation;
-
-    #[Reactive]
-    public $filters;
-
-    #[Reactive]
-    public $selected_solvers;
-
-    public $families;
-
-    public $solvers;
-
-    public $solvers_name;
-
-    public function mount($filters, $evaluation, $selected_solvers)
-    {
-        $this->filters = $filters;
-        $this->selected_solvers = $selected_solvers;
-        $this->evaluation = $evaluation;
-        foreach ($this->evaluation->solvers as $solver)
-            $this->solvers[$solver->id] = $solver;
-    }
-
     public function create_radars()
     {
         $this->families = [];
@@ -63,11 +40,5 @@ class Radar extends Component
                 xaxis: $this->solvers_name
             );
         }
-    }
-
-    public function render()
-    {
-        $this->create_radars();
-        return view('livewire.radar');
     }
 }

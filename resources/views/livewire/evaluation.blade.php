@@ -21,7 +21,7 @@
                 />
                 @break
             @case(2)
-                <livewire:radar :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                <livewire:is :component=$radar_component :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
                 />
                 @break
             @case(3)
