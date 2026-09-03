@@ -8,13 +8,15 @@ class Filters implements Wireable
 {
     public $time_limit;
     public $status;
+    public $type;
     public $families;
     public $constraints;
     public $are_forbidden;
     public $expression;
+    public $category;
 
 
-    public function __construct($time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null)
+    public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL")
     {
         $this->time_limit = $time_limit;
         $this->status = $status;
@@ -22,31 +24,31 @@ class Filters implements Wireable
         $this->constraints = $constraints;
         $this->are_forbidden = $are_forbidden;
         $this->expression = $expression;
+        $this->type = $type;
+        $this->category = $category;
     }
 
     public function toLivewire()
     {
         return [
+            'category' => $this->category,
             'time_limit' => $this->time_limit,
             'status' => $this->status,
             'families' => $this->families,
             'constraints' => $this->constraints,
             'are_forbidden' => $this->are_forbidden,
             'expression' => $this->expression,
+            'type' => $this->type,
         ];
     }
 
     public static function fromLivewire($value)
     {
-        return new static($value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression']);
+        return new static($value['category'], $value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression'], $value['type']);
     }
 
     public function is_filtered($benchmark)
     {
-        if ($this->status == "UNSAT" && $benchmark->status != "UNSAT")
-            return true;
-        if ($this->status == "SAT" && $benchmark->status != "SAT")
-            return true;
         if (in_array($benchmark->family, $this->families) == false)
             return true;
 
@@ -68,10 +70,32 @@ class Filters implements Wireable
                 if ($eval->evaluate($this->expression) == false)
                     return true;
             } catch (ExprEvaluatorException $e) {
-                
+
             }
         }
 
+        // SAT/CSP special filters
+        if ($this->category == "sat") {
+            if ($this->status == "UNSAT" && $benchmark->status != "UNSAT")
+                return true;
+            if ($this->status == "SAT" && $benchmark->status != "SAT")
+                return true;
+        }
+
+
+        // COP special filters
+        if ($this->category == "cop") {
+            if ($this->status == "CLOSED" && ($benchmark->status == "SAT" || $benchmark->status == "UNKNOWN"))
+                return true;
+            if ($this->status == "OPEN" && ($benchmark->status == "OPTIMUM" || $benchmark->status == "UNSAT"))
+                return true;
+
+
+            if ($this->type == "MAXIMIZE" && $benchmark->get_type() != "MAXIMIZE")
+                return true;
+            if ($this->type == "MINIMIZE" && $benchmark->get_type() != "MINIMIZE")
+                return true;
+        }
         return false;
     }
 }

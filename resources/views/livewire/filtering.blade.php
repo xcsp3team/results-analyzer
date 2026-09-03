@@ -22,19 +22,52 @@
             </button>
         </div>
 
-        <div class="mt-3 inline-flex rounded-base shadow-xs -space-x-px" role="group">
-            <button
-                wire:click="$dispatch('filters_change', { field: 'status', value: 'SAT'})"
-                type="button"
-                class="{{$filters->status == "SAT"  ? "button-blue" : "button-gray"}} rounded-s-xs">
-                SAT
-            </button>
-            <button type="button"
-                    wire:click="$dispatch('filters_change', { field: 'status', value: 'UNSAT'})"
-                    class="{{$filters->status == "UNSAT"  ? "button-blue" : "button-gray"}} rounded-e-xs">
-                UNSAT
-            </button>
-        </div>
+        @if($filters->category == "sat")
+            <div class="mt-3 inline-flex rounded-base shadow-xs -space-x-px" role="group">
+                <button
+                    wire:click="$dispatch('filters_change', { field: 'status', value: 'SAT'})"
+                    type="button"
+                    class="{{$filters->status == "SAT"  ? "button-blue" : "button-gray"}} rounded-s-xs">
+                    SAT
+                </button>
+                <button type="button"
+                        wire:click="$dispatch('filters_change', { field: 'status', value: 'UNSAT'})"
+                        class="{{$filters->status == "UNSAT"  ? "button-blue" : "button-gray"}} rounded-e-xs">
+                    UNSAT
+                </button>
+            </div>
+        @endif
+
+        @if($filters->category == "cop")
+            <div class="mt-3 inline-flex rounded-base shadow-xs -space-x-px" role="group">
+                <button
+                    wire:click="$dispatch('filters_change', { field: 'status', value: 'CLOSED'})"
+                    type="button"
+                    class="{{$filters->status == "CLOSED"  ? "button-blue" : "button-gray"}} rounded-s-xs">
+                    Closed
+                </button>
+                <button type="button"
+                        wire:click="$dispatch('filters_change', { field: 'status', value: 'OPEN'})"
+                        class="{{$filters->status == "OPEN"  ? "button-blue" : "button-gray"}} rounded-e-xs">
+                    Open
+                </button>
+            </div>
+
+            <div class="mt-3 inline-flex rounded-base shadow-xs -space-x-px" role="group">
+                <button
+                    wire:click="$dispatch('filters_change', { field: 'type', value: 'MINIMIZE'})"
+                    type="button"
+                    class="{{$filters->type == "MINIMIZE"  ? "button-blue" : "button-gray"}} rounded-s-xs">
+                    Min
+                </button>
+                <button type="button"
+                        wire:click="$dispatch('filters_change', { field: 'type', value: 'MAXIMIZE'})"
+                        class="{{$filters->type == "MAXIMIZE"  ? "button-blue" : "button-gray"}} rounded-e-xs">
+                    Max
+                </button>
+            </div>
+        @endif
+
         <div class="mt-3">
             <label class="text-xs  px-1">Expression</label>
             <input type="text"

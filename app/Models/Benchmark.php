@@ -22,4 +22,11 @@ class Benchmark extends Model
         preg_match_all('/#(\d+):/', $this->info_domains, $matches);
         return (int)end($matches[1]);
     }
+
+    public function get_type()
+    {
+        if (str_contains(strtoupper($this->type), "MAX"))
+            return "MAXIMIZE";
+        return "MINIMIZE";
+    }
 }
