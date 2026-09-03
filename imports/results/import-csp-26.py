@@ -8,7 +8,7 @@ import csv
 # add timestamps to all lines
 
 #CD_ID,CD_SCRIPT,RS_WCTIME,RS_CPUTIME,RS_USERTIME,RS_SYSTEMTIME,RS_CPUUSAGE,RS_MAXVM,RS_TIMEOUT,RS_MEMOUT,SC_instance_name,SC_track,SC_checker,SC_o_lines
-solver_id = 44
+solver_id = 42
 competition_id = 2
 prefix="/csp/"
 _time = 3 # 3 -> CPU or 2 -> WC
