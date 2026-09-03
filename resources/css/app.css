@@ -1,9 +1,56 @@
 @import 'tailwindcss';
+@import "flowbite/src/themes/default";
 
+@source "../../node_modules/flowbite";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../vendor/masmerise/livewire-toaster/resources/views/*.blade.php';
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+
+@plugin "flowbite/plugin";
+
+.table {
+    @apply w-full text-left text-sm text-body;
+}
+
+.button-blue {
+    @apply text-white bg-blue-500 box-border border hover:bg-blue-600 focus:ring-4  font-medium leading-5 text-sm px-3 py-1 ;
+}
+
+.button-gray {
+    @apply dark:border-gray-300 text-body bg-neutral-primary-soft border border-default hover:bg-blue-500 hover:text-white hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft font-medium leading-5 text-sm px-3 py-1 focus:outline-none;
+}
+
+.thead {
+    @apply text-sm text-body bg-neutral-secondary-medium border-t border-b border-default-medium;
+}
+
+.th {
+    @apply px-6 py-3 font-medium;
+}
+
+.tr {
+    @apply bg-neutral-primary-soft  hover:bg-neutral-secondary-medium  border-b border-b-gray-200;
+}
+
+.td {
+    @apply px-6 py-2;
+}
+
+.td-right {
+    @apply flex justify-end;
+}
+
+
+.checkbox {
+    @apply w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft;
+}
+
+.h3 {
+    @apply text-xl font-medium mb-4 dark:text-gray-400;
+}
+
+.h2 {
+    @apply text-2xl font-bold mb-6 dark:text-gray-400;
 }

@@ -7,11 +7,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "ext-pdo": "*",
+        "afatmustafa/blade-hugeicons": "*",
         "filament/filament": "^5.0",
         "laravel/framework": "^13.8",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
-        "ext-pdo": "*"
+        "livewire/livewire": "*",
+        "masmerise/livewire-toaster": "*",
+        "wire-elements/modal": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Competition;
+use App\Models\Evaluation;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -14,21 +14,22 @@ use Illuminate\Support\Facades\DB;
 class Bugs extends Page implements HasTable
 {
     use InteractsWithTable;
+
     protected string $view = 'filament.pages.bugs';
     protected static bool $shouldRegisterNavigation = false; // si tu n'y accèdes que via un lien depuis une autre page
 
-    public static ?string $slug = 'competitions/{competition}/bugs';
+    public static ?string $slug = 'evaluations/{evaluation}/bugs';
 
-    public Competition $competition;
+    public Evaluation $evaluation;
 
-    public function mount(Competition $competition): void
+    public function mount(Evaluation $evaluation): void
     {
-        $this->competition = $competition;
+        $this->evaluation = $evaluation;
     }
 
     public function getTitle(): string
     {
-        return "Bugs in results – {$this->competition->name} {$this->competition->track}" ;
+        return "Bugs in results – {$this->evaluation->name} {$this->evaluation->track}";
     }
 
     public function table(Table $table): Table
@@ -44,7 +45,7 @@ class Bugs extends Page implements HasTable
             ->where('r1.status', '!=', 'UNSUPPORTED')
             ->where('r2.status', '!=', 'UNSUPPORTED')
             ->whereColumn('r1.status', '!=', 'r2.status')
-            ->where('benchmarks.competition_id', $this->competition->id)
+            ->where('benchmarks.evaluation_id', $this->evaluation->id)
             ->select([
                 DB::raw("CONCAT(r1.id, '-', r2.id) as id"),
                 'benchmarks.id as benchmark_id',
@@ -68,8 +69,8 @@ class Bugs extends Page implements HasTable
         return $table
             ->query($model->newQuery()->fromSub($query, 'divergences'))
             ->columns([
-               TextColumn::make('benchmark_name')->label('Benchmark')->sortable()->searchable(),
-               TextColumn::make('s1_name')->label('Solver 1')->sortable(),
+                TextColumn::make('benchmark_name')->label('Benchmark')->sortable()->searchable(),
+                TextColumn::make('s1_name')->label('Solver 1')->sortable(),
                 TextColumn::make('s1_version')->label('Version 1'),
                 TextColumn::make('r1_status')->label('Statut 1')->badge(),
                 TextColumn::make('s2_name')->label('Solver 2')->sortable(),

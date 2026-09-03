@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ResultCops;
 
 use App\Filament\Resources\ResultCops\Pages\ManageResultCops;
+use App\Models\Result;
 use App\Models\Result_cop;
 use App\Models\ResultCops;
 use BackedEnum;
@@ -30,11 +31,10 @@ use UnitEnum;
 
 class ResultCopsResource extends Resource
 {
-    protected static ?string $model = Result_cop::class;
+    protected static ?string $model = Result::class;
     protected static ?int $navigationSort = 3;
-    protected static string | UnitEnum | null $navigationGroup = "Results";
+    protected static string|UnitEnum|null $navigationGroup = "Results";
     protected static ?string $navigationLabel = "COP";
-
 
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -53,7 +53,7 @@ class ResultCopsResource extends Resource
             ->components([
                 Select::make('solver_id')
                     ->relationship('solver', 'name')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->version}")
                     ->required(),
                 TextInput::make('solver_id')
                     ->required()
@@ -81,8 +81,8 @@ class ResultCopsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('competition')
-                    ->state(fn($record) => $record->benchmark->competition->fullname())->sortable(),
+                TextColumn::make('evaluation')
+                    ->state(fn($record) => $record->benchmark->evaluation->fullname())->sortable(),
                 TextColumn::make('benchmark.name')
                     ->sortable()->searchable(),
                 TextColumn::make('benchmark.family')
@@ -97,10 +97,10 @@ class ResultCopsResource extends Resource
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('bounds')->label("Best bound")->alignEnd()
-                    ->state(function ( $record) {
-                        $tab = json_decode(str_replace("'", '"',$record->bounds));
+                    ->state(function ($record) {
+                        $tab = json_decode(str_replace("'", '"', $record->bounds));
                         //dd($tab);
-                        if($tab == null || count($tab) == 0)
+                        if ($tab == null || count($tab) == 0)
                             return null;
                         return $tab[count($tab) - 1]->bound;
                     })->numeric()
@@ -109,15 +109,15 @@ class ResultCopsResource extends Resource
                 ToggleColumn::make('bug'),
             ])->defaultPaginationPageOption(50)
             ->filters([
-                SelectFilter::make('competition')
-                    ->label('Competition')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->track}")
-                    ->relationship('benchmark.competition', 'name',  modifyQueryUsing: fn ($query) => $query->where("type", "cop"))
+                SelectFilter::make('evaluation')
+                    ->label('Evaluation')
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
+                    ->relationship('benchmark.evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "cop"))
                     ->preload()
                     ->searchable(),
                 SelectFilter::make('solver')
                     ->relationship('solver', 'name')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->name} {$record->version}")
+                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->version}")
                     ->preload()
                     ->searchable(),
                 TernaryFilter::make('bug')->label('Bug')
@@ -128,9 +128,9 @@ class ResultCopsResource extends Resource
             ->recordActions([
                 Action::make("family")
                     ->label("Make family buggy")
-                    ->action(function($record) {
-                        DB::update("UPDATE results_cop set bug=1 where solver_id = ? and benchmark_id in (SELECT id from benchmarks_cop where competition_id=? and family=?)",
-                            [$record->solver_id, $record->benchmark->competition_id, $record->benchmark->family]);
+                    ->action(function ($record) {
+                        DB::update("UPDATE results set bug=1 where solver_id = ? and benchmark_id in (SELECT id from benchmarks_cop where evaluation_id=? and family=?)",
+                            [$record->solver_id, $record->benchmark->evaluation_id, $record->benchmark->family]);
                     }),
                 EditAction::make(),
                 DeleteAction::make(),

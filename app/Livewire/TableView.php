@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Livewire;
+
+use Livewire\Attributes\Reactive;
+use Livewire\Component;
+
+class TableView extends Component
+{
+    public $evaluation;
+
+    #[Reactive]
+    public $filters;
+
+    public $summary_component;
+    public $details_component;
+    public $cactus_component;
+
+    #[Reactive]
+    public $selected_solvers;
+
+    public $nb_benchmarks;
+
+
+    public function mount($filters, $evaluation, $selected_solvers)
+    {
+        $this->filters = $filters;
+        $this->selected_solvers = $selected_solvers;
+        $this->evaluation = $evaluation;
+        $this->summary_component = "summary.summary-" . $this->evaluation->get_type();
+        $this->details_component = "details.details-" . $this->evaluation->get_type();
+        $this->cactus_component = "cactus.cactus-" . $this->evaluation->get_type();
+    }
+
+    public function render()
+    {
+        $this->nb_benchmarks = 0;
+        foreach ($this->evaluation->benchmarks as $benchmark)
+            if ($this->filters->is_filtered($benchmark) == false)
+                $this->nb_benchmarks++;
+
+        return view('livewire.table-view');
+    }
+}
