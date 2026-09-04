@@ -18,13 +18,13 @@ class CreateResultsTable extends Migration
             $table->bigInteger("solver_id")->unsigned();
             $table->bigInteger("benchmark_id")->unsigned();
             $table->float("time");
-            $table->string("status");
+            $table->string("status")->nullable();
+            $table->longText("bounds")->nullable();
             $table->integer("unsupported");
             $table->integer("bug");
             $table->timestamps();
             $table->foreign("solver_id")->references("id")->on("solvers")->onDelete("cascade");
             $table->foreign("benchmark_id")->references("id")->on("benchmarks")->onDelete("cascade");
-
         });
     }
 

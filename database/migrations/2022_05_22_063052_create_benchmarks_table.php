@@ -15,19 +15,20 @@ class CreateBenchmarksTable extends Migration
     {
         Schema::create('benchmarks', function (Blueprint $table) {
             $table->id();
-            $table->string("name", );
+            $table->string("name");
             $table->string("fullname", 1000);
             $table->string("family");
-            $table->bigInteger("competition_id")->unsigned();
-            $table->string("status");
+            $table->bigInteger("evaluation_id")->unsigned();
+            $table->string("status")->nullable();
+            $table->bigInteger("best_bound")->nullable();
             $table->integer("nb_variables");
             $table->integer("nb_clauses");
             $table->string("info_domains")->nullable();
             $table->string("info_constraints")->nullable();
+            $table->string("type")->nullable();
             $table->integer("useless_vars");
             $table->timestamps();
-
-            $table->foreign("competition_id")->references("id")->on("competitions")->onDelete("cascade");
+            $table->foreign("evaluation_id")->references("id")->on("evaluations")->onDelete("cascade");
         });
     }
 
