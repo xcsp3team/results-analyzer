@@ -57,9 +57,7 @@ class ExportNewDB extends Command
             $this->info("Export competition  " . $competition['name'] . " " . $competition["track"]);
 
             $competition_id = $competition['id'];
-            unset($competition['created_at']);
-            unset($competition['updated_at']);
-            DB::insert("insert into evaluations(id, name, track, type, defaulttime,public,rank,slug) values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug)", $competition);
+            DB::insert("insert into evaluations values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug, :created_at,:updated_at)", $competition);
 
 
             if ($competition['type'] == "cop") {
@@ -72,7 +70,8 @@ class ExportNewDB extends Command
                     unset($benchmark["competition_id"]);
                     unset($benchmark["created_at"]);
                     unset($benchmark["updated_at"]);
-                    DB::insert("INSERT INTO benchmarks(id,name,fullname,family,evaluation_id, nb_variables,nb_clauses,info_domains,info_constraints,useless_vars) values(:id,:name,:fullname,:family,:competition_id,:nb_variables,:nb_clauses,:info_domains,:info_constraints,:useless_vars)", $benchmark);
+                    DB::insert("INSERT INTO benchmarks(id,name,fullname,family, nb_variables,nb_clauses,info_domains,info_constraints,useless_vars,evaluation_id) " .
+                                      "values(:id,:name,:fullname,:family,:evaluation_id,:nb_variables,:nb_clauses,:info_domains,:info_constraints,:useless_vars, :evaluation_id)", $benchmark);
                 }
             }
 
