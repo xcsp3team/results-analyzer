@@ -88,6 +88,7 @@ class Evaluation extends Model
             $benchmark->status = "UNKNOWN";
             $best_bound = $this->best_bound_cop($benchmark->id, $type, $solvers, $this->defaulttime);
             $benchmark->best_bound = $best_bound->bound;
+
             if ($best_bound->unsat)
                 $benchmark->status = "UNSAT";
             if ($best_bound->optimum)
@@ -175,6 +176,7 @@ class Evaluation extends Model
     {
         $all_results = $this->all_results_cop($time_limit);
         $tmp = (object)["bound" => null, "optimum" => false, "unsat" => false];
+
         foreach ($selected_solvers as $solver_id) {
             $data = $all_results[$solver_id][$benchmark_id];
             if ($data->bug)
@@ -184,13 +186,11 @@ class Evaluation extends Model
                 return $tmp;
             }
             if ($data->bound === null) continue;
-            if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound))
+            if ($tmp->bound === null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound))
                 $tmp->bound = $data->bound;
-
             if ($data->time != -1 && $data->time <= $time_limit)
                 $tmp->optimum = true;
         }
-
         return $tmp;
     }
 

@@ -69,7 +69,7 @@ class SummaryCop extends AbstractSummary
                 $tmp[self::BB2]->value += $score->bb2;
             }
 
-            $tmp[self::SCORE]->value = $tmp[self::OPTIMUM]->value + $tmp[self::BB1]->value + $tmp[self::BB2]->value / 2 + $tmp[self::UNSAT]->value;
+            $tmp[self::SCORE]->value = $tmp[self::OPTIMUM]->value + $tmp[self::BB1]->value + fdiv($tmp[self::BB2]->value, 2) + $tmp[self::UNSAT]->value;
             $this->summary[] = $tmp;
 
         }

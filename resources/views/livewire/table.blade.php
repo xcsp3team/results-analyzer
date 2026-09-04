@@ -27,7 +27,7 @@
                         <td
                             {{$cell->attributes}}
                             class="td  {{$header[$i]->align ?? ""}} {{$cell->class}} {{ is_numeric($cell->value) ? "tabular-nums" : "" }}">
-                            {!!  is_numeric($cell->value) ? number_format((int)$cell->value, 0, ",", "&nbsp;") : $cell->value !!}
+                            {!!  is_float($cell->value) ? number_format($cell->value, 2, ".", "&nbsp;") : (is_numeric($cell->value) ? number_format((int)$cell->value, 0, ".", "&nbsp;") : $cell->value) !!}
                         </td>
                     @endforeach
                 </tr>
