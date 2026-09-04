@@ -184,14 +184,13 @@ class Evaluation extends Model
                 return $tmp;
             }
             if ($data->bound === null) continue;
-            if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound)) {
+            if ($tmp->bound == null || ($type == "MAXIMIZE" && $tmp->bound < $data->bound) || ($type == "MINIMIZE" && $tmp->bound > $data->bound))
                 $tmp->bound = $data->bound;
-                if ($data->time != -1 && $data->time <= $time_limit) {
-                    $tmp->optimum = true;
-                    return $tmp;
-                }
-            }
+
+            if ($data->time != -1 && $data->time <= $time_limit)
+                $tmp->optimum = true;
         }
+
         return $tmp;
     }
 
