@@ -57,7 +57,9 @@ class ExportNewDB extends Command
             $this->info("Export competition  " . $competition['name'] . " " . $competition["track"]);
 
             $competition_id = $competition['id'];
-            DB::insert("insert into evaluations values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug,:created_at,:updated_at)", $competition);
+            unset($competition['created_at']);
+            unset($competition['updated_at']);
+            DB::insert("insert into evaluations(id, name, track, type, defaulttime,public,rank,slug) values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug)", $competition);
 
 
             if ($competition['type'] == "cop") {
