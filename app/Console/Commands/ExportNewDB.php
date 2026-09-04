@@ -7,6 +7,7 @@ use App\Models\Solver;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use PDO;
 
 #[Signature('app:export-new-db')]
@@ -21,7 +22,7 @@ class ExportNewDB extends Command
         $host = env('DB_HOST');
         $user = env('DB_USERNAME');
         $passwd = env('DB_PASSWORD');
-        $db = $this->ask('Name of the old database?');
+        $db = "old_xcsp26"; //$this->ask('Name of the old database?');
 
         try {
             $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $passwd, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
@@ -32,12 +33,19 @@ class ExportNewDB extends Command
         }
 
         // Export all solvers
-        $query = $pdo->query("SELECT * FROM competitions");
+
+        $this->info("Delete data");
+        DB::delete("delete from solvers");
+        DB::delete("delete from evaluations");
+        DB::delete("delete from benchmarks");
+        DB::delete("delete from results");
+
+
+        $query = $pdo->query("SELECT * FROM solvers");
         $query->setFetchMode(\PDO::FETCH_ASSOC);
         $solvers = $query->fetchAll();
-        foreach ($solvers as $solver) {
-            Solver::create($solver);
-        }
+        foreach ($solvers as $solver)
+            DB::insert("INSERT INTO solvers values(:id,:name,:version,:params,:authors,:created_at,:updated_at)",$solver);
 
 
         $this->info("Export " . count($solvers) . " solvers\n");
@@ -47,16 +55,23 @@ class ExportNewDB extends Command
         $competitions = $query->fetchAll();
         foreach ($competitions as $competition) {
             $this->info("Export competition  " . $competition['name'] . " " . $competition["track"]);
-            Evaluation::create($competition);
+
             $competition_id = $competition['id'];
+            DB::insert("insert into evaluations values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug,:created_at,:updated_at)", $competition);
+
+
             if ($competition['type'] == "cop") {
-                $query = $pdo->query("SELECT * FROM benchmark WHERE competition_id=$competition_id");
+            } else {
+                $query = $pdo->query("SELECT * FROM benchmarks WHERE competition_id=$competition_id");
                 $query->setFetchMode(\PDO::FETCH_ASSOC);
                 $benchmarks = $query->fetchAll();
                 foreach ($benchmarks as $benchmark) {
+                    $benchmark["evaluation_id"] = $competition_id;
+                    unset($benchmark["competition_id"]);
+                    unset($benchmark["created_at"]);
+                    unset($benchmark["updated_at"]);
+                    DB::insert("INSERT INTO benchmarks(id,name,fullname,family,evaluation_id, nb_variables,nb_clauses,info_domains,info_constraints,useless_vars) values(:id,:name,:fullname,:family,:competition_id,:nb_variables,:nb_clauses,:info_domains,:info_constraints,:useless_vars)", $benchmark);
                 }
-            } else {
-
             }
 
 

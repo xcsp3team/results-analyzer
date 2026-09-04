@@ -16,7 +16,7 @@ class CreateSolversTable extends Migration
         Schema::create('solvers', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("version");
+            $table->string("version")->nullable();
             $table->string("params")->nullable();
             $table->string("authors")->nullable();
             $table->timestamps();
