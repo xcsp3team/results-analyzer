@@ -70,6 +70,7 @@ class ExportNewDB extends Command
                     unset($benchmark["competition_id"]);
                     unset($benchmark["created_at"]);
                     unset($benchmark["updated_at"]);
+                    unset($benchmark["status"]);
                     DB::insert("INSERT INTO benchmarks(id,name,fullname,family, nb_variables,nb_clauses,info_domains,info_constraints,useless_vars,evaluation_id) " .
                                       "values(:id,:name,:fullname,:family,:evaluation_id,:nb_variables,:nb_clauses,:info_domains,:info_constraints,:useless_vars, :evaluation_id)", $benchmark);
                 }
