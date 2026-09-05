@@ -54,3 +54,7 @@
 .h2 {
     @apply text-2xl font-bold mb-6 dark:text-gray-400;
 }
+
+.th-sticky {
+    @apply sticky top-0 z-10;
+}

@@ -13,18 +13,19 @@ class Table extends Component
 
     public $_table;
     public $header;
-
+    public $sticky;
     public $sort_field;
 
     public $sort_direction = 'asc';
 
-    public function mount($table, $header, $sort_field, $sort_direction)
+    public function mount($table, $header, $sort_field, $sort_direction, $sticky = false)
     {
         $this->_table = $table;
         $this->header = $header;
 
         $this->sort_field = $sort_field;
         $this->sort_direction = $sort_direction;
+        $this->sticky = $sticky;
         $this->sort($sort_field);
     }
 
