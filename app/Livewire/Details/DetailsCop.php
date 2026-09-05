@@ -35,12 +35,15 @@ class DetailsCop extends AbstractDetails
                 continue;
             $icon = str_contains(strtoupper($benchmark->type), "MIN") ? $icon_min : $icon_max;
             $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses)];
-            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})' );
+            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
 
             if ($benchmark->status == "UNSAT")
                 $tmp[] = new Data("UNSAT", "text-green-500");
             else
                 $tmp[] = new Data($benchmark->best_bound, $benchmark->status == "OPTIMUM" ? "text-green-500" : "");
+
+            $type = $benchmark->get_type();
+            $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
 
             foreach ($this->selected_solvers as $id) {
                 $selectedSolver = $this->solvers[$id];
@@ -62,11 +65,6 @@ class DetailsCop extends AbstractDetails
                     continue;
                 }
 
-                if (str_contains(strtoupper($benchmark->type), "MAX"))
-                    $type = "MAXIMIZE";
-                else
-                    $type = "MINIMIZE";
-                $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
                 $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
                 $nb = $score->optimum + $score->bb1 + $score->bb2;
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit)
@@ -88,7 +86,6 @@ class DetailsCop extends AbstractDetails
             }
             $this->detailed_results[] = $tmp;
         }
-
     }
 
 }
