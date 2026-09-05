@@ -33,8 +33,6 @@ class ResultResource extends Resource
     protected static ?string $model = Result::class;
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationLabel = "CSP";
-    protected static string|UnitEnum|null $navigationGroup = "Results";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -92,7 +90,7 @@ class ResultResource extends Resource
                 SelectFilter::make('evaluation')
                     ->label('Evaluation')
                     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->name} {$record->track}")
-                    ->relationship('benchmark.evaluation', 'name', modifyQueryUsing: fn($query) => $query->where("type", "csp"))
+                    ->relationship('benchmark.evaluation', 'name')
                     ->preload()
                     ->searchable(),
                 SelectFilter::make('solver')

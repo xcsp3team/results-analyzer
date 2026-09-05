@@ -25,8 +25,8 @@ use UnitEnum;
 class BenchmarkResource extends Resource
 {
     protected static ?string $model = Benchmark::class;
-    protected static string|UnitEnum|null $navigationGroup = "Benchmarks";
-    protected static ?string $navigationLabel = "CSP";
+    
+    protected static bool $shouldRegisterNavigation = false;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
