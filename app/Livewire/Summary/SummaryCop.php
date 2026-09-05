@@ -35,43 +35,75 @@ class SummaryCop extends AbstractSummary
     {
         $all_results = $this->evaluation->all_results_cop($this->filters->time_limit);
         $this->summary = [];
+        $vbs = [];
+        for ($i = 0; $i <= 6; $i++) {
+            $vbs[] = new Data();
+            $vbs[count($vbs) - 1]->class = "bg-green-300 italic";
+
+        }
+        $vbs[self::NAME]->value = "Virtual Best Solver";
         foreach ($this->selected_solvers as $id) {
             $selectedSolver = $this->solvers[$id];
             $tmp = [];
             for ($i = 0; $i <= 6; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
-            foreach ($this->evaluation->benchmarks as $benchmark) {
-                if ($this->filters->is_filtered($benchmark) || $benchmark->status == "UNKNOWN")
-                    continue;
-                $data = $all_results[$selectedSolver->id][$benchmark->id];
+            $this->summary[] = $tmp;
+        }
+
+
+        foreach ($this->evaluation->benchmarks as $benchmark) {
+            if ($this->filters->is_filtered($benchmark) || $benchmark->status == "UNKNOWN")
+                continue;
+            $type = $benchmark->get_type();
+            $i = 0;
+            $unsat = 0;
+            $optim = 0;
+            $bb1 = 0;
+            $unsupported = 1;
+            foreach ($this->selected_solvers as $solver_id) {
+                $data = $all_results[$solver_id][$benchmark->id];
                 if ($data->unsupported) {
-                    $tmp[self::UNSUPPORTED]->value += 1;
+                    $this->summary[$i++][self::UNSUPPORTED]->value += 1;
                     continue;
                 }
-                if ($data->bug)
+                if ($data->bug) {
+                    $i++;
                     continue;
-                if (str_contains(strtoupper($benchmark->type), "MAX"))
-                    $type = "MAXIMIZE";
-                else
-                    $type = "MINIMIZE";
+                }
 
                 $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, $this->selected_solvers, $this->filters->time_limit);
                 if ($data->status == "UNSAT" && $data->time < $this->filters->time_limit) {
-                    $tmp[self::UNSAT]->value += 1;
+                    $this->summary[$i++][self::UNSAT]->value += 1;
+                    $unsat = 1;
+                    $unsupported = 0;
                     continue;
                 }
-                if ($best_bound->bound === null)
+                if ($best_bound->bound === null) {
+                    $i++;
                     continue;
-                $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
-                $tmp[self::OPTIMUM]->value += $score->optimum;
-                $tmp[self::BB1]->value += $score->bb1;
-                $tmp[self::BB2]->value += $score->bb2;
+                }
+                $score = $this->evaluation->score_cop($benchmark->id, $solver_id, $type, $best_bound, $this->filters->time_limit);
+                $unsupported = 0;
+                if ($score->optimum) {
+                    $optim = 1;
+                    $bb1 = 0;
+                }
+                if ($optim == 0 && $score->bb1)
+                    $bb1 = 1;
+                $this->summary[$i][self::OPTIMUM]->value += $score->optimum;
+                $this->summary[$i][self::BB1]->value += $score->bb1;
+                $this->summary[$i][self::BB2]->value += $score->bb2;
+                $this->summary[$i][self::SCORE]->value = $this->summary[$i][self::OPTIMUM]->value + $this->summary[$i][self::BB1]->value + fdiv($this->summary[$i][self::BB2]->value, 2) + $this->summary[$i][self::UNSAT]->value;
+                $i++;
             }
-
-            $tmp[self::SCORE]->value = $tmp[self::OPTIMUM]->value + $tmp[self::BB1]->value + fdiv($tmp[self::BB2]->value, 2) + $tmp[self::UNSAT]->value;
-            $this->summary[] = $tmp;
-
+            $vbs[self::UNSAT]->value += $unsat;
+            $vbs[self::OPTIMUM]->value += $optim;
+            $vbs[self::BB1]->value += $bb1;
+            $vbs[self::UNSUPPORTED]->value += $unsupported;
         }
+        $vbs[self::SCORE]->value = (float)($vbs[self::UNSAT]->value + $vbs[self::OPTIMUM]->value + $vbs[self::BB1]->value);
+        $this->summary[] = $vbs;
     }
+
 }
