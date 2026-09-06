@@ -40,21 +40,21 @@ class DetailsSat extends AbstractDetails
                 $selectedSolver = $this->solvers[$id];
                 $data = $all_results[$selectedSolver->id][$benchmark->id];
                 if ($data->unsupported) {
-                    $tmp[] = new Data("U");
+                    $tmp[] = new Data("U", "", "", -2);
                     continue;
                 }
                 if ($data->bug) {
-                    $tmp[] = new Data($data->time, "bg-red-500 opacity-50");
+                    $tmp[] = new Data($data->time, "bg-red-500 opacity-50", "", -3);
                     continue;
                 }
                 if ($data->time <= $best && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data($data->time, "text-green-500");
+                    $tmp[] = new Data((int)$data->time, "text-green-500");
                     continue;
                 }
                 if ($data->time <= $this->filters->time_limit)
-                    $tmp[] = new Data($data->time);
+                    $tmp[] = new Data((int)$data->time);
                 else
-                    $tmp[] = new Data("-", "opacity-30");
+                    $tmp[] = new Data("-", "opacity-30", "", -1);
             }
             $this->detailed_results[] = $tmp;
         }

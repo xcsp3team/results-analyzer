@@ -94,7 +94,8 @@ class SummaryCop extends AbstractSummary
                 $this->summary[$i][self::OPTIMUM]->value += $score->optimum;
                 $this->summary[$i][self::BB1]->value += $score->bb1;
                 $this->summary[$i][self::BB2]->value += $score->bb2;
-                $this->summary[$i][self::SCORE]->value = $this->summary[$i][self::OPTIMUM]->value + $this->summary[$i][self::BB1]->value + fdiv($this->summary[$i][self::BB2]->value, 2) + $this->summary[$i][self::UNSAT]->value;
+                $this->summary[$i][self::SCORE]->value = (float)$this->summary[$i][self::OPTIMUM]->value + $this->summary[$i][self::BB1]->value + fdiv($this->summary[$i][self::BB2]->value, 2) + $this->summary[$i][self::UNSAT]->value;
+                $this->summary[$i][self::SCORE]->value_sort = (float)$this->summary[$i][self::SCORE]->value;
                 $i++;
             }
             $vbs[self::UNSAT]->value += $unsat;
@@ -103,6 +104,7 @@ class SummaryCop extends AbstractSummary
             $vbs[self::UNSUPPORTED]->value += $unsupported;
         }
         $vbs[self::SCORE]->value = (float)($vbs[self::UNSAT]->value + $vbs[self::OPTIMUM]->value + $vbs[self::BB1]->value);
+        $vbs[self::SCORE]->value_sort = (float)$vbs[self::SCORE]->value_sort;
         $this->summary[] = $vbs;
     }
 

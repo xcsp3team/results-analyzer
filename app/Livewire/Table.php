@@ -49,9 +49,14 @@ class Table extends Component
         }
 
         usort($this->_table, function ($row1, $row2) {
-            if ($row1[$this->sort_field] > $row2[$this->sort_field]) {
+            if ($row1[$this->sort_field]->value_sort == null)
+                $row1[$this->sort_field]->value_sort = $row1[$this->sort_field]->value;
+            if ($row2[$this->sort_field]->value_sort == null)
+                $row2[$this->sort_field]->value_sort = $row2[$this->sort_field]->value;
+            
+            if ($row1[$this->sort_field]->value_sort > $row2[$this->sort_field]->value_sort) {
                 return $this->sort_direction === 'asc' ? 1 : -1;
-            } elseif ($row1[$this->sort_field] < $row2[$this->sort_field]) {
+            } elseif ($row1[$this->sort_field]->value_sort < $row2[$this->sort_field]->value_sort) {
                 return $this->sort_direction === 'asc' ? -1 : 1;
             }
             return 0;

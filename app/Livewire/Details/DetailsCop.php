@@ -49,40 +49,40 @@ class DetailsCop extends AbstractDetails
                 $selectedSolver = $this->solvers[$id];
                 $data = $all_results[$selectedSolver->id][$benchmark->id];
                 if ($data->unsupported) {
-                    $tmp[] = new Data("U");
+                    $tmp[] = new Data("U", "", "", 0);
                     continue;
                 }
 
                 // UNSAT CASE
                 if ($data->status == "UNSAT" && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data("UNSAT (1) " . $data->time . "s", "text-green-500");
+                    $tmp[] = new Data("UNSAT (1) " . $data->time . "s", "text-green-500", 1);
                     continue;
                 }
 
                 // No bound found
                 if ($data->bound === null) {
-                    $tmp[] = new Data("(0)", "opacity-30");
+                    $tmp[] = new Data("(0)", "opacity-30", "", 0.);
                     continue;
                 }
 
                 $score = $this->evaluation->score_cop($benchmark->id, $id, $type, $best_bound, $this->filters->time_limit);
-                $nb = $score->optimum + $score->bb1 + $score->bb2;
+                $nb = $score->optimum + $score->bb1 + $score->bb2 / 2;
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit)
                     $time = $data->bound_time . "s - " . $data->time . "s";
                 else $time = $data->bound_time . "s";
                 $cell = $data->bound . " ($nb) " . $time;
                 if ($data->bug) {
-                    $tmp[] = new Data($cell, "bg-red-500 opacity-50");
+                    $tmp[] = new Data($cell, "bg-red-500 opacity-50", "", 0);
                     continue;
                 }
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data($cell, "text-green-500");
+                    $tmp[] = new Data($cell, "text-green-500", "", 2);
                     continue;
                 }
                 if ($data->bound == $best_bound->bound)
-                    $tmp[] = new Data($cell);
+                    $tmp[] = new Data($cell, "", "", $nb);
                 else
-                    $tmp[] = new Data($cell, "opacity-40");
+                    $tmp[] = new Data($cell, "opacity-40", "", -1);
             }
             $this->detailed_results[] = $tmp;
         }
