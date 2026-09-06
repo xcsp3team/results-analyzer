@@ -14,9 +14,10 @@ class Filters implements Wireable
     public $are_forbidden;
     public $expression;
     public $category;
+    public $enabled;
 
 
-    public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL")
+    public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL", $enabled = false)
     {
         $this->time_limit = $time_limit;
         $this->status = $status;
@@ -26,6 +27,7 @@ class Filters implements Wireable
         $this->expression = $expression;
         $this->type = $type;
         $this->category = $category;
+        $this->enabled = $enabled;
     }
 
     public function toLivewire()
@@ -39,12 +41,13 @@ class Filters implements Wireable
             'are_forbidden' => $this->are_forbidden,
             'expression' => $this->expression,
             'type' => $this->type,
+            'enabled' => $this->enabled,
         ];
     }
 
     public static function fromLivewire($value)
     {
-        return new static($value['category'], $value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression'], $value['type']);
+        return new static($value['category'], $value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression'], $value['type'], $value['enabled']);
     }
 
     public function is_filtered($benchmark)

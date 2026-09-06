@@ -91,7 +91,8 @@
         <button
             wire:click="$dispatch('initialize_filters')"
             type="button"
-            class="mt-3 button-blue rounded-xs">
+            {{$filters->enabled ? "" : "disabled"}}
+            class="mt-3 {{ $filters->enabled ? "button-blue" : "button-disabled" }}  rounded-xs">
             Reset filters
         </button>
     </div>

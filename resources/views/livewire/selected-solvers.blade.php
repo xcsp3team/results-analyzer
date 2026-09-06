@@ -6,14 +6,14 @@
             <button type="button"
                     wire:click="$dispatch('all-solvers')"
                     {{count($selected_solvers) == count($evaluation->solvers)  ? "disabled" :""}}
-                    class="{{count($selected_solvers) != count($evaluation->solvers)  ? "button-blue" : "button-gray"}} rounded-s-xs">
+                    class="{{count($selected_solvers) != count($evaluation->solvers)  ? "button-blue" : " button-disabled"}} rounded-s-xs">
                 All
             </button>
             <button
                 wire:click="$dispatch('none-solvers')"
                 type="button"
                 {{count($selected_solvers) == 0  ? "disabled" : ""}}
-                class="{{count($selected_solvers) > 0  ? "button-blue" : "button-gray"}} rounded-e-xs">
+                class="{{count($selected_solvers) > 0  ? "button-blue" : "button-disabled"}} rounded-e-xs">
                 None
             </button>
         </div>

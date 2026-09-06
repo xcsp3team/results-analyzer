@@ -46,7 +46,7 @@ class Evaluation extends Component
 
         $this->filters->status = "ALL";
         $this->filters->type = "ALL";
-
+        $this->filters->enabled = false;
         if ($this->first == false)
             Toaster::success('Filters initialized.');
         $this->first = false;
@@ -66,10 +66,15 @@ class Evaluation extends Component
                 $value = "ALL";
         }
 
+        if($field == "time_limit" && $this->evaluation->type== "cop") {
+            $this->evaluation->all_results_cop($value);
+        }
+
         if ($field == "constraints") {
             $this->filters->are_forbidden = $forbidden;
         }
         $this->filters->$field = $value;
+        $this->filters->enabled = true;
         Toaster::success('Filters updated.');
     }
 
