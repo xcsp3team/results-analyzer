@@ -15,7 +15,7 @@ class OneVsOneCop extends AbstractOneVsOne
 
 
         $this->scatter = [];
-        $this->scatter[] = new DataPlot("OPT");
+        $this->scatter[] = new DataPlot("OPTIMUM");
         $this->scatter[] = new DataPlot("OPEN");
 
         foreach ($this->evaluation->benchmarks as $benchmark) {
@@ -61,40 +61,43 @@ class OneVsOneCop extends AbstractOneVsOne
 
     public function create_per_constraints()
     {
+
+
         $this->selected_constraints = [];
         $i = 0;
         foreach ($this->evaluation->constraints() as $constraints)
             $this->selected_constraints[$constraints] = $i++;
 
+        $all_results = $this->evaluation->all_results_cop($this->filters->time_limit);
 
-        $this->per_constraints["SATX"] = new DataPlot($this->name_x . " SAT", array_fill(0, count($this->selected_constraints), 0), $this->name_x);
-        $this->per_constraints["SATY"] = new DataPlot($this->name_y . " SAT", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
-        $this->per_constraints["UNSATX"] = new DataPlot($this->name_x . " UNSAT", array_fill(0, count($this->selected_constraints), 0), $this->name_x);
-        $this->per_constraints["UNSATY"] = new DataPlot($this->name_y . " UNSAT", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
 
-        $all_results = $this->evaluation->all_results();
+        $this->per_constraints["OPTX"] = new DataPlot($this->name_x . " OPTIMUM", array_fill(0, count($this->selected_constraints), 0), $this->name_x);
+        $this->per_constraints["OPTY"] = new DataPlot($this->name_y . " OPTIMUM", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
+        $this->per_constraints["BB1X"] = new DataPlot($this->name_x . " BB1", array_fill(0, count($this->selected_constraints), 0), $this->name_x);
+        $this->per_constraints["BB1Y"] = new DataPlot($this->name_y . " BB1", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
+        $this->per_constraints["BB2X"] = new DataPlot($this->name_x . " BB2", array_fill(0, count($this->selected_constraints), 0), $this->name_x);
+        $this->per_constraints["BB2Y"] = new DataPlot($this->name_y . " BB2", array_fill(0, count($this->selected_constraints), 0), $this->name_y);
+
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
             preg_match_all('/#(\w+):/', $benchmark->info_constraints, $matches);
             $constraints = $matches[1];
+            $type = $benchmark->get_type();
+            $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, [$this->solver_x, $this->solver_y], $this->filters->time_limit);
+
+            $score_x = $this->evaluation->score_cop($benchmark->id, $this->solver_x, $type, $best_bound, $this->filters->time_limit);
+            $score_y = $this->evaluation->score_cop($benchmark->id, $this->solver_y, $type, $best_bound, $this->filters->time_limit);
+
 
             foreach ($constraints as $c) {
                 $pos = $this->selected_constraints[$c];
-                $data_x = $all_results[$this->solver_x][$benchmark->id];
-                $data_y = $all_results[$this->solver_y][$benchmark->id];
-                if ($data_x->time <= $this->filters->time_limit && $data_x->bug == false) {
-                    if ($benchmark->status == "SAT")
-                        $this->per_constraints["SATX"]->data[$pos]++;
-                    else
-                        $this->per_constraints["UNSATX"]->data[$pos]++;
-                }
-                if ($data_y->time <= $this->filters->time_limit && $data_y->bug == false) {
-                    if ($benchmark->status == "SAT")
-                        $this->per_constraints["SATY"]->data[$pos]++;
-                    else
-                        $this->per_constraints["UNSATY"]->data[$pos]++;
-                }
+                $this->per_constraints["OPTX"]->data[$pos] += $score_x->optimum;
+                $this->per_constraints["BB1X"]->data[$pos] += $score_x->bb1;
+                $this->per_constraints["BB2X"]->data[$pos] += $score_x->bb2;
+                $this->per_constraints["OPTY"]->data[$pos] += $score_y->optimum;
+                $this->per_constraints["BB1Y"]->data[$pos] += $score_y->bb1;
+                $this->per_constraints["BB2Y"]->data[$pos] += $score_y->bb2;
             }
         }
 
@@ -105,8 +108,6 @@ class OneVsOneCop extends AbstractOneVsOne
             series: array_values(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, "group" => $s->group], $this->per_constraints)),
             selected_constraints: $categories,
         );
-
-
     }
 
     public function create_per_families()
@@ -118,31 +119,30 @@ class OneVsOneCop extends AbstractOneVsOne
                 $this->selected_families[$family] = $i++;
         }
 
-        $this->per_families["SATX"] = new DataPlot($this->name_x . " SAT", array_fill(0, count($this->selected_families), 0), $this->name_x);
-        $this->per_families["SATY"] = new DataPlot($this->name_y . " SAT", array_fill(0, count($this->selected_families), 0), $this->name_y);
-        $this->per_families["UNSATX"] = new DataPlot($this->name_x . " UNSAT", array_fill(0, count($this->selected_families), 0), $this->name_x);
-        $this->per_families["UNSATY"] = new DataPlot($this->name_y . " UNSAT", array_fill(0, count($this->selected_families), 0), $this->name_y);
 
-        $all_results = $this->evaluation->all_results();
+        $this->per_families["OPTX"] = new DataPlot($this->name_x . " OPTIMUM", array_fill(0, count($this->selected_families), 0), $this->name_x);
+        $this->per_families["OPTY"] = new DataPlot($this->name_y . " OPTIMUM", array_fill(0, count($this->selected_families), 0), $this->name_y);
+        $this->per_families["BB1X"] = new DataPlot($this->name_x . " BB1", array_fill(0, count($this->selected_families), 0), $this->name_x);
+        $this->per_families["BB1Y"] = new DataPlot($this->name_y . " BB1", array_fill(0, count($this->selected_families), 0), $this->name_y);
+        $this->per_families["BB2X"] = new DataPlot($this->name_x . " BB2", array_fill(0, count($this->selected_families), 0), $this->name_x);
+        $this->per_families["BB2Y"] = new DataPlot($this->name_y . " BB2", array_fill(0, count($this->selected_families), 0), $this->name_y);
+
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))
                 continue;
+            $type = $benchmark->get_type();
+            $best_bound = $this->evaluation->best_bound_cop($benchmark->id, $type, [$this->solver_x, $this->solver_y], $this->filters->time_limit);
+            $score_x = $this->evaluation->score_cop($benchmark->id, $this->solver_x, $type, $best_bound, $this->filters->time_limit);
+            $score_y = $this->evaluation->score_cop($benchmark->id, $this->solver_y, $type, $best_bound, $this->filters->time_limit);
+
             $family = $benchmark->family;
             $pos = $this->selected_families[$family];
-            $data_x = $all_results[$this->solver_x][$benchmark->id];
-            $data_y = $all_results[$this->solver_y][$benchmark->id];
-            if ($data_x->time <= $this->filters->time_limit && $data_x->bug == false) {
-                if ($benchmark->status == "SAT")
-                    $this->per_families["SATX"]->data[$pos]++;
-                else
-                    $this->per_families["UNSATX"]->data[$pos]++;
-            }
-            if ($data_y->time <= $this->filters->time_limit && $data_y->bug == false) {
-                if ($benchmark->status == "SAT")
-                    $this->per_families["SATY"]->data[$pos]++;
-                else
-                    $this->per_families["UNSATY"]->data[$pos]++;
-            }
+            $this->per_families["OPTX"]->data[$pos] += $score_x->optimum;
+            $this->per_families["BB1X"]->data[$pos] += $score_x->bb1;
+            $this->per_families["BB2X"]->data[$pos] += $score_x->bb2;
+            $this->per_families["OPTY"]->data[$pos] += $score_y->optimum;
+            $this->per_families["BB1Y"]->data[$pos] += $score_y->bb1;
+            $this->per_families["BB2Y"]->data[$pos] += $score_y->bb2;
         }
 
         $categories = array_flip($this->selected_families); // pos => famille

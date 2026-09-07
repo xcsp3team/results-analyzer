@@ -79,12 +79,14 @@
                 });
                 this.chart.render();
 
-                Livewire.on('per_constraints-updated', (event) => {
-                    this.chart.updateOptions({ series: [], xaxis: { categories: event.selected_constraints } }, false, false);
-                    this.chart.updateOptions({ series: event.series }, false, false);
-                });
-            }
-        }">
+        Livewire.on('per_constraints-updated', (event) => {
+            this.chart.updateOptions({
+                series: event.series,
+                xaxis: { categories: event.selected_constraints }
+            }, false, true); // redrawPaths = true pour forcer le recalcul des groupes
+        });
+    }
+}">
             <div x-ref="constraints"></div>
         </div>
 
