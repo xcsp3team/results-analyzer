@@ -16,7 +16,7 @@ class Evaluation extends Component
     public $filters;
     public $display_sidebar = true;
 
-    public $view = 2;
+    public $view = 3;
     public $first = true;
 
     public $radar_component;
