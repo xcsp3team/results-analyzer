@@ -16,10 +16,11 @@ class Evaluation extends Component
     public $filters;
     public $display_sidebar = true;
 
-    public $view = 1;
+    public $view = 3;
     public $first = true;
 
     public $radar_component;
+    public $versus_component;
     public $nb_benchmarks;
 
 
@@ -32,6 +33,7 @@ class Evaluation extends Component
         $this->filters = new Filters($this->evaluation->get_type());
         $this->initialize_filtering();
         $this->radar_component = "radar.radar-" . $this->evaluation->get_type();
+        $this->versus_component = "versus.one-vs-one-" . $this->evaluation->get_type();
     }
 
 
@@ -66,7 +68,7 @@ class Evaluation extends Component
                 $value = "ALL";
         }
 
-        if($field == "time_limit" && $this->evaluation->type== "cop") {
+        if ($field == "time_limit" && $this->evaluation->type == "cop") {
             $this->evaluation->all_results_cop($value);
         }
 

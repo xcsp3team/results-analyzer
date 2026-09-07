@@ -1,6 +1,7 @@
-<div>
+<div class="relative">
     <h2 class="h2">One to one comparison</h2>
     @if($solver_x != null)
+        <button wire:click="close" class="absolute right-5 top-2 text-gray-400">@svg('hugeicons-cancel-circle')</button>
         <h3 class="h3">Scatter plot</h3>
         <div
             wire:key="scatter-chart"
@@ -119,15 +120,15 @@
         <form wire:submit="set_solvers">
             <div class="mx-auto w-1/2 flex justify-around items-center mb-4">
                 <select wire:model="solver_x"
-                        class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                        class="dark:border-gray-400 block w-72 px-3 py-1.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-xs focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
                     @foreach($evaluation->solvers as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>
                     @endforeach
                 </select>
-                <div class="dark:text-gray-400">Versus</div>
+                <div class="dark:text-gray-400 mx-2 ">Versus</div>
                 <select wire:model="solver_y"
-                        class="dark:border-gray-400 block w-72 px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                        class="dark:border-gray-400 block w-72 px-3 py-1.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-xs focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                     <option></option>
                     @foreach($evaluation->solvers as $solver)
                         <option value="{{$solver->id}}">{{$solver->name ." " . $solver->version}}</option>

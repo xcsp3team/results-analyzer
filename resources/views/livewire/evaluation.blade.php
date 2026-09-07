@@ -21,11 +21,13 @@
                 />
                 @break
             @case(2)
-                <livewire:is :component=$radar_component :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                <livewire:is :component=$radar_component :filters=$filters :selected_solvers=$selected_solvers
+                             :evaluation=$evaluation
                 />
                 @break
             @case(3)
-                <livewire:one-vs-one :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
+                <livewire:is :component=$versus_component :filters=$filters :selected_solvers=$selected_solvers
+                             :evaluation=$evaluation
                 />
                 @break
             @case(4)

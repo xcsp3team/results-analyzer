@@ -1,60 +1,12 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Versus;
 
 use App\Misc\DataPlot;
-use App\Models\Solver;
-use Livewire\Attributes\Reactive;
-use Livewire\Component;
 
-class OneVsOne extends Component
+
+class OneVsOneSat extends AbstractOneVsOne
 {
-    public $evaluation;
-
-    #[Reactive]
-    public $filters;
-
-    #[Reactive]
-    public $selected_solvers;
-
-    public $nb_benchmarks;
-
-    public $scatter;
-    public $per_constraints;
-    public $per_families;
-
-    public $selected_families;
-    public $selected_constraints;
-
-
-    public $solver_x = null;
-    public $solver_y = null;
-
-    public $name_x = "SX";
-    public $name_y = "SY";
-
-    public $xaxis;
-
-    public function mount($filters, $evaluation, $selected_solvers)
-    {
-        $this->filters = $filters;
-        $this->selected_solvers = $selected_solvers;
-        $this->evaluation = $evaluation;
-    }
-
-    public function set_solvers()
-    {
-        if ($this->solver_x == $this->solver_y) {
-            $this->solver_x = null;
-            $this->solver_y = null;
-        } else {
-            $tmp = Solver::find($this->solver_x);
-            $this->name_x = $tmp->name . " " . $tmp->version;
-            $tmp = Solver::find($this->solver_y);
-            $this->name_y = $tmp->name . " " . $tmp->version;
-
-        }
-    }
 
     public function create_scatter()
     {
@@ -178,16 +130,5 @@ class OneVsOne extends Component
             series: array_values(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data, "group" => $s->group], $this->per_families)),
             selected_families: $categories,
         );
-
-    }
-
-    public function render()
-    {
-        if ($this->solver_x != null) {
-            $this->create_scatter();
-            $this->create_per_families();
-            $this->create_per_constraints();
-        }
-        return view('livewire.one-vs-one');
     }
 }
