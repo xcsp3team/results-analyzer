@@ -1,12 +1,12 @@
 <div class="text-base">
     <h2 class="text-3xl font-bold mb-6 text-heading">Help</h2>
 
-    <h3 class="text-xl font-medium mb-4">Introduction</h3>
-    <p>
+    <h3 class="text-xl font-medium mb-4 dark:text-gray-400">Introduction</h3>
+    <p class="dark:text-gray-500">
         This application allows to display results of solvers on different combinatorial problems.
         On the left, you have a panel for applying some filters (described below) and one for selecting
         solvers. On the top right, you can select whichever view you prefer</p>
-    <ul class="ml-4 space-y-1 list-disc list-inside mb-8">
+    <ul class="ml-4 space-y-1 list-disc list-inside mb-8 dark:text-gray-500">
         <li>A detailed view: summary, cactus plot and results for all selected instances.</li>
         <li>A versus view: You select 2 solvers, and you perform a one to one comparison with a scatter plots and to
             charts related to specific constraints and specific families.
@@ -14,13 +14,15 @@
         <li>A radar view: for each family, you can see the number of solvers instances by each solver.</li>
     </ul>
 
-    <h3 class="text-xl font-medium mb-4">Filters</h3>
-    <p class="mb-2">The icon <span>@svg('heroicon-m-bars-3', 'text-green-300 inline w-4 h-4')</span> allows to
+    <h3 class="text-xl font-medium mb-4 dark:text-gray-400">Filters</h3>
+    <p class="mb-2 dark:text-gray-500">The icon <span>@svg('heroicon-m-bars-3', 'text-green-300 inline w-4 h-4')</span>
+        allows to
         hide/display filters.
     </p>
-    <p class="mb-2">Different filters can be applied to refine the presentation of results (which are then re-computed
+    <p class=" dark:text-gray-500 mb-2">Different filters can be applied to refine the presentation of results (which
+        are then re-computed
         accordingly):</p>
-    <ul class="ml-4 space-y-1 list-disc list-inside mb-4">
+    <ul class="dark:text-gray-500 ml-4 space-y-1 list-disc list-inside mb-4">
         <li>Problems: You can filter by family of problems.
         </li>
         <li>Constraints: You can forbid one/several constraints or force all problems to contain a type of
@@ -44,13 +46,13 @@
             </ul>
         </li>
     </ul>
-    You can also reduce the maximum time allowed to solve an instance.
+    <p class="dark:text-gray-500">You can also reduce the maximum time allowed to solve an instance.</p>
     <br/><br/><br/>
 
-    <h3 class="h3">Information related to CSP/SAT instances</h3>
+    <h3 class="h3 dark:text-gray-400">Information related to CSP/SAT instances</h3>
 
-    <h4 class="text-lg">Table view</h4>
-    <ul class="ml-4 space-y-1 list-disc list-inside mb-2">
+    <h4 class="text-lg dark:text-gray-500">Table view</h4>
+    <ul class="dark:text-gray-500 ml-4 space-y-1 list-disc list-inside mb-2">
         <li>A table summarising results per solver S: number of solved instances (Solved), number of satisfiable and
             unsatisfiable
             solved instances (SAT/UNSAT), number of times S is the only solver to solve an instance, number of times S
@@ -68,11 +70,11 @@
         </li>
     </ul>
 
-    <p class="mb-8">Note that you can sort the tables by clicking on the column names.</p>
+    <p class="dark:text-gray-500 mb-8">Note that you can sort the tables by clicking on the column names.</p>
 
     <h3 class="h3"> Information related to COP instances</h3>
-    <h4 class="text-lg">Table view</h4>
-    <ul class="ml-4 space-y-1 list-disc list-inside mb-4">
+    <h4 class="text-lg dark:text-gray-500">Table view</h4>
+    <ul class="ml-4 space-y-1 list-disc list-inside mb-4 dark:text-gray-500">
         <li>A table summarising results per solver S:
             the score of S,
             the number of times S is able to prove optimality (#Opt),
