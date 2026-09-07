@@ -6,12 +6,14 @@ use App\Misc\DataPlot;
 
 class CactusSat extends AbstractCactus
 {
-    public $xaxis;
 
+    public $maxX;
     public $series;
+    public $nb_benchmarks;
+
     public function create_cactus()
     {
-        $max = 0;
+        $this->maxX = 0;
         $all_results = $this->evaluation->all_results();
 
         $this->series = [];
@@ -26,18 +28,16 @@ class CactusSat extends AbstractCactus
                 if ($data->bug == 0 && $data->time < $this->filters->time_limit && $data->unsupported == 0)
                     $values[] = $data->time;
             }
-            if (count($values) > $max)
-                $max = count($values);
+            if (count($values) > $this->maxX)
+                $this->maxX = count($values);
             sort($values);
             $tmp->data = $values;
             $this->series[] = $tmp;
         }
-        $this->xaxis = [];
-        for ($i = 1; $i <= $max; $i++)
-            $this->xaxis[] = $i;
+        
         $this->dispatch('cactus-updated',
             series: array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $this->series),
-            xaxis: $this->xaxis
+            maxX: $this->maxX,
         );
     }
 
