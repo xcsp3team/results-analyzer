@@ -61,7 +61,7 @@ class DetailsCop extends AbstractDetails
 
                 // No bound found
                 if ($data->bound === null) {
-                    $tmp[] = new Data("(0)", "opacity-30", "", 0.);
+                    $tmp[] = new Data("(0)", "dark:opacity-60 opacity-30", "", 0.);
                     continue;
                 }
 
@@ -72,7 +72,7 @@ class DetailsCop extends AbstractDetails
                 else $time = $data->bound_time . "s";
                 $cell = $data->bound . " ($nb) " . $time;
                 if ($data->bug) {
-                    $tmp[] = new Data($cell, "bg-red-500 opacity-50", "", 0);
+                    $tmp[] = new Data($cell, "bg-red-700 opacity-40", "", 0);
                     continue;
                 }
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit) {
@@ -82,7 +82,7 @@ class DetailsCop extends AbstractDetails
                 if ($data->bound == $best_bound->bound)
                     $tmp[] = new Data($cell, "", "", $nb);
                 else
-                    $tmp[] = new Data($cell, "opacity-40", "", -1);
+                    $tmp[] = new Data($cell, "dark:opacity-60 opacity-30", "", -1);
             }
             $this->detailed_results[] = $tmp;
         }
