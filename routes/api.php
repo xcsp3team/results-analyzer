@@ -29,65 +29,8 @@ function castIds($rows, array $columns = ['id'])
     });
 }
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 
 // --------------------------- CSP/SAT --------------------------------------
-Route::get("/competitions", function () {
-    return Evaluation::all();
-});
-
-Route::get("/competitions/{slug}", function ($slug) {
-    return Evaluation::whereRaw("slug=?", [$slug])->firstOrFail();
-});
-
-
-Route::get("/solversincompetition/{id}", function ($id) {
-    $c = Evaluation::findOrFail($id);
-    return $c->displaysolvers();
-})->where("id", "[0-9]+");
-
-
-Route::get("/solver/{id}", function ($id) {
-    return Solver::findOrFail($id);
-})->where("id", "[0-9]+");
-
-
-Route::get("/benchmarksincompetition/{id}", function ($id) {
-    $c = Evaluation::findOrFail($id);
-    if ($c->type == "cop")
-        return $c->benchmarksCop;
-    return $c->benchmarks2;
-})->where("id", "[0-9]+");
-
-Route::get("/solverresultincompetition/{idc}/{ids}", function ($idc, $ids) {
-    $s = Solver::findOrFail($ids);
-    return castIds($s->results($idc), ["bug", "unsupported"]);
-})->where("idc", "[0-9]+")->where("ids", "[0-9]+");
-
-Route::get("/scatter/{idc}/{ids1}/{ids2}/{selection}", function ($idc, $ids1, $ids2, $selection = "ALL") {
-    $c = Evaluation::whereRaw("slug=?", [$idc])->firstOrFail();
-
-    if ($selection == "ALL") {
-        $tmp = "";
-        $parameters = [$c->id, $ids1, $ids2];
-    } else {
-        $tmp = "and benchmarks.status=?";
-        $parameters = [$c->id, $ids1, $ids2, $selection];
-    }
-
-    return DB::select("select r1.time as t1,r2.time as t2, benchmarks.*  " .
-        "from results r1,results r2, benchmarks " .
-        "WHERE r1.benchmark_id=r2.benchmark_id " .
-        "and benchmarks.id=r1.benchmark_id " .
-        "and benchmarks.competition_id=? " .
-        "and r1.solver_id=? and r2.solver_id=? " .
-        $tmp .
-        " order by r1.time "
-        , $parameters);
-})->where("ids1", "[0-9]+")->where("ids2", "[0-9]+");
 
 
 Route::post("/competitions", [Admin::class, "storecompetition"]);
@@ -119,22 +62,6 @@ Route::get("/competitions/maxsolved/{idc}/{timelimit}", function ($idc, $timelim
 });
 
 
-Route::get("/displaysolvers/{idc}", function ($idc) {
-    $c = Evaluation::findOrFail($idc);
-    $tmp = $c->displaysolvers();
-    return castIds($tmp);
-})->where("idc", "[0-9]*");
-
-
-Route::get("/solver_id/{name}", function ($name) {
-    $s = Solver::where("name", $name)->first();
-    if ($s != null)
-        return $s->id;
-    $s = new Solver();
-    $s->name = $name;
-    $s->save();
-    return $s->id;
-});
 
 
 

@@ -31,7 +31,24 @@
             </button>
         </div>
     </div>
-
-    <livewire:table wire:key="{{Str::random()}}" :table="$detailed_results" :header="$header_results" sticky={{true}}
-                    :sort_field="0" :sort_direction="'desc'"/>
+    @include("livewire.table", ['table' => $paginator_details->items(), 'header' => $header_results, 'sticky' => true, 'sort_field' => $sort_field, 'sort_direction' => $sort_direction])
+    <br/><br/>
+    <br/><br/>
+    <div class="flex justify-center items-center">
+        <div class="inline-flex rounded-md shadow-xs mr-2">
+            <label for="perPage"
+                   class="m-0 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-s-xs">Par
+                page</label>
+            <select id="perPage"
+                    class="m-0 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700   rounded-e-xs border   text-sm block p-2.5 mr-3"
+                    wire:model="perPage"
+                    wire:change="changePerPage">
+                <option {{$perPage==10 ? "selected" :""}}>10</option>
+                <option {{$perPage==25 ? "selected" :""}}>25</option>
+                <option {{$perPage==100 ? "selected" :""}}>100</option>
+            </select>
+        </div>
+        {{ $paginator_details->links('livewire.paginator') }}
+    </div>
+    <br/><br/><br/>
 </div>
