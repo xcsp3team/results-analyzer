@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PDO;
 
-class Evaluation extends Model
-{
+class Evaluation extends Model {
     use HasFactory;
 
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
