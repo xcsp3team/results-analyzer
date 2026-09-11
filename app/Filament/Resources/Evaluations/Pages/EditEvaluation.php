@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Evaluations\Pages;
 
+use App\Filament\Imports\BenchmarkImporter;
 use App\Filament\Pages\MissingResults;
 use App\Filament\Resources\Evaluations\EvaluationResource;
 use App\Models\Evaluation;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ImportAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditEvaluation extends EditRecord
@@ -17,6 +19,11 @@ class EditEvaluation extends EditRecord
     {
         return [
             DeleteAction::make(),
+            ImportAction::make()
+                ->importer(BenchmarkImporter::class)
+                ->options(fn($record) => [
+                    'evaluation_id' => $record->id,
+                ]),
         ];
     }
 

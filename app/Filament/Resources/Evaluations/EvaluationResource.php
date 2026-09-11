@@ -37,9 +37,6 @@ class EvaluationResource extends Resource
     {
         return [
             RelationManagers\Benchmarks2RelationManager::class,
-            RelationManagers\BenchmarksCopRelationManager::class,
-            //RelationManagers\Solvers2RelationManager::class,
-            //RelationManagers\SolversCopRelationManager::class,
         ];
 
     }
