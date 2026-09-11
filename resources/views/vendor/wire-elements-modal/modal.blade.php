@@ -19,18 +19,17 @@
         class="fixed inset-0 z-50 overflow-y-auto"
         aria-labelledby="modal-title" role="dialog" aria-modal="true"
     >
-        <!-- Modal overlay : z-index inférieur, isolé -->
-        <div class="fixed inset-0 z-0 bg-gray-500/75 transition-opacity"></div>
-
-        <!-- Contenu modal : z-index supérieur, opacité propre -->
+        <!-- Modal overlay -->
+        <div class="fixed inset-0 z-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity"></div>
+        <!-- Contenu modal -->
         <div class="relative z-10 flex items-end justify-center min-h-screen p-4 text-center sm:block sm:p-0">
             <div
-                class="inline-block w-full align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:max-w-md md:max-w-xl lg:max-w-3xl xl:max-w-4xl">
-                <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
+                class="inline-block w-full align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:max-w-md md:max-w-xl lg:max-w-3xl xl:max-w-4xl">
+                <div class="px-4 pt-5 pb-4 bg-white dark:bg-gray-800 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <div class="mt-2">
-                                <p class="text-sm text-gray-500">
+                                <p class="text-sm text-gray-500 dark:text-gray-300">
                                 @forelse($components as $id => $component)
                                     <div x-show.immediate="activeComponent == '{{ $id }}'" x-ref="{{ $id }}"
                                          wire:key="{{ $id }}">

@@ -1,5 +1,5 @@
 <div>
-    <h4>Filtering problems</h4>
+    <h4 class="h3">Filtering problems</h4>
     <div>
         <form wire:submit="save">
 

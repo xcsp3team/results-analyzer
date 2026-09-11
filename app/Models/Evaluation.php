@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PDO;
 
-class Evaluation extends Model {
+class Evaluation extends Model
+{
     use HasFactory;
 
     protected $fillable = ["name", "track", "type", "slug", "defaulttime", "public", "rank"];
@@ -160,6 +161,7 @@ class Evaluation extends Model {
             $tmp = array_merge($tmp, $matches[1]);
         }
         $this->_constraints = array_values(array_unique($tmp));
+        sort($this->_constraints);
         return $this->_constraints;
     }
 
