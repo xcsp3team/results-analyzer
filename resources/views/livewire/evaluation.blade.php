@@ -31,7 +31,7 @@
                 />
                 @break
             @case(4)
-                <livewire:help
+                <livewire:help :type="$evaluation->type"
                 />
                 @break
         @endswitch
