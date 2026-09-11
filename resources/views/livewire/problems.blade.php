@@ -17,7 +17,7 @@
                     </button>
                 </div>
             </div>
-            <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="flex flex-col flex-wrap max-h-96  gap-2 mb-4  content-start ">
 
                 @foreach($all_families as $family)
                     <div class="flex items-center m-4">

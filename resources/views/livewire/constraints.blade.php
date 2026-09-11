@@ -18,7 +18,7 @@
                 </label>
             </div>
 
-            <div class="columns-4  column-fill:_auto  gap-2 mb-4">
+            <div class="flex flex-col flex-wrap max-h-64  gap-2 mb-4  content-start ml-12">
 
                 @foreach($all_constraints as $constraint)
                     <div class="flex items-center m-4">
