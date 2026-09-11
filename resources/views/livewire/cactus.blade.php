@@ -1,5 +1,16 @@
 <div wire:ignore x-data="{
     chart: null,
+    isDark() {
+            return localStorage.theme === 'dark';
+        },
+         themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
     init() {
         const seriesData = @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series));
         const maxX = 150;
@@ -18,8 +29,13 @@
             const newMax = Math.max(...event.series.flatMap(s => s.data.map(p => p.x ?? p[0])));
             this.chart.updateOptions({
                 series: event.series,
-                 xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX / 10) * 10 }
+                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX / 10) * 10 },
+                ...this.themeOptions()
+
             });
+        });
+        window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
         });
     }
 }">

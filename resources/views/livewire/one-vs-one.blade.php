@@ -8,6 +8,17 @@
                 wire:key="scatter-chart"
                 wire:ignore x-data="{
         chart: null,
+        isDark() {
+            return localStorage.theme === 'dark';
+        },
+         themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
         init() {
             if (this.chart) this.chart.destroy();
 
@@ -74,8 +85,12 @@
             this.chart.render();
 
             Livewire.on('scatter-updated', (event) => {
-                this.chart.updateOptions({ series: event.series, xaxis: { numeric: event.xaxis } });
+                this.chart.updateOptions({ series: event.series, xaxis: { numeric: event.xaxis }, ...this.themeOptions()
+ });
             });
+             window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
+        });
         }
     }" x-init="init()">
                 <div x-ref="scatter"></div>
@@ -87,6 +102,17 @@
         <div wire:key="families-chart"
              wire:ignore x-data="{
             chart: null,
+            isDark() {
+            return localStorage.theme === 'dark';
+        },
+         themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
             init() {
                 if (this.chart) this.chart.destroy();
                 this.chart = new ApexCharts(this.$refs.constraints, {
@@ -104,9 +130,15 @@
         Livewire.on('per_constraints-updated', (event) => {
             this.chart.updateOptions({
                 series: event.series,
-                xaxis: { categories: event.selected_constraints }
+                xaxis: { categories: event.selected_constraints },
+                ...this.themeOptions()
+
             }, false, true); // redrawPaths = true pour forcer le recalcul des groupes
         });
+        window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
+        });
+
     }
 }">
             <div x-ref="constraints"></div>
@@ -118,6 +150,17 @@
         <div wire:key="families-chart"
              wire:ignore x-data="{
             chart: null,
+            isDark() {
+            return localStorage.theme === 'dark';
+        },
+         themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
             init() {
                 if (this.chart) this.chart.destroy();
                 this.chart = new ApexCharts(this.$refs.families, {
@@ -133,9 +176,12 @@
                 this.chart.render();
 
                 Livewire.on('per_families-updated', (event) => {
-                    this.chart.updateOptions({ series: [], xaxis: { categories: event.selected_families } }, false, false);
+                    this.chart.updateOptions({ series: [], xaxis: { categories: event.selected_families },  ...this.themeOptions() }, false, false);
                     this.chart.updateOptions({ series: event.series }, false, false);
                 });
+                  window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
+        });
             }
         }">
             <div x-ref="families"></div>

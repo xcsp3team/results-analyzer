@@ -2,7 +2,19 @@
     <div class="grid grid-cols-2 gap-6">
         <div wire:ignore
              x-data="{
+
     chart: null,
+    isDark() {
+            return localStorage.theme === 'dark';
+        },
+    themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
     init() {
         this.chart = new ApexCharts(this.$refs.cactus_optimum, {
             chart: { type: 'line', height: '400px', toolbar: { show: false }, zoom: { enabled: false, allowMouseWheelZoom: false } },
@@ -19,9 +31,12 @@
         Livewire.on('cactus-opt-updated', (event) => {
             this.chart.updateOptions({
                 series: event.series_optimum,
-                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_optimum / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_optimum / 10) * 10 }
-
+                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_optimum / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_optimum / 10) * 10 },
+                ...this.themeOptions()
             });
+        });
+        window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
         });
     }
 }">
@@ -30,6 +45,17 @@
         </div>
         <div wire:ignore x-data="{
     chart: null,
+    isDark() {
+            return localStorage.theme === 'dark';
+        },
+    themeOptions() {
+            return {
+                theme: { mode: this.isDark() ? 'dark' : 'light' },
+                chart: { foreColor: this.isDark() ? '#e5e7eb' : '#1f2937' },
+                grid: { borderColor: this.isDark() ? '#374151' : '#e5e7eb' },
+                tooltip: { theme: this.isDark() ? 'dark' : 'light' },
+            };
+        },
     init() {
         this.chart = new ApexCharts(this.$refs.cactus_search, {
             chart: { type: 'line', height: '400px', toolbar: { show: false }, zoom: { enabled: false, allowMouseWheelZoom: false } },
@@ -46,9 +72,12 @@
         Livewire.on('cactus-search-updated', (event) => {
             this.chart.updateOptions({
                 series: event.series_search,
-                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_search / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_search / 10) * 10 }
-
+                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_search / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_search / 10) * 10 },
+                 ...this.themeOptions()
             });
+        });
+        window.addEventListener('theme-changed', () => {
+            this.chart.updateOptions(this.themeOptions());
         });
     }
 }">
