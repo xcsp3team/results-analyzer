@@ -9,6 +9,7 @@ use App\Filament\Resources\Evaluations\Schemas\EvaluationForm;
 use App\Filament\Resources\Evaluations\Tables\EvaluationsTable;
 use App\Models\Evaluation;
 use BackedEnum;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -37,9 +38,7 @@ class EvaluationResource extends Resource
     {
         return [
             RelationManagers\Benchmarks2RelationManager::class,
-            RelationManagers\BenchmarksCopRelationManager::class,
-            //RelationManagers\Solvers2RelationManager::class,
-            //RelationManagers\SolversCopRelationManager::class,
+            RelationManagers\Solvers2RelationManager::class
         ];
 
     }

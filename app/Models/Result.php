@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Unguarded;
 #[Unguarded]
 class Result extends Model
 {
-    
+    protected $guarded = [];
+
     public function benchmark()
     {
         return $this->belongsTo(Benchmark::class);

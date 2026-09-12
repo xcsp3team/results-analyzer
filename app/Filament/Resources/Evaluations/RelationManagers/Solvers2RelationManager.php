@@ -24,10 +24,6 @@ class Solvers2RelationManager extends RelationManager
     protected static string $relationship = 'solvers';
     protected static ?string $title = "Solvers";
 
-    public static function canViewForRecord(Evaluation|\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): bool
-    {
-        return $ownerRecord->type === 'csp';
-    }
 
     public function form(Schema $schema): Schema
     {

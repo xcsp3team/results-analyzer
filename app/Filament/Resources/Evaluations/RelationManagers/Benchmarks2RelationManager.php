@@ -14,10 +14,6 @@ class Benchmarks2RelationManager extends RelationManager
 
     protected static ?string $relatedResource = BenchmarkResource::class;
 
-    public static function canViewForRecord(Evaluation|\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): bool
-    {
-        return $ownerRecord->type === 'csp';
-    }
 
     public function table(Table $table): Table
     {

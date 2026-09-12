@@ -10,6 +10,7 @@
         "ext-pdo": "*",
         "afatmustafa/blade-hugeicons": "*",
         "filament/filament": "^5.0",
+        "halaxa/json-machine": "*",
         "laravel/framework": "^13.8",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
