@@ -48,6 +48,7 @@ class EditEvaluation extends EditRecord
                 ->schema([
                     Select::make('solver_id')
                         ->options($solvers)
+                        ->required()
                         ->searchable(['name']),
                     FileUpload::make('json_file')
                         ->label('JSON File')

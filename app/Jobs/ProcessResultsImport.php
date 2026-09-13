@@ -7,9 +7,10 @@ use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use JsonMachine\Items;
 
 class ProcessResultsImport implements ShouldQueue
@@ -28,7 +29,6 @@ class ProcessResultsImport implements ShouldQueue
     {
         $fullPath = Storage::disk('local')->path($this->path);
         DB::beginTransaction();
-
         $buffer = [];
         try {
             $items = Items::fromFile($fullPath, ['pointer' => '/results']);
@@ -36,17 +36,26 @@ class ProcessResultsImport implements ShouldQueue
             $errors = false;
             foreach ($items as $entry) {
                 $nb++;
+                $validator = Validator::make((array)$entry, [
+                    'time' => ['required', 'integer', 'min:-1'],
+                    'status' => ['required', Rule::in(['SAT', 'UNSAT', 'UNKNOWN', 'OPTIMUM'])],
+                    'bug' => ["required", "boolean"],
+                    'unsupported' => ["required", "boolean"],
+                    'bounds' => ['string',
+                        'regex:/^\[\s*(\{\s*\'bound\':\s*-?\d+(\.\d+)?,\s*\'time\':\s*-?\d+(\.\d+)?\s*\}\s*,?\s*)+\]$/']
+                ]);
+                if ($validator->fails()) {
+                    $errors = true;
+                    $str_error = $validator->errors()->all()[0];
+                    break;
+                }
+                $b = Benchmark::where("fullname", $entry->fullname)->first();
+                if ($b == null) {
+                    $errors = true;
+                    $str_error = "Benchmark not found : $entry->fullname";
+                    break;
+                }
                 if ($this->record->type != 'cop') {
-
-                    if (isset($entry->time, $entry->status, $entry->unsupported, $entry->bug) == false) {
-                        $errors = true;
-                        break;
-                    }
-                    $b = Benchmark::where("fullname", $entry->fullname)->first();
-                    if ($b == null) {
-                        $errors = true;
-                        break;
-                    }
                     $buffer[] = [
                         'benchmark_id' => $b->id,
                         'solver_id' => $this->solver_id,
@@ -56,11 +65,19 @@ class ProcessResultsImport implements ShouldQueue
                         'unsupported' => $entry->unsupported,
                     ];
                 } else {
-
+                    $buffer[] = [
+                        'benchmark_id' => $b->id,
+                        'solver_id' => $this->solver_id,
+                        'time' => $entry->time,
+                        'status' => $entry->status,
+                        'bounds' => $entry->bounds,
+                        'bug' => $entry->bug,
+                        'unsupported' => $entry->unsupported,
+                    ];
                 }
 
-                if (count($buffer) >= 500) {
-                    DB::table('benchmarks')->insert($buffer);
+                if (count($buffer) >= 100) {
+                    DB::table('results')->insert($buffer);
                     $buffer = [];
                 }
             }
@@ -68,13 +85,13 @@ class ProcessResultsImport implements ShouldQueue
                 DB::rollBack();
                 Notification::make()
                     ->title('Import failed')
-                    ->body("At entry number $nb. Import canceled.")
+                    ->body("At entry number $nb. Import canceled: $str_error")
                     ->danger()
                     ->sendToDatabase(User::find($this->user_id));
                 return;
             }
             if ($buffer !== []) {
-                DB::table('benchmarks')->insert($buffer);
+                DB::table('results')->insert($buffer);
             }
 
         } finally {

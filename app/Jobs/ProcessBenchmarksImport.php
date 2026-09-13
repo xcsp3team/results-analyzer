@@ -10,6 +10,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use JsonMachine\Items;
 
 class ProcessBenchmarksImport implements ShouldQueue
@@ -36,11 +37,25 @@ class ProcessBenchmarksImport implements ShouldQueue
             $errors = false;
             foreach ($items as $entry) {
                 $nb++;
+                $validator = Validator::make((array)$entry, [
+                    'name' => ['required', 'string'],
+                    'fullname' => ['required', 'string'],
+                    'family' => ['required', 'string'],
+                    'nb_variables' => ['required', 'integer'],
+                    'nb_clauses' => ['required', 'integer'],
+                    'info_domains' => ['required', 'string'],
+                    'info_constraints' => ['required', 'string'],
+                    'useless_vars' => ['required', 'integer'],
+                    'type' => ['start_with: min,max']
+                ]);
+                if ($validator->fails()) {
+                    $errors = true;
+                    $str_error = $validator->errors()->all()[0];
+                    break;
+                }
+
+
                 if ($this->record->type != 'cop') {
-                    if (isset($entry->name, $entry->fullname, $entry->family, $entry->nb_variables, $entry->nb_clauses, $entry->info_domains, $entry->info_constraints, $entry->useless_vars) == false) {
-                        $errors = true;
-                        break;
-                    }
                     $buffer[] = [
                         'evaluation_id' => $this->record->id,
                         'name' => $entry->name,
@@ -53,10 +68,6 @@ class ProcessBenchmarksImport implements ShouldQueue
                         'useless_vars' => $entry->useless_vars,
                     ];
                 } else {
-                    if (isset($entry->name, $entry->fullname, $entry->family, $entry->nb_variables, $entry->nb_clauses, $entry->info_domains, $entry->info_constraints, $entry->useless_vars, $entry->type) == false) {
-                        $errors = true;
-                        break;
-                    }
                     $buffer[] = [
                         'evaluation_id' => $this->record->id,
                         'name' => $entry->name,
@@ -80,7 +91,7 @@ class ProcessBenchmarksImport implements ShouldQueue
                 DB::rollBack();
                 Notification::make()
                     ->title('Import failed')
-                    ->body("At entry number $nb. Import canceled.")
+                    ->body("At entry number $nb. Import canceled: $str_error")
                     ->danger()
                     ->sendToDatabase(User::find($this->user_id));
                 return;
