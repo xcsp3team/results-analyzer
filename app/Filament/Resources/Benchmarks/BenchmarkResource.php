@@ -25,7 +25,7 @@ use UnitEnum;
 class BenchmarkResource extends Resource
 {
     protected static ?string $model = Benchmark::class;
-    
+
     protected static bool $shouldRegisterNavigation = false;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -48,7 +48,7 @@ class BenchmarkResource extends Resource
                 TextInput::make('nb_variables')
                     ->required()
                     ->numeric(),
-                TextInput::make('nb_clauses')
+                TextInput::make('nb_constraints')
                     ->required()
                     ->numeric(),
                 TextInput::make('info_domains'),
@@ -75,7 +75,7 @@ class BenchmarkResource extends Resource
                 TextColumn::make('nb_variables')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('nb_clauses')
+                TextColumn::make('nb_constraints')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('info_domains')

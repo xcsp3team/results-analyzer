@@ -47,7 +47,7 @@ class ExportNewDB extends Command
         $query->setFetchMode(\PDO::FETCH_ASSOC);
         $solvers = $query->fetchAll();
         foreach ($solvers as $solver)
-            DB::insert("INSERT INTO solvers values(:id,:name,:version,:params,:authors,:created_at,:updated_at)",$solver);
+            DB::insert("INSERT INTO solvers values(:id,:name,:version,:params,:authors,:created_at,:updated_at)", $solver);
 
 
         $this->info("Export " . count($solvers) . " solvers\n");
@@ -72,7 +72,7 @@ class ExportNewDB extends Command
                     $b->fullname = $benchmark["fullname"];
                     $b->family = $benchmark["family"];
                     $b->nb_variables = $benchmark["nb_variables"];
-                    $b->nb_clauses = $benchmark["nb_constraints"];
+                    $b->nb_constraints = $benchmark["nb_constraints"];
                     $b->info_domains = $benchmark["info_domains"];
                     $b->info_constraints = $benchmark["info_constraints"];
                     $b->useless_vars = $benchmark["useless_vars"];
@@ -90,13 +90,13 @@ class ExportNewDB extends Command
                         $r->solver_id = $result["solver_id"];
                         $r->bounds = $result["bounds"];
                         $r->status = "SAT";
-                        if($result['time'] != -1) {
-                            if($result['bounds'] == '[]')
+                        if ($result['time'] != -1) {
+                            if ($result['bounds'] == '[]')
                                 $r->status = "UNSAT";
                             else
                                 $r->status = "OPTIMUM";
                         } else {
-                            if($result['bounds'] == '[]')
+                            if ($result['bounds'] == '[]')
                                 $r->status = "UNKNOWN";
                         }
                         $r->bug = $result["bug"];
@@ -115,7 +115,7 @@ class ExportNewDB extends Command
                     $b->fullname = $benchmark["fullname"];
                     $b->family = $benchmark["family"];
                     $b->nb_variables = $benchmark["nb_variables"];
-                    $b->nb_clauses = $benchmark["nb_clauses"];
+                    $b->nb_constraints = $benchmark["nb_constraints"];
                     $b->info_domains = $benchmark["info_domains"];
                     $b->info_constraints = $benchmark["info_constraints"];
                     $b->useless_vars = $benchmark["useless_vars"];

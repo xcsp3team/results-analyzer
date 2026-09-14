@@ -22,7 +22,7 @@ class CreateBenchmarksTable extends Migration
             $table->string("status")->nullable();
             $table->bigInteger("best_bound")->nullable();
             $table->integer("nb_variables");
-            $table->integer("nb_clauses");
+            $table->integer("nb_constraints");
             $table->string("info_domains")->nullable();
             $table->string("info_constraints")->nullable();
             $table->string("type")->nullable();

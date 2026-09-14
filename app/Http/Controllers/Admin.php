@@ -93,7 +93,7 @@ class Admin extends Controller
                 $bench->competition_id = $c->id;
                 $bench->status = "UNKNOWN";
                 $bench->nb_variables = $b['nb_variables'];
-                $bench->nb_clauses = $b['nb_constraints'];
+                $bench->nb_constraints = $b['nb_constraints'];
                 $bench->info_domains = $b['info_domains'];
                 $bench->info_constraints = $b['info_constraints'];
                 $bench->useless_vars = $b['useless_vars'] ?? 0;

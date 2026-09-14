@@ -54,7 +54,7 @@ In the edit page of an evaluation, you can import a set of benchmarks using a js
 		"fullname": "/data/test1.xml",
 		"family": "test",
 		"nb_variables": 10,
-		"nb_clauses": 20,
+		"nb_constraints": 20,
 		"info_domains": "",
 		"info_constraints": "",
 		"useless_vars": 0
@@ -64,7 +64,7 @@ In the edit page of an evaluation, you can import a set of benchmarks using a js
 		"fullname": "/data/test2.xml",
 		"family": "test",
 		"nb_variables": 12,
-		"nb_clauses": 30,
+		"nb_constraints": 30,
 		"info_domains": "",
 		"info_constraints": "",
 		"useless_vars": 0,
@@ -80,7 +80,7 @@ The fields are:
 - fullname: When you import results, the fullname is used to find the benchmark in the database. It must be unique.
 - family: the family of the benchmark.
 - nb_variables: the number of variables.
-- nb_clauses: the number of constraints/clauses.
+- nb_constraints: the number of constraints/clauses.
 - info_domains (for CSP/COP problems). It must be a strng of type "#types:1 #values:25025 (#1001:25)".
 - info_constraints: It mus be of type "#intension:42551 #ordered:1" for CSP/COP problems or "#2:30 #3: 40" for SAT
   problems.
