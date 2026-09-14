@@ -27,7 +27,14 @@ class DetailsSat extends AbstractDetails
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
-            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses), new Data($benchmark->status)];
+            $name = $benchmark->name;
+            $info = "#vars: $benchmark->nb_variables #ctrs: $benchmark->nb_clauses<br />";
+            $info .= "domains &#8594; $benchmark->info_domains<br />";
+            $info .= "constraints &#8594; $benchmark->info_constraints<br />";
+            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"')];
+            $tmp[] = new Data($benchmark->nb_variables);
+            $tmp[] = new Data($benchmark->nb_clauses);
+            $tmp[] = new Data($benchmark->status);
 
             $best = $this->filters->time_limit;
             foreach ($this->selected_solvers as $id) {

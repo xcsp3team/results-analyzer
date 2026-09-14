@@ -34,7 +34,13 @@ class DetailsCop extends AbstractDetails
             if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
                 continue;
             $icon = str_contains(strtoupper($benchmark->type), "MIN") ? $icon_min : $icon_max;
-            $tmp = [new Data($benchmark->name), new Data($benchmark->nb_variables), new Data($benchmark->nb_clauses)];
+            $name = $benchmark->name;
+            $info = "#vars: $benchmark->nb_variables #ctrs: $benchmark->nb_clauses<br />";
+            $info .= "domains &#8594; $benchmark->info_domains<br />";
+            $info .= "constraints &#8594; $benchmark->info_constraints<br />";
+            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"')];
+            $tmp[] = new Data($benchmark->nb_variables);
+            $tmp[] = new Data($benchmark->nb_clauses);
             $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
 
             if ($benchmark->status == "UNSAT")
