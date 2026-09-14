@@ -82,7 +82,7 @@ The fields are:
 - family: the family of the benchmark.
 - nb_variables: the number of variables.
 - nb_constraints: the number of constraints/clauses.
-- info_domains (for CSP/COP problems). It must be a strng of type "#types:1 #values:25025 (#1001:25)".
+- info_domains (for CSP/COP problems). It must be a string of type "#types:1 #values:25025 (#1001:25)".
 - info_constraints: It mus be of type "#intension:42551 #ordered:1" for CSP/COP problems or "#2:30 #3: 40" for SAT
   problems.
 - useless_vars: if any.
@@ -129,8 +129,8 @@ time required to prove the optimality. You also must save the bounds evolution u
 
 ## Frontend part
 
-It is quite intuitive. One the evaluation selected, you can see the results using 3 different pages (details, chart,
-comparison). You can select/deslected some solvers. You can also filters benchmarks using different kinds of filtering.
+It is quite intuitive. Once the evaluation selected, you can see the results using 3 different pages (details, chart,
+comparison). You can select/deslected some solvers. You can also filter benchmarks using different kinds of filtering.
 
 An helping page can give you additional information.
 
