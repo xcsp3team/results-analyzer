@@ -63,7 +63,7 @@
             class="z-50 rounded-lg bg-white shadow-lg ring-1 ring-black/5 text-sm"
         >
 
-            <div>
+            <div x-if="content">
                 <div class="px-3 py-2 bg-neutral-tertiary border-b border-default rounded-t-base dark:bg-gray-400">
                     <h3 class="font-medium text-heading " x-text="content.title"></h3>
                 </div>

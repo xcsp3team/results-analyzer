@@ -26,8 +26,8 @@ abstract class AbstractOneVsOne extends Component
     public $selected_constraints;
 
 
-    public $solver_x = 3;
-    public $solver_y = 5;
+    public $solver_x = null;
+    public $solver_y = null;
 
     public $name_x;
     public $name_y;

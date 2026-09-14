@@ -44,11 +44,18 @@
                         var x = point[0];
                         var y = point[1];
                         var name = point[2];
-                        return '<div style=\'padding:8px 12px;\'>' +
-                            '<div style=\'font-weight:600;margin-bottom:4px; background-color:#ddd;border-bottom: 1px solid black; \'>' + name + '</div>' +
+                        return '<div>'+
+                            '<div class=\'px-3 py-2 bg-neutral-tertiary border-b border-default rounded-t-base dark:bg-gray-400\'>'+
+                            '<h3 class=\'font-medium text-heading\'>'+name + '</h3>' +
+                            '</div>' +
+                            '<div class=\'px-3 py-2 dark:bg-gray-300\'>' +
+                            '<div class=\'text-gray-600\'>' +
                             '<div>{{$name_x}}: ' + x + '</div>' +
                             '<div>{{$name_y}}: ' + y + '</div>' +
-                            '</div>';
+                            '</div>' +
+                            '</div>' +
+                            '</div>'
+                        ;
                     }
                 },
                 markers: { size: 5 },
