@@ -23,7 +23,7 @@ a set of benchmarks. An evaluation can be based on SAT, CSP or COP problems. The
 6. Modify the .env file (database, cache, session).
 7. Migrate the database `php artisan migrate`
 8. Create an admin user `php artisan make:filament-user`
-9. Optionally: create an XCSP evaluation example (XCSP 2026 competition) `php artisan db:seed`
+9. Optionally: create an XCSP evaluation example (XCSP 2026 competition) `php artisan app:import-xcsp26`
 10. Optionally: create a SAT evaluation example (SAT 2006 competition) #TODO
 
 For a production deployment, please see [the documentation](https://laravel.com/docs/13.x/deployment).
@@ -90,8 +90,7 @@ The fields are:
 ## Adding Results
 
 In the edit page of an evaluation, you can import a set of results using a json file. The file is related to only one
-solver.
-For SAT/CSP problems, the file must have this format:
+solver. For SAT/CSP problems, the file must have this format:
 
 ```
 {
@@ -130,8 +129,7 @@ time required to prove the optimality. You also must save the bounds evolution u
 ## Frontend part
 
 It is quite intuitive. One the evaluation selected, you can see the results using 3 different pages (details, chart,
-comparison).
-You can select/deslected some solvers. You can also filters benchmarks using different kinds of filtering.
+comparison). You can select/deslected some solvers. You can also filters benchmarks using different kinds of filtering.
 
 An helping page can give you additional information.
 
