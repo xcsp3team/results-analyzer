@@ -73,7 +73,7 @@ class Filters implements Wireable
                 if ($eval->evaluate($this->expression) == false)
                     return true;
             } catch (ExprEvaluatorException $e) {
-
+                
             }
         }
 

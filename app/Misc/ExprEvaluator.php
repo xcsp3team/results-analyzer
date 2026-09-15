@@ -19,9 +19,6 @@
 
 namespace App\Misc;
 
-class ExprEvaluatorException extends \RuntimeException
-{
-}
 
 final class ExprEvaluator
 {

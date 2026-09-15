@@ -2,15 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Livewire\Evaluation;
-use App\Models\Benchmark;
-use App\Models\Result;
-use App\Models\Solver;
+
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use PDO;
+use Illuminate\Support\Facades\Http;
 
 #[Signature('app:import-xcsp26')]
 #[Description('Import XCSP26 competition in database')]
@@ -22,8 +18,8 @@ class ImportXCSP26Data extends Command
 
     public function handle()
     {
-        $gzPath = storage_path('app/seed-data.sql.gz');
-        $sqlPath = storage_path('app/seed-data.sql');
+        $gzPath = storage_path('app/xcsp26.sql.gz');
+        $sqlPath = storage_path('app/xcsp26.sql');
 
         $this->info('Loading data...');
 

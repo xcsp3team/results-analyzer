@@ -1,6 +1,6 @@
 <div>
     <div class="mt-8 mb-4">
-        <h4 class="mb-4"><span class="h2">Detailed results</span> <span class="font-medium mb-6 dark:text-gray-400">(solving times in seconds per solver)</span>
+        <h4 class="mb-4"><span class="h2">Detailed results</span>
         </h4>
 
         <label for="input-group-1" class="sr-only">Search</label>
