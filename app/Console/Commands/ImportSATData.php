@@ -43,21 +43,33 @@ class ImportSATData extends Command
                 ->select('features.hash', 'features.family', 'filename.value as filename')
                 ->get();
 
-            $total = 0;
+            $stats = [
+                'meta_rows' => $rows->count(),
+                'meta_distinct_hash' => $rows->pluck('hash')->unique()->count(),
+                'matched' => 0,
+                'skipped_no_feature' => 0,
+                'skipped_hashes' => [],
+                'upserted' => 0,
+            ];
 
-            $rows->chunk(500)->each(function ($chunk) use ($features, &$total) {
+            $rows->chunk(500)->each(function ($chunk) use ($features, &$stats) {
                 $data = [];
 
                 foreach ($chunk as $row) {
                     $feature = $features->get($row->hash);
 
                     if (!$feature) {
+                        $stats['skipped_no_feature']++;
+                        $stats['skipped_hashes'][] = $row->hash;
                         continue; // pas de correspondance dans base.db, on ignore
                     }
 
+                    $stats['matched']++;
+
                     $data[] = [
-                        // NB: ici name = filename.value. Remplacer par $row->family
-                        // si c'est plutôt la famille que vous voulez comme "name".
+                        // NB: ici name = filename.value (sans le suffixe .cnf.xz).
+                        // Remplacer par $row->family si c'est plutôt la famille
+                        // que vous voulez comme "name".
                         'name' => preg_replace('/\.cnf\.xz$/', '', $row->filename),
                         'fullname' => $row->hash,
                         'family' => $row->family,
@@ -71,18 +83,21 @@ class ImportSATData extends Command
                 if (!empty($data)) {
                     // Nécessite un index UNIQUE sur (fullname, evaluation_id)
                     // pour que l'upsert fasse un update plutôt qu'un doublon.
-                    DB::table('benchmarks')->upsert(
+                    DB::table('benchmark')->upsert(
                         $data,
                         ['fullname', 'evaluation_id'],
                         ['name', 'nb_variables', 'nb_constraints']
                     );
-                    $total += count($data);
+                    $stats['upserted'] += count($data);
                 }
             });
 
-            return $total;
+            return $stats;
         } finally {
             $this->cleanup($metaPath, $basePath);
+            foreach ($stats as $name => $stat)
+                if ($name != "skipped_hashes")
+                    $this->info("$name: $stat");
         }
     }
 
