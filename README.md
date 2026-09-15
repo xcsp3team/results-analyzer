@@ -24,7 +24,7 @@ a set of benchmarks. An evaluation can be based on SAT, CSP or COP problems. The
 7. Migrate the database `php artisan migrate`
 8. Create an admin user `php artisan make:filament-user`
 9. Optionally: create an XCSP evaluation example (XCSP 2026 competition) `php artisan app:import-xcsp26`
-10. Optionally: create a SAT evaluation example (SAT 2006 competition) #TODO
+10. Optionally: create a SAT evaluation example (SAT 2006 competition) (forthcoming)
 11. Serve the application `composer run dev`
 
 For a production deployment, please see [the documentation](https://laravel.com/docs/13.x/deployment).
