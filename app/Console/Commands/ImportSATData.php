@@ -15,7 +15,7 @@ class ImportSATData extends Command
 {
     protected const META_URL = 'https://benchmark-database.de/getdatabase/meta';
     protected const BASE_URL = 'https://benchmark-database.de/getdatabase/base';
-    protected const TRACK = 'main_2026';
+    protected const TRACK = 'main_2025';
     protected const EVALUATION_ID = 9;
 
 
@@ -58,24 +58,29 @@ class ImportSATData extends Command
                 foreach ($chunk as $row) {
                     $feature = $features->get($row->hash);
 
-                    if (!$feature) {
+                    if ($feature) {
+                        $stats['matched']++;
+                    } else {
+                        // pas de correspondance dans base.db : on insère quand
+                        // même, avec 0 comme valeur par défaut.
                         $stats['skipped_no_feature']++;
                         $stats['skipped_hashes'][] = $row->hash;
-                        continue; // pas de correspondance dans base.db, on ignore
                     }
-
-                    $stats['matched']++;
 
                     $data[] = [
                         // NB: ici name = filename.value (sans le suffixe .cnf.xz).
                         // Remplacer par $row->family si c'est plutôt la famille
                         // que vous voulez comme "name".
-                        'name' => preg_replace('/\.cnf\.xz$/', '', $row->filename),
+                        'name' => preg_replace(
+                            '/(\.(sanitized|normalised))?\.cnf\.xz$/',
+                            '',
+                            $row->filename
+                        ),
                         'fullname' => $row->hash,
                         'family' => $row->family,
                         'evaluation_id' => self::EVALUATION_ID,
-                        'nb_variables' => $feature->variables,
-                        'nb_constraints' => $feature->clauses,
+                        'nb_variables' => $feature->variables ?? 0,
+                        'nb_constraints' => $feature->clauses ?? 0,
                         'useless_vars' => 0
                     ];
                 }
@@ -83,7 +88,7 @@ class ImportSATData extends Command
                 if (!empty($data)) {
                     // Nécessite un index UNIQUE sur (fullname, evaluation_id)
                     // pour que l'upsert fasse un update plutôt qu'un doublon.
-                    DB::table('benchmark')->upsert(
+                    DB::table('benchmarks')->upsert(
                         $data,
                         ['fullname', 'evaluation_id'],
                         ['name', 'nb_variables', 'nb_constraints']
@@ -92,13 +97,14 @@ class ImportSATData extends Command
                 }
             });
 
-            return $stats;
+            //return $stats;
         } finally {
             $this->cleanup($metaPath, $basePath);
             foreach ($stats as $name => $stat)
                 if ($name != "skipped_hashes")
                     $this->info("$name: $stat");
         }
+        return 0;
     }
 
     protected function downloadSqlite(string $url, string $label): string

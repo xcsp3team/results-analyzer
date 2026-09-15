@@ -41,13 +41,14 @@ class ImportXCSP26Data extends Command
         $config = config("database.connections.$connection");
 
         $command = sprintf(
-            'mysql -u%s -p%s -h%s %s < %s',
+            '(echo "SET FOREIGN_KEY_CHECKS=0;"; cat %s; echo "SET FOREIGN_KEY_CHECKS=1;") | mysql -u%s -p%s -h%s %s',
+            escapeshellarg($sqlPath),
             $config['username'],
             $config['password'],
             $config['host'],
-            $config['database'],
-            $sqlPath
+            $config['database']
         );
+
 
         exec($command, $output, $exitCode);
 
