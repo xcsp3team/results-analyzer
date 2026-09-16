@@ -41,7 +41,7 @@ class DetailsCop extends AbstractDetails
             $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"')];
             $tmp[] = new Data($benchmark->nb_variables);
             $tmp[] = new Data($benchmark->nb_constraints);
-            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
+            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center cursor-pointer", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
 
             if ($benchmark->status == "UNSAT")
                 $tmp[] = new Data("UNSAT", "text-green-500");

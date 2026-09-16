@@ -22,7 +22,7 @@
     width: 1,
     curve: 'smooth',
   },
-            markers: { size: 1 },
+            markers: { size: 2   },
             legend: { show: true, position: 'top' },
             xaxis: {tickAmount: 5},
             series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series)),
