@@ -82,6 +82,18 @@ abstract class AbstractDetails extends Component
         Cookie::queue('perPage', $this->perPage, 60 * 24 * 365);;
     }
 
+    function extractType( $string) {
+        if($string == null)
+            return null;
+        if (preg_match('/^(min|max)/i', $string)) {
+            $words = preg_split('/\s+|&nbsp;?/i', trim($string));
+            // On enlève les éléments vides éventuels (ex: si &nbsp; est collé en début/fin)
+            $mots = array_values(array_filter($words, fn($m) => $m !== ''));
+            return implode(' ', array_slice($words, 0, 2));
+        }
+        return $string; // ne commence ni par "min" ni par "max"
+    }
+
     public function export()
     {
         $this->create_detailed_results();
@@ -89,7 +101,7 @@ abstract class AbstractDetails extends Component
         $csvFile = fopen($csvFileName, 'w');
         fputcsv($csvFile, array_map(fn($h) => $h->value, $this->header_results));
         foreach ($this->detailed_results as $row)
-            fputcsv($csvFile, array_map(fn($h) => $h->value, $row));
+            fputcsv($csvFile, array_map(fn($h) => $this->extractType($h->value), $row));
         fclose($csvFile);
         Toaster::success("Data exported.");
         return response()->download($csvFileName)->deleteFileAfterSend();
