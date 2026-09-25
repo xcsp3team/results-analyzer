@@ -18,12 +18,15 @@
                 <livewire:selected-solvers wire:key="{{Str::random()}}" :selected_solvers=$selected_solvers :evaluation=$evaluation />
             </div>
         </aside>
-    </div>
-    @if($display_sidebar == false)
-        <div class="text-gray-400 fixed top-16 left-1"><x-hugeicons-panel-left-close wire:click="$set('display_sidebar', true)"/> </div>
-    @endif
 
-    <div class="p-4 {{$display_sidebar == false ? "": "ml-64"}} mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
+    <template x-if="!open">
+        <div class="text-gray-400 fixed top-16 left-1">
+            <x-hugeicons-panel-left-close @click="open = true" wire:click="$set('display_sidebar', true)"/>
+        </div>
+    </template>
+
+
+    <div  :class="open ? 'ml-64' : 'ml-0'" class="p-4  transition-all duration-300 ease-in-out mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
         @switch($view)
             @case(1)
                 <livewire:table-view :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation
@@ -45,4 +48,6 @@
                 @break
         @endswitch
     </div>
+    </div>
+
 </div>
