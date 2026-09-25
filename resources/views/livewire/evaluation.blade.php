@@ -13,14 +13,14 @@
                class="fixed top-15.5 left-0 z-40 w-64 h-full"
                aria-label="Sidebar">
             <div class="bg-gray-100 h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
-                <x-hugeicons-panel-left-open class="absolute right-2" @click="open = false" wire:click="$set('display_sidebar', false)"/>
+                <x-hugeicons-panel-left-open class="text-gray-400 absolute right-2" @click="open = false" wire:click="$set('display_sidebar', false)"/>
                 <livewire:filtering wire:key="{{Str::random()}}" :filters=$filters :evaluation=$evaluation />
                 <livewire:selected-solvers wire:key="{{Str::random()}}" :selected_solvers=$selected_solvers :evaluation=$evaluation />
             </div>
         </aside>
     </div>
     @if($display_sidebar == false)
-        <div class="fixed top-16 left-1"><x-hugeicons-panel-left-close wire:click="$set('display_sidebar', true)"/> </div>
+        <div class="text-gray-400 fixed top-16 left-1"><x-hugeicons-panel-left-close wire:click="$set('display_sidebar', true)"/> </div>
     @endif
 
     <div class="p-4 {{$display_sidebar == false ? "": "ml-64"}} mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
