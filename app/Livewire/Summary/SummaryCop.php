@@ -42,12 +42,15 @@ class SummaryCop extends AbstractSummary
 
         }
         $vbs[self::NAME]->value = "Virtual Best Solver";
+        $vbs[self::NAME]->type = "string";
         foreach ($this->selected_solvers as $id) {
             $selectedSolver = $this->solvers[$id];
             $tmp = [];
             for ($i = 0; $i <= 6; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
+            $tmp[self::SCORE]->type = "float";
+            $tmp[self::NAME]->type = "string";
             $this->summary[] = $tmp;
         }
 

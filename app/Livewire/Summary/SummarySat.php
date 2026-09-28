@@ -52,6 +52,7 @@ class SummarySat extends AbstractSummary
             for ($i = 0; $i <= 7; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
+            $tmp[self::NAME]->type = "string";
             foreach ($this->evaluation->benchmarks as $benchmark) {
                 if ($this->filters->is_filtered($benchmark))
                     continue;
@@ -96,6 +97,7 @@ class SummarySat extends AbstractSummary
             $vbs[] = new Data(0, "bg-green-300");
         $vbs[self::NAME]->value = "Virtual Best Solver";
         $vbs[self::NAME]->class = "bg-green-300 italic";
+        $vbs[self::NAME]->type = "string";
 
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))

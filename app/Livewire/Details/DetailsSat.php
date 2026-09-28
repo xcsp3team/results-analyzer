@@ -31,10 +31,10 @@ class DetailsSat extends AbstractDetails
             $info = "#vars: $benchmark->nb_variables #ctrs: $benchmark->nb_constraints<br />";
             $info .= "domains &#8594; $benchmark->info_domains<br />";
             $info .= "constraints &#8594; $benchmark->info_constraints<br />";
-            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"')];
+            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"', null, "string")];
             $tmp[] = new Data($benchmark->nb_variables);
             $tmp[] = new Data($benchmark->nb_constraints);
-            $tmp[] = new Data($benchmark->status);
+            $tmp[] = new Data($benchmark->status, "", "", null, "string");
 
             $best = $this->filters->time_limit;
             foreach ($this->selected_solvers as $id) {
@@ -47,7 +47,7 @@ class DetailsSat extends AbstractDetails
                 $selectedSolver = $this->solvers[$id];
                 $data = $all_results[$selectedSolver->id][$benchmark->id];
                 if ($data->unsupported) {
-                    $tmp[] = new Data("U", "", "", -2);
+                    $tmp[] = new Data("U", "", "", -2, "string");
                     continue;
                 }
                 if ($data->bug) {
@@ -61,7 +61,7 @@ class DetailsSat extends AbstractDetails
                 if ($data->time <= $this->filters->time_limit)
                     $tmp[] = new Data((int)$data->time);
                 else
-                    $tmp[] = new Data("-", "opacity-30", "", -1);
+                    $tmp[] = new Data("-", "opacity-30", "", -1, "string");
             }
             $this->detailed_results[] = $tmp;
         }

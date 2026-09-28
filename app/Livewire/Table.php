@@ -53,7 +53,7 @@ class Table extends Component
                 $row1[$this->sort_field]->value_sort = $row1[$this->sort_field]->value;
             if ($row2[$this->sort_field]->value_sort == null)
                 $row2[$this->sort_field]->value_sort = $row2[$this->sort_field]->value;
-            
+
             if ($row1[$this->sort_field]->value_sort > $row2[$this->sort_field]->value_sort) {
                 return $this->sort_direction === 'asc' ? 1 : -1;
             } elseif ($row1[$this->sort_field]->value_sort < $row2[$this->sort_field]->value_sort) {
