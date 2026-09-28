@@ -22,11 +22,11 @@ class SummaryCop extends AbstractSummary
         $this->header_summary = [
             new DataHeader("Solver", "left"),
             new DataHeader("Score"),
-            new DataHeader("#Opt"),
-            new DataHeader("#BB1"),
-            new DataHeader("#BB2"),
-            new DataHeader("#UNSAT"),
-            new DataHeader("#Unsupported"),
+            new DataHeader("OPT"),
+            new DataHeader("BB1"),
+            new DataHeader("BB2"),
+            new DataHeader("UNSAT"),
+            new DataHeader("Unsupported"),
         ];
     }
 

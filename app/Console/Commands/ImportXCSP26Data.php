@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
 #[Signature('app:import-xcsp26')]
-#[Description('Import XCSP26 competition in database')]
+#[Description('Import XCSP26 evaluation in database')]
 class ImportXCSP26Data extends Command
 {
 

@@ -17,10 +17,10 @@
                     </button>
                 </div>
             </div>
-            <div class="flex flex-col flex-wrap max-h-96  gap-2 mb-4  content-start ">
+            <div class="grid grid-cols-3  flex-wrap max-h-96 my-4  content-start ">
 
                 @foreach($all_families as $family)
-                    <div class="flex items-center m-4">
+                    <div class="flex items-center mx-4 my-2.5">
                         <input type="checkbox"
                                id="{{$family}}"
                                wire:model.live="selected_families"

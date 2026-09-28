@@ -8,7 +8,8 @@ use App\Misc\DataHeader;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class SummarySat extends AbstractSummary {
+class SummarySat extends AbstractSummary
+{
 
 
     const int NAME = 0;
@@ -26,13 +27,13 @@ class SummarySat extends AbstractSummary {
         parent::mount($filters, $evaluation, $selected_solvers);
         $this->header_summary = [
             new DataHeader("Solver", "left"),
-            new DataHeader("#Solved"),
-            new DataHeader("#SAT"),
-            new DataHeader("#UNSAT"),
-            new DataHeader("#Exclusive"),
-            new DataHeader("#Fastest"),
-            new DataHeader("#Unsupported"),
-            new DataHeader("#PAR2")
+            new DataHeader("Solved"),
+            new DataHeader("SAT"),
+            new DataHeader("UNSAT"),
+            new DataHeader("Exclusive"),
+            new DataHeader("Fastest"),
+            new DataHeader("Unsupported"),
+            new DataHeader("PAR2")
         ];
     }
 

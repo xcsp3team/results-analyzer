@@ -2,7 +2,7 @@
     <span class="absolute right-3 -top-8 dark:text-gray-400 " wire:click="export">@svg('hugeicons-xls-02')</span>
     <table class="table ">
         @if($header != null && count($header) > 0)
-            <thead class="thead {{$sticky ?'sticky top-15 z-10' : ""}}">
+            <thead class="thead whitespace-nowrap {{$sticky ?'sticky top-15 z-10' : ""}}">
             <tr>
                 @foreach($header as $i => $th)
                     <th scope="col"
@@ -10,7 +10,7 @@
                         {{isset($th->sortable) ? "wire:click=sort($i)": ""}}
                     >
                         <div class="flex {{$th->align=="text-right" ? "justify-end" : "justify-start"}}">
-                            <span class="mr-2">{{$th->value}}</span>
+                            <span class="mr-2">{!! $th->value  !!}</span>
                             <span
                                 class="w-4">{{$sort_field==$i ? ($sort_direction== 'asc' ? svg('heroicon-o-arrow-down') : svg('heroicon-o-arrow-up')):svg('heroicon-o-arrows-up-down')}}</span>
                         </div>

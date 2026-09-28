@@ -45,8 +45,8 @@
                         class="m-0 pl-2 pr-6 py-2 text-sm  text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700   rounded-e-xs border   text-sm block p-2.5 mr-3"
                         wire:model="perPage"
                         wire:change="changePerPage">
-                    <option {{$perPage==10 ? "selected" :""}}>10</option>
                     <option {{$perPage==25 ? "selected" :""}}>25</option>
+                    <option {{$perPage==50 ? "selected" :""}}>50</option>
                     <option {{$perPage==100 ? "selected" :""}}>100</option>
                 </select>
             </div>
