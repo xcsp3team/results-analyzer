@@ -32,7 +32,7 @@
 
 
         <div :class="open ? 'ml-64' : 'ml-0'"
-             class="p-4  transition-all duration-300 ease-in-out mt-14 px-4 mx-auto max-w-8xl lg:px-4 pt-16">
+             class="p-4  transition-all duration-300 ease-in-out mt-14 px-4 mx-auto  lg:px-4 pt-16">
             @switch($view)
                 @case(1)
                     <livewire:table-view :filters=$filters :selected_solvers=$selected_solvers :evaluation=$evaluation

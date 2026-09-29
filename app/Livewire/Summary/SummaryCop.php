@@ -69,7 +69,8 @@ class SummaryCop extends AbstractSummary
                 if ($data->unsupported) {
                     $this->summary[$i++][self::UNSUPPORTED]->value += 1;
                     continue;
-                }
+                } else
+                    $unsupported = false;
                 if ($data->bug) {
                     $i++;
                     continue;
@@ -79,7 +80,6 @@ class SummaryCop extends AbstractSummary
                 if ($data->status == "UNSAT" && $data->time < $this->filters->time_limit) {
                     $this->summary[$i++][self::UNSAT]->value += 1;
                     $unsat = 1;
-                    $unsupported = 0;
                     continue;
                 }
                 if ($best_bound->bound === null) {
@@ -107,6 +107,7 @@ class SummaryCop extends AbstractSummary
             $vbs[self::UNSUPPORTED]->value += $unsupported;
         }
         $vbs[self::SCORE]->value = (float)($vbs[self::UNSAT]->value + $vbs[self::OPTIMUM]->value + $vbs[self::BB1]->value);
+        $vbs[self::SCORE]->type = "float";
         $vbs[self::SCORE]->value_sort = (float)$vbs[self::SCORE]->value_sort;
         $this->summary[] = $vbs;
     }
