@@ -56,7 +56,7 @@ class ExportNewDB extends Command
         $query->setFetchMode(\PDO::FETCH_ASSOC);
         $competitions = $query->fetchAll();
         foreach ($competitions as $competition) {
-            $this->info("Export competition  " . $competition['name'] . " " . $competition["track"]);
+            $this->info("Export evaluation  " . $competition['name'] . " " . $competition["track"]);
 
             $competition_id = $competition['id'];
             DB::insert("insert into evaluations values(:id,:name,:track,:type,:defaulttime,:public,:rank,:slug, :created_at,:updated_at)", $competition);

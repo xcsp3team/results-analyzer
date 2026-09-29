@@ -46,7 +46,6 @@ class ProcessBenchmarksImport implements ShouldQueue
                     'info_domains' => ['required', 'string'],
                     'info_constraints' => ['required', 'string'],
                     'useless_vars' => ['required', 'integer'],
-                    'type' => ['start_with: min,max']
                 ]);
                 if ($validator->fails()) {
                     $errors = true;

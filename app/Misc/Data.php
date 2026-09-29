@@ -10,13 +10,15 @@ class Data implements Wireable
     public $class;
     public $attributes;
     public $value_sort;
+    public $type;
 
-    public function __construct($v = 0, $c = "", $a = "", $vs = null)
+    public function __construct($v = 0, $c = "", $a = "", $vs = null, $t = "integer")
     {
         $this->value = $v;
         $this->class = $c;
         $this->attributes = $a;
         $this->value_sort = $vs;
+        $this->type = $t;
     }
 
     public function toLivewire()
@@ -26,12 +28,13 @@ class Data implements Wireable
             'class' => $this->class,
             'attributes' => $this->attributes,
             'value_sort' => $this->value_sort,
+            'type' => $this->type
         ];
     }
 
     public static function fromLivewire($value)
     {
-        return new static($value['value'], $value['class'], $value['attributes'], $value['value_sort']);
+        return new static($value['value'], $value['class'], $value['attributes'], $value['value_sort'], $value['type']);
     }
 }
 

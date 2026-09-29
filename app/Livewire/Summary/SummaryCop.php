@@ -22,11 +22,11 @@ class SummaryCop extends AbstractSummary
         $this->header_summary = [
             new DataHeader("Solver", "left"),
             new DataHeader("Score"),
-            new DataHeader("#Opt"),
-            new DataHeader("#BB1"),
-            new DataHeader("#BB2"),
-            new DataHeader("#UNSAT"),
-            new DataHeader("#Unsupported"),
+            new DataHeader("OPT"),
+            new DataHeader("BB1"),
+            new DataHeader("BB2"),
+            new DataHeader("UNSAT"),
+            new DataHeader("Unsupported"),
         ];
     }
 
@@ -42,12 +42,15 @@ class SummaryCop extends AbstractSummary
 
         }
         $vbs[self::NAME]->value = "Virtual Best Solver";
+        $vbs[self::NAME]->type = "string";
         foreach ($this->selected_solvers as $id) {
             $selectedSolver = $this->solvers[$id];
             $tmp = [];
             for ($i = 0; $i <= 6; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
+            $tmp[self::SCORE]->type = "float";
+            $tmp[self::NAME]->type = "string";
             $this->summary[] = $tmp;
         }
 

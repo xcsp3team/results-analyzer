@@ -1,20 +1,27 @@
-#  come with json file provided by Chris,
-# see mail 5/2/23
+# Import XCSP competition using json file provided in the archive.
 
 import json
-with open('features2024/minicop24.json', 'r') as f:
+import sys
+
+if len(sys.argv) != 3:
+    print("Usage: python3 import-xcsp-evaluation.py jsonfile [0/1]")
+    print("  jsonfile: the file with all information (see archive from XCSP competitions)")
+    print("  0: CSP evaluation or 1: COP evaluation")
+    exit(1)
+
+with open(sys.argv[1], encoding="utf-8") as f:
     data = json.load(f)
 
-isCOP = True
-c_id = 4 # create the competition before...
-#/home/cril/audemard/benchs/
+isCOP = sys.argv[2] == "1"
+
+benchmarks = []
 
 for instance in data:
     fullname = instance['instance']
     name = fullname.split('/')[-1].split(".")[0]
     family = name.split('-')[0]
-    nbvar = instance['n']
-    nbc = instance['e']
+    nb_variables = instance['n']
+    nb_constraints = instance['e']
     domains = instance['domainSizes']
     nDomainTypes = len(domains)
     degrees = instance['variableDegrees']
@@ -22,6 +29,8 @@ for instance in data:
     globals = instance['globalConstraints']
     if isCOP:
         type = instance['objectiveType']
+    else:
+        type = null
 
     nValues = 0
     d1 = 0
@@ -55,14 +64,19 @@ for instance in data:
 
 
     if isCOP:
-# Normal
-        #print(f"INSERT INTO benchmarks_cop VALUES(NULL, '{name}', '{fullname}', '{family}', '{c_id}', '{nbvar}', '{nbc}',NULL, 0, '{d}', '{constraints}','{useless}', '{type}',  NULL, NULL );")
-# My backend
-        print(f"INSERT INTO benchmarks_cop VALUES(NULL, '{name}', '{fullname}', '{family}', '{c_id}', '{nbvar}', '{nbc}',NULL, 0,  '{d}', '{constraints}', '{useless}', '{type}'  ,NULL, NULL );")
-    else:
-        print(f"INSERT INTO benchmarks VALUES(NULL, '{name}', '{fullname}', '{family}',  '{c_id}', 'UNKNOWN', '{nbvar}', '{nbc}', '{d}', '{constraints}', '{useless}', NULL, NULL);")
-
-
+        benchmarks.append({
+            "name": name,
+        	"fullname": fullname,
+        	"family": family,
+        	"nb_variables": nb_variables,
+        	"nb_constraints": nb_constraints,
+        	"info_domains": d,
+        	"type": type,
+        	"info_constraints": constraints,
+        	"useless_vars": useless
+        })
+results = {"benchmarks" :   benchmarks}
+print(json.dumps(results))
 
 
 

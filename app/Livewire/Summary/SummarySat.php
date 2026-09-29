@@ -8,7 +8,8 @@ use App\Misc\DataHeader;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-class SummarySat extends AbstractSummary {
+class SummarySat extends AbstractSummary
+{
 
 
     const int NAME = 0;
@@ -26,13 +27,13 @@ class SummarySat extends AbstractSummary {
         parent::mount($filters, $evaluation, $selected_solvers);
         $this->header_summary = [
             new DataHeader("Solver", "left"),
-            new DataHeader("#Solved"),
-            new DataHeader("#SAT"),
-            new DataHeader("#UNSAT"),
-            new DataHeader("#Exclusive"),
-            new DataHeader("#Fastest"),
-            new DataHeader("#Unsupported"),
-            new DataHeader("#PAR2")
+            new DataHeader("Solved"),
+            new DataHeader("SAT"),
+            new DataHeader("UNSAT"),
+            new DataHeader("Exclusive"),
+            new DataHeader("Fastest"),
+            new DataHeader("Unsupported"),
+            new DataHeader("PAR2")
         ];
     }
 
@@ -51,6 +52,7 @@ class SummarySat extends AbstractSummary {
             for ($i = 0; $i <= 7; $i++)
                 $tmp[] = new Data();
             $tmp[self::NAME]->value = $selectedSolver->name . " " . $selectedSolver->version;
+            $tmp[self::NAME]->type = "string";
             foreach ($this->evaluation->benchmarks as $benchmark) {
                 if ($this->filters->is_filtered($benchmark))
                     continue;
@@ -95,6 +97,7 @@ class SummarySat extends AbstractSummary {
             $vbs[] = new Data(0, "bg-green-300");
         $vbs[self::NAME]->value = "Virtual Best Solver";
         $vbs[self::NAME]->class = "bg-green-300 italic";
+        $vbs[self::NAME]->type = "string";
 
         foreach ($this->evaluation->benchmarks as $benchmark) {
             if ($this->filters->is_filtered($benchmark))

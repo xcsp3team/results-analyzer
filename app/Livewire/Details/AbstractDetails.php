@@ -48,6 +48,11 @@ abstract class AbstractDetails extends Component
 
     public abstract function create_detailed_results();
 
+    public function updatedInstanceName(): void
+    {
+        $this->page = 1;
+    }
+
 
     public function sort($field)
     {
@@ -82,8 +87,9 @@ abstract class AbstractDetails extends Component
         Cookie::queue('perPage', $this->perPage, 60 * 24 * 365);;
     }
 
-    function extractType( $string) {
-        if($string == null)
+    function extractType($string)
+    {
+        if ($string == null)
             return null;
         if (preg_match('/^(min|max)/i', $string)) {
             $words = preg_split('/\s+|&nbsp;?/i', trim($string));

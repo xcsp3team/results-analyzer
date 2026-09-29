@@ -38,10 +38,10 @@ class DetailsCop extends AbstractDetails
             $info = "#vars: $benchmark->nb_variables #ctrs: $benchmark->nb_constraints<br />";
             $info .= "domains &#8594; $benchmark->info_domains<br />";
             $info .= "constraints &#8594; $benchmark->info_constraints<br />";
-            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"')];
+            $tmp = [new Data($benchmark->name, "cursor-pointer", '@click="open=true;x=$event.clientX;y=$event.clientY;content={title:\'' . $name . '\',details:\'' . $info . '\'}"', null, "string")];
             $tmp[] = new Data($benchmark->nb_variables);
             $tmp[] = new Data($benchmark->nb_constraints);
-            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center cursor-pointer", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})');
+            $tmp[] = new Data($benchmark->type . "&nbsp;&nbsp;$icon", "flex items-center cursor-pointer", 'wire:click=$dispatch(\'openModal\',{component:\'evolution\',arguments:{selected_solvers:[' . $selected_solvers_string . '],benchmark_id:' . $benchmark->id . ',time_limit:' . $this->filters->time_limit . '}})', null, "string");
 
             if ($benchmark->status == "UNSAT")
                 $tmp[] = new Data("UNSAT", "text-green-500");
@@ -55,19 +55,19 @@ class DetailsCop extends AbstractDetails
                 $selectedSolver = $this->solvers[$id];
                 $data = $all_results[$selectedSolver->id][$benchmark->id];
                 if ($data->unsupported) {
-                    $tmp[] = new Data("U", "", "", 0);
+                    $tmp[] = new Data("U", "", "", 0, "string");
                     continue;
                 }
 
                 // UNSAT CASE
                 if ($data->status == "UNSAT" && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data("UNSAT (1) " . $data->time . "s", "text-green-500", 1);
+                    $tmp[] = new Data("UNSAT (1) " . $data->time . "s", "text-green-500", 1, null, "string");
                     continue;
                 }
 
                 // No bound found
                 if ($data->bound === null) {
-                    $tmp[] = new Data("(0)", "dark:opacity-60 opacity-30", "", 0.);
+                    $tmp[] = new Data("(0)", "dark:opacity-60 opacity-30", "", 0., "string");
                     continue;
                 }
 
@@ -78,17 +78,17 @@ class DetailsCop extends AbstractDetails
                 else $time = $data->bound_time . "s";
                 $cell = $data->bound . " ($nb) " . $time;
                 if ($data->bug) {
-                    $tmp[] = new Data($cell, "bg-red-700 opacity-40", "", 0);
+                    $tmp[] = new Data($cell, "bg-red-700 opacity-40", "", 0, "string");
                     continue;
                 }
                 if ($data->time != -1 && $data->time <= $this->filters->time_limit) {
-                    $tmp[] = new Data($cell, "text-green-500", "", 2);
+                    $tmp[] = new Data($cell, "text-green-500", "", 2, "string");
                     continue;
                 }
                 if ($data->bound == $best_bound->bound)
-                    $tmp[] = new Data($cell, "", "", $nb);
+                    $tmp[] = new Data($cell, "", "", $nb, "string");
                 else
-                    $tmp[] = new Data($cell, "dark:opacity-60 opacity-30", "", -1);
+                    $tmp[] = new Data($cell, "dark:opacity-60 opacity-30", "", -1, "string");
             }
             $this->detailed_results[] = $tmp;
         }

@@ -18,10 +18,10 @@
                 </label>
             </div>
 
-            <div class="flex flex-col flex-wrap max-h-64  gap-2 mb-4  content-start ml-12">
+            <div class="grid grid-cols-4 max-h-64  gap-2 my-4  content-start ml-12">
 
                 @foreach($all_constraints as $constraint)
-                    <div class="flex items-center m-4">
+                    <div class="flex items-center mx-4 my-1.5">
                         <input type="checkbox"
                                id="{{$constraint}}"
                                wire:model.live="selected_constraints"
