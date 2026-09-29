@@ -39,20 +39,21 @@ class ProcessResultsImport implements ShouldQueue
                 $validator = Validator::make((array)$entry, [
                     'time' => ['required', 'integer', 'min:-1'],
                     'status' => ['required', Rule::in(['SAT', 'UNSAT', 'UNKNOWN', 'OPTIMUM'])],
-                    'bug' => ["required", "boolean"],
                     'unsupported' => ["required", "boolean"],
-                    'bounds' => ['string',
-                        'regex:/^\[\s*(\{\s*\'bound\':\s*-?\d+(\.\d+)?,\s*\'time\':\s*-?\d+(\.\d+)?\s*\}\s*,?\s*)+\]$/']
-                ]);
+                    ]);
                 if ($validator->fails()) {
                     $errors = true;
-                    $str_error = $validator->errors()->all()[0];
+                    $str_error = "";
+                    foreach ($validator->errors()->all() as $error)
+                        $str_error .= $error . "\n";
+                    logger($str_error);
+                    logger(json_encode($entry));
                     break;
                 }
-                $b = Benchmark::where("fullname", $entry->fullname)->first();
+                $b = Benchmark::where("fullname", $entry->name)->first();
                 if ($b == null) {
                     $errors = true;
-                    $str_error = "Benchmark not found : $entry->fullname";
+                    $str_error = "Benchmark not found : $entry->name";
                     break;
                 }
                 if ($this->record->type != 'cop') {
@@ -61,7 +62,7 @@ class ProcessResultsImport implements ShouldQueue
                         'solver_id' => $this->solver_id,
                         'time' => $entry->time,
                         'status' => $entry->status,
-                        'bug' => $entry->bug,
+                        'bug' => $entry->bug ?? 0,
                         'unsupported' => $entry->unsupported,
                     ];
                 } else {
@@ -70,8 +71,8 @@ class ProcessResultsImport implements ShouldQueue
                         'solver_id' => $this->solver_id,
                         'time' => $entry->time,
                         'status' => $entry->status,
-                        'bounds' => $entry->bounds,
-                        'bug' => $entry->bug,
+                        'bounds' => json_encode($entry->bounds),
+                        'bug' => $entry->bug??0,
                         'unsupported' => $entry->unsupported,
                     ];
                 }
