@@ -20,7 +20,6 @@
             chart: { type: 'line', height: '400px', toolbar: { show: false }, zoom: { enabled: false, allowMouseWheelZoom: false } },
             stroke: { width: 1 },
             tooltip: { shared: true, intersect: false },
-            markers: { size: 2 },
             legend: { show: true, position: 'bottom' },
             series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series_optimum)),
             xaxis: { type: 'numeric', tickAmount: Math.ceil({{$maxX_optimum}} / 10) * 10 / 10, min:0, max: Math.ceil({{$maxX_optimum}} / 10) * 10 }
@@ -29,9 +28,10 @@
         this.chart.render();
 
         Livewire.on('cactus-opt-updated', (event) => {
+            const nb = event.maxX_search > 500 ? 50 : 10
             this.chart.updateOptions({
                 series: event.series_optimum,
-                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_optimum / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_optimum / 10) * 10 },
+                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_optimum / nb) * nb / nb, min:0, max: Math.ceil(event.maxX_optimum / nb) * nb },
                 ...this.themeOptions()
             });
         });
@@ -61,7 +61,6 @@
             chart: { type: 'line', height: '400px', toolbar: { show: false }, zoom: { enabled: false, allowMouseWheelZoom: false } },
             stroke: { width: 1 },
             tooltip: { shared: true, intersect: false },
-            markers: { size: 2 },
             legend: { show: true, position: 'bottom' },
             series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series_search)),
             xaxis: { type: 'numeric', tickAmount: Math.ceil({{$maxX_search}} / 10) * 10 / 10, min:0, max: Math.ceil({{$maxX_search}} / 10) * 10 }
@@ -70,9 +69,10 @@
         this.chart.render();
 
         Livewire.on('cactus-search-updated', (event) => {
+            const nb = event.maxX_search > 500 ? 50 : 10
             this.chart.updateOptions({
                 series: event.series_search,
-                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_search / 10) * 10 / 10, min:0, max: Math.ceil(event.maxX_search / 10) * 10 },
+                xaxis: { type: 'numeric', tickAmount: Math.ceil(event.maxX_search / nb) * nb / nb, min:0, max: Math.ceil(event.maxX_search / nb) * nb },
                  ...this.themeOptions()
             });
         });
