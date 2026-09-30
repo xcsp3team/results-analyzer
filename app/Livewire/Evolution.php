@@ -37,7 +37,7 @@ class Evolution extends ModalComponent
             $values = [];
             foreach ($bounds as $b)
                 if ($b->time <= $this->time_limit)
-                    $values[] = $b->bound;
+                    $values[] = [$b->time, $b->bound];
                 else break;
             $tmp->data = $values;
             $this->series[] = $tmp;

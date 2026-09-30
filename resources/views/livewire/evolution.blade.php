@@ -19,13 +19,18 @@
             chart: { type: 'line',toolbar: { show: false },  },
             tooltip: { shared: true, intersect: false },
             stroke: {
-    width: 1,
-    curve: 'smooth',
-  },
-            markers: { size: 2   },
+                width: 1,
+                curve: 'smooth',
+            },
             legend: { show: true, position: 'top' },
-            xaxis: {tickAmount: 5},
+            markers: {
+                size: 1,
+                strokeWidth: 0,   // supprime le contour qui épaissit visuellement le point
+                fillOpacity: 1
+            },
+            xaxis: {tickAmount: 5, min:0},
             series: @js(array_map(fn($s) => ['name' => $s->name, 'data' => $s->data], $series)),
+
         });
         this.chart.render();
 
