@@ -30,7 +30,7 @@ for instance in data:
     if isCOP:
         type = instance['objectiveType']
     else:
-        type = null
+        type = None
 
     nValues = 0
     d1 = 0
@@ -75,6 +75,18 @@ for instance in data:
         	"info_constraints": constraints,
         	"useless_vars": useless
         })
+    else:
+        benchmarks.append({
+            "name": name,
+        	"fullname": fullname,
+        	"family": family,
+        	"nb_variables": nb_variables,
+        	"nb_constraints": nb_constraints,
+        	"info_domains": d,
+        	"info_constraints": constraints,
+        	"useless_vars": useless
+        })
+
 results = {"benchmarks" :   benchmarks}
 print(json.dumps(results))
 

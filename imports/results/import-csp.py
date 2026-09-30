@@ -1,8 +1,8 @@
-# ./rec.sh | python import.py
 import sys
 import os
-# //{"results" : [{"name": "maincsp/AztecDiamond-025_c22", "status": "sat", "time": 3}, {"name":"maincsp/AztecDiamond-030_c22", "status": "unknown"}]
-time = 10000
+import json
+# add timestamps to all lines
+
 
 def get_time(timestamp, tt):
 # tt="wc" or ttt="cpu"
@@ -23,7 +23,8 @@ dirlist = os.listdir(path)
 for p in dirlist:
     f = open(path+"/"+p+"/execution.out")
     time = 10000
-    sat="UNKNOWN"
+    sat = None
+    status = "UNKNOWN"
     bounds = []
     unsupported = 0
     bug = 0
@@ -34,12 +35,14 @@ for p in dirlist:
         if line.startswith("Bench"):
             bench = line[6:]
         if line.startswith("s SAT") or line.startswith('\033[92ms SAT'):
-            sat = "SATISFIABLE"
+            status = "SAT"
             time = get_time(timestamp, _time)
         if line.startswith("s UNSUP") or line.startswith('\033[92ms UNSUP'):
             unsupported = 1
         if line.startswith("s UNSAT") or line.startswith('\033[92ms UNSAT'):
-	        sat = "UNSATISFIABLE"
+	        status = "UNSAT"
 	        time = get_time(timestamp, _time)
-    results['results'].extend([{'name': bench, "status": sat, "time": time, 'unsupported': unsupported, 'bug': 0}])
-print(results)
+    results['results'].extend([{'name': bench, "time": time, 'status': status, 'unsupported': unsupported}])
+print(json.dumps(results))
+
+
