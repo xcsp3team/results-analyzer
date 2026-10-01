@@ -15,9 +15,9 @@ class Filters implements Wireable
     public $expression;
     public $category;
     public $enabled;
+    public $name = "Airc";
 
-
-    public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL", $enabled = false)
+    public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL", $enabled = false, $name = "")
     {
         $this->time_limit = $time_limit;
         $this->status = $status;
@@ -28,6 +28,7 @@ class Filters implements Wireable
         $this->type = $type;
         $this->category = $category;
         $this->enabled = $enabled;
+        $this->name = $name;
     }
 
     public function toLivewire()
@@ -42,17 +43,21 @@ class Filters implements Wireable
             'expression' => $this->expression,
             'type' => $this->type,
             'enabled' => $this->enabled,
+            'name' => $this->name,
         ];
     }
 
     public static function fromLivewire($value)
     {
-        return new static($value['category'], $value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression'], $value['type'], $value['enabled']);
+        return new static($value['category'], $value['time_limit'], $value['status'], $value['families'], $value['constraints'], $value['are_forbidden'], $value['expression'], $value['type'], $value['enabled'], $value['name']);
     }
 
     public function is_filtered($benchmark)
     {
         if (in_array($benchmark->family, $this->families) == false)
+            return true;
+
+        if ($this->name != "" && str_contains($benchmark->name, $this->name) == false)
             return true;
 
         if ($this->are_forbidden) {
@@ -73,7 +78,7 @@ class Filters implements Wireable
                 if ($eval->evaluate($this->expression) == false)
                     return true;
             } catch (ExprEvaluatorException $e) {
-                
+
             }
         }
 

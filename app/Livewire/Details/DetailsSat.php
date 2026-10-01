@@ -25,7 +25,7 @@ class DetailsSat extends AbstractDetails
         }
 
         foreach ($this->evaluation->benchmarks as $benchmark) {
-            if ($this->filters->is_filtered($benchmark) || ($this->instance_name != null) && str_contains($benchmark->name, $this->instance_name) == false)
+            if ($this->filters->is_filtered($benchmark))
                 continue;
             $name = $benchmark->name;
             $info = "#vars: $benchmark->nb_variables #ctrs: $benchmark->nb_constraints<br />";

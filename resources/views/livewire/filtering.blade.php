@@ -86,6 +86,16 @@
                    w-full px-3 py-2"
                    placeholder="Expression" required/>
         </div>
+        <label for="input-group-1" class="sr-only">Search</label>
+        <div class="relative mt-3">
+            <input type="text"
+                   value="{{$filters->name}}"
+                   wire:change="$dispatch('filters_change', { field: 'name', value: $event.target.value })"
+
+                   class=" dark:border-gray-400 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-sm block
+                   w-full px-3 py-2"
+                   placeholder="Name">
+        </div>
 
 
         <button

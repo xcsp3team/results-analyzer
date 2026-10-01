@@ -49,6 +49,7 @@ class Evaluation extends Component
         $this->filters->status = "ALL";
         $this->filters->type = "ALL";
         $this->filters->enabled = false;
+        $this->filters->name = "";
         if ($this->first == false)
             Toaster::success('Filters initialized.');
         $this->first = false;
