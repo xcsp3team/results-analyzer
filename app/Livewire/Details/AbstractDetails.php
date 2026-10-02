@@ -3,6 +3,7 @@
 namespace App\Livewire\Details;
 
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
@@ -31,6 +32,31 @@ abstract class AbstractDetails extends Component
     public $sort_field = 0;
     public $sort_direction = 'asc';
     public $page = 1;
+
+    protected function cache_key(): string
+    {
+        return implode(':', [
+            'details',
+            static::class,
+            $this->evaluation->id,
+            $this->evaluation->updated_at?->timestamp,   // ou un numéro de version
+            md5(serialize($this->filters)),              // ou une méthode cache_key() sur vos filtres
+            implode(',', collect($this->selected_solvers)->sort()->all()),
+        ]);
+    }
+
+    protected function load_results(): void
+    {
+        [$this->header_results, $this->detailed_results] = Cache::remember(
+            $this->cache_key(),
+            now()->addHours(6),
+            function () {
+                $this->create_detailed_results();
+                return [$this->header_results, $this->detailed_results];
+            }
+        );
+    }
+
 
     public function mount($filters, $evaluation, $selected_solvers)
     {
@@ -116,7 +142,7 @@ abstract class AbstractDetails extends Component
     public function render()
     {
 
-        $this->create_detailed_results();
+        $this->load_results();
         usort($this->detailed_results, function ($row1, $row2) {
             if ($row1[$this->sort_field]->value_sort == null)
                 $row1[$this->sort_field]->value_sort = $row1[$this->sort_field]->value;
