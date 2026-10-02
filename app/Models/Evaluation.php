@@ -101,15 +101,20 @@ class Evaluation extends Model
 
     public function all_results()
     {
-        if ($this->_all_results != null)
-            return $this->_all_results;
         $this->_all_results = [];
-        foreach ($this->solvers as $solver) {
-            $tmp = $solver->results($this);
-            foreach ($tmp as $data) {
-                $data->time = round($data->time);
-                $this->_all_results[$data->solver_id][$data->benchmark_id] = $data;
-            }
+        $rows = DB::table('results')
+            ->join('benchmarks', 'benchmarks.id', '=', 'results.benchmark_id')
+            ->where('benchmarks.evaluation_id', $this->id)
+            ->whereIn('results.solver_id', $this->solvers->pluck('id'))
+            ->select([
+                'results.solver_id', 'results.benchmark_id', 'results.time',
+                'results.status', 'results.bug', 'results.unsupported', 'results.bounds',
+            ])
+            ->get();
+
+        foreach ($rows as $data) {
+            $data->time = round($data->time);
+            $this->_all_results[$data->solver_id][$data->benchmark_id] = $data;
         }
         return $this->_all_results;
     }
