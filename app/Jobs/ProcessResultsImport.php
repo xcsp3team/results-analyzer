@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Benchmark;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,10 +16,6 @@ class ProcessResultsImport implements ShouldQueue
 {
     use Queueable;
 
-
-    /**
-     * Create a new job instance.
-     */
     public function __construct(private $path, private $solver_id, private $record, private $user_id)
     {
     }
@@ -28,60 +23,65 @@ class ProcessResultsImport implements ShouldQueue
     public function handle(): void
     {
         $fullPath = Storage::disk('local')->path($this->path);
+        $is_cop = $this->record->type == 'cop';
+
+        // Un seul chargement au lieu d'une requête par entrée : fullname => id
+        $benchmarks = $this->record->benchmarks()->pluck('id', 'fullname');
+
+        $errors = false;
+        $str_error = '';
+        $nb = 0;
+        $rows = [];
+        $bounds = [];   // benchmark_id => [time => bound]
+
         DB::beginTransaction();
-        $buffer = [];
         try {
             $items = Items::fromFile($fullPath, ['pointer' => '/results']);
-            $nb = 0;
-            $errors = false;
             foreach ($items as $entry) {
                 $nb++;
                 $validator = Validator::make((array)$entry, [
                     'time' => ['required', 'integer', 'min:-1'],
                     'status' => ['required', Rule::in(['SAT', 'UNSAT', 'UNKNOWN', 'OPTIMUM'])],
-                    'unsupported' => ["required", "boolean"],
-                    ]);
+                    'unsupported' => ['required', 'boolean'],
+                ]);
                 if ($validator->fails()) {
                     $errors = true;
-                    $str_error = "";
-                    foreach ($validator->errors()->all() as $error)
-                        $str_error .= $error . "\n";
-                    logger($str_error);
-                    logger(json_encode($entry));
+                    $str_error = implode("\n", $validator->errors()->all());
                     break;
                 }
-                $b = Benchmark::where("fullname", $entry->name)->first();
-                if ($b == null) {
+
+                $benchmark_id = $benchmarks[$entry->name] ?? null;
+                if ($benchmark_id === null) {
                     $errors = true;
                     $str_error = "Benchmark not found : $entry->name";
                     break;
                 }
-                if ($this->record->type != 'cop') {
-                    $buffer[] = [
-                        'benchmark_id' => $b->id,
-                        'solver_id' => $this->solver_id,
-                        'time' => $entry->time,
-                        'status' => $entry->status,
-                        'bug' => $entry->bug ?? 0,
-                        'unsupported' => $entry->unsupported,
-                    ];
-                } else {
-                    $buffer[] = [
-                        'benchmark_id' => $b->id,
-                        'solver_id' => $this->solver_id,
-                        'time' => $entry->time,
-                        'status' => $entry->status,
-                        'bounds' => json_encode($entry->bounds),
-                        'bug' => $entry->bug??0,
-                        'unsupported' => $entry->unsupported,
-                    ];
+
+                $rows[] = [
+                    'benchmark_id' => $benchmark_id,
+                    'solver_id' => $this->solver_id,
+                    'time' => $entry->time,
+                    'status' => $entry->status,
+                    'bug' => $entry->bug ?? 0,
+                    'unsupported' => $entry->unsupported,
+                ];
+
+                if ($is_cop) {
+                    $dedup = [];
+                    foreach ($entry->bounds ?? [] as $b) {
+                        if (isset($b->time, $b->bound))
+                            $dedup[(string)$b->time] = $b->bound;   // même time : on garde la dernière
+                    }
+                    $bounds[$benchmark_id] = $dedup;
                 }
 
-                if (count($buffer) >= 100) {
-                    DB::table('results')->insert($buffer);
-                    $buffer = [];
+                if (count($rows) >= 100) {
+                    $this->flush($rows, $bounds);
+                    $rows = [];
+                    $bounds = [];
                 }
             }
+
             if ($errors) {
                 DB::rollBack();
                 Notification::make()
@@ -91,21 +91,49 @@ class ProcessResultsImport implements ShouldQueue
                     ->sendToDatabase(User::find($this->user_id));
                 return;
             }
-            if ($buffer !== []) {
-                DB::table('results')->insert($buffer);
-            }
 
-        } finally {
+            $this->flush($rows, $bounds);
             DB::commit();
-            if ($errors == false) {
-                Notification::make()
-                    ->title('Import done')
-                    ->success()
-                    ->sendToDatabase(User::find($this->user_id))
-                    ->send();
-            }
-            Storage::disk('local')->delete($this->path); // toujours nettoyé, même en cas d'échec
+
+            Notification::make()
+                ->title('Import done')
+                ->success()
+                ->sendToDatabase(User::find($this->user_id))
+                ->send();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;   // déclenche failed()
+        } finally {
+            Storage::disk('local')->delete($this->path);
         }
+    }
+
+    private function flush(array $rows, array $bounds): void
+    {
+        if ($rows === [])
+            return;
+
+        DB::table('results')->insert($rows);
+
+        if ($bounds === [])
+            return;
+
+        $ids = DB::table('results')
+            ->where('solver_id', $this->solver_id)
+            ->whereIn('benchmark_id', array_keys($bounds))
+            ->pluck('id', 'benchmark_id');
+
+        $insert = [];
+        foreach ($bounds as $benchmark_id => $list)
+            foreach ($list as $time => $bound)
+                $insert[] = [
+                    'result_id' => $ids[$benchmark_id],
+                    'time' => $time,
+                    'bound' => $bound,
+                ];
+
+        foreach (array_chunk($insert, 1000) as $part)
+            DB::table('result_bounds')->upsert($part, ['result_id', 'time'], ['bound']);
     }
 
     public function failed(\Throwable $exception): void
@@ -118,5 +146,4 @@ class ProcessResultsImport implements ShouldQueue
 
         Storage::disk('local')->delete($this->path);
     }
-
 }
