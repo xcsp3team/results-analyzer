@@ -29,17 +29,23 @@ class Evolution extends ModalComponent
     public function create_data()
     {
         $this->series = [];
+        $solvers = Solver::whereIn('id', $this->selected_solvers)->get()->keyBy('id');
+
+        $bounds = DB::table('result_bounds as rb')
+            ->join('results as r', 'r.id', '=', 'rb.result_id')
+            ->where('r.benchmark_id', $this->benchmark_id)
+            ->whereIn('r.solver_id', $this->selected_solvers)
+            ->where('rb.time', '<=', $this->time_limit)
+            ->orderBy('rb.time')
+            ->get(['r.solver_id', 'rb.time', 'rb.bound'])
+            ->groupBy('solver_id');
+
         foreach ($this->selected_solvers as $id) {
-            $solver = Solver::find($id);
+            $solver = $solvers[$id];
             $tmp = new DataPlot($solver->name . " " . $solver->version);
-            $results = DB::select("SELECT * FROM results where benchmark_id=? and solver_id=?", [$this->benchmark_id, $id])[0];
-            $bounds = json_decode(str_replace("'", '"', $results->bounds));
-            $values = [];
-            foreach ($bounds as $b)
-                if ($b->time <= $this->time_limit)
-                    $values[] = [$b->time, $b->bound];
-                else break;
-            $tmp->data = $values;
+            $tmp->data = ($bounds[$id] ?? collect())
+                ->map(fn($b) => [$b->time, $b->bound])
+                ->all();
             $this->series[] = $tmp;
         }
     }

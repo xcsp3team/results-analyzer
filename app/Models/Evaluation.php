@@ -108,7 +108,7 @@ class Evaluation extends Model
             ->whereIn('results.solver_id', $this->solvers->pluck('id'))
             ->select([
                 'results.solver_id', 'results.benchmark_id', 'results.time',
-                'results.status', 'results.bug', 'results.unsupported', 'results.bounds',
+                'results.status', 'results.bug', 'results.unsupported'
             ])
             ->get();
 
@@ -123,24 +123,33 @@ class Evaluation extends Model
     {
         if ($this->_all_results != null)
             return $this->_all_results;
-        $this->all_results();
-        foreach ($this->_all_results as $data_solver) {
-            foreach ($data_solver as $data) {
 
-                $json = str_replace("'", '"', $data->bounds);
-                $bounds = json_decode($json);
-                $data->bound = null;
-                foreach ($bounds as $b)
-                    if ($b->time <= $time_limit) {
-                        $data->bound = $b->bound;
-                        $data->bound_time = $b->time;
-                    }
-                unset($data->bounds);
-                //if ($data->benchmark_id == 701)
-                //    dd($data);
-            }
+        $last = DB::table('result_bounds')
+            ->where('time', '<=', $time_limit)
+            ->select('result_id', DB::raw('MAX(time) AS max_time'))
+            ->groupBy('result_id');
+
+        $rows = DB::table('results')
+            ->join('benchmarks', 'benchmarks.id', '=', 'results.benchmark_id')
+            ->leftJoinSub($last, 'lb', 'lb.result_id', '=', 'results.id')
+            ->leftJoin('result_bounds as rb', function ($j) {
+                $j->on('rb.result_id', '=', 'lb.result_id')->on('rb.time', '=', 'lb.max_time');
+            })
+            ->where('benchmarks.evaluation_id', $this->id)
+            ->whereIn('results.solver_id', $this->solvers->pluck('id'))
+            ->select([
+                'results.solver_id', 'results.benchmark_id', 'results.time',
+                'results.status', 'results.bug', 'results.unsupported',
+                'rb.bound', 'rb.time as bound_time',
+            ])
+            ->get();
+
+        $res = [];
+        foreach ($rows as $data) {
+            $data->time = round($data->time);
+            $res[$data->solver_id][$data->benchmark_id] = $data;
         }
-        return $this->_all_results;
+        return $this->_all_results = $res;
     }
 
 
