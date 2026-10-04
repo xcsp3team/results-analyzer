@@ -7,6 +7,7 @@ use App\Filament\Pages\MissingResults;
 use App\Models\Evaluation;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
@@ -33,8 +34,8 @@ class EvaluationsTable
                 TextColumn::make("benchmarks_count")
                     ->label("Nb benchs")
                     ->state(fn($record) => $record->benchmarks()->count())
-                    ->numeric()
-                //TextColumn::make("solvers")->state(fn(Evaluation $record) => count($record->solvers()))->numeric(),
+                    ->numeric(),
+                TextColumn::make("solvers")->state(fn(Evaluation $record) => $record->solvers()->count())->numeric(),
                 //IconColumn::make('public')
                 //    ->boolean(),
                 //TextColumn::make('slug')
@@ -67,6 +68,7 @@ class EvaluationsTable
                 Action::make('Missing')
                     ->url(fn(Evaluation $record) => MissingResults::getUrl(['evaluation' => $record->id])),
                 EditAction::make(),
+                DeleteAction::make()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -51,16 +51,14 @@ class EditEvaluation extends EditRecord
 		"status": "OPTIUMUM",
 		"time": 10,
 		"bounds": [{\'bound\': 199, \'time\': 12}, {\'bound\': 190, \'time\': 15}, {\'bound\': 100, \'time\': 42}]
-		"unsupported": 0,
-		"bug": 0
+		"unsupported": 0
 	},
 	{
 		"fullname": "/data/test2.xml",
 		"status": "SAT",
 		"time": -1,
-		"bounds": [{\'bound\': 199, \'time\': 12},  {\'bound\': 100, \'time\': 42}]
-		"unsupported": 0,
-		"bug": 0
+		"bounds": [{"bound": 199, "time": 12},  {"bound": 100, "time": 42}]
+		"unsupported": 0
 	}...
 	]
 }';
@@ -71,15 +69,13 @@ class EditEvaluation extends EditRecord
 		"fullname": "/data/test1.xml",
 		"status": "SAT",
 		"time": 10,
-		"unsupported": 0,
-		"bug": 0
+		"unsupported": 0
 	},
 	{
 		"fullname": "/data/test2.xml",
 		"status": "UNSAT",
 		"time": 100,
-		"unsupported": 0,
-		"bug": 0
+		"unsupported": 0
 	}
 	]
 }';

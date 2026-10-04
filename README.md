@@ -23,9 +23,10 @@ a set of benchmarks. An evaluation can be based on SAT, CSP or COP problems. The
 6. Modify the .env file (database, cache, session).
 7. Migrate the database `php artisan migrate`
 8. Create an admin user `php artisan make:filament-user`
-9. Optionally: create an XCSP evaluation example (XCSP 2026 competition) `php artisan app:import-xcsp26`
-10. Optionally: create a SAT evaluation example (SAT 2006 competition) (forthcoming)
-11. Serve the application `composer run dev`
+9. Optionally: create an XCSP evaluation example (XCSP 2026 competition). Download
+   this [file](https://github.com/xcsp3team/results-analyzer/releases/download/seed-data-xcsp26/xcsp26.sql.gz) and
+   import it inside you database.
+10. Serve the application `composer run dev`
 
 For a production deployment, please see [the documentation](https://laravel.com/docs/13.x/deployment).
 
@@ -101,14 +102,12 @@ solver. For SAT/CSP problems, the file must have this format:
 		"status": "SAT",
 		"time": 10,
 		"unsupported": 0,
-		"bug": 0
 	},
 	{
 		"fullname": "/data/test2.xml", 
 		"status": "UNSAT",
 		"time": 100,
 		"unsupported": 0,
-		"bug": 0
 	} 
 	]
 }
@@ -125,7 +124,7 @@ The fields are:
 For COP problems, the status can also be OPTIMUM. The time is -1 if the solver is not able to find the optimum or is the
 time required to prove the optimality. You also must save the bounds evolution using an additional field:
 
-`"bounds": [{'bound': 199, 'time': 12}, {'bound': 190, 'time': 15}, {'bound': 100, 'time': 42}]`
+`"bounds": [{"bound": 199, "time": 12}, {"bound": 190, "time": 15}, {"bound": 100, "time": 42}]`
 
 ## Frontend part
 
@@ -133,6 +132,15 @@ It is quite intuitive. Once the evaluation selected, you can see the results usi
 comparison). You can select/deslected some solvers. You can also filter benchmarks using different kinds of filtering.
 
 An helping page can give you additional information.
+
+## TODO
+
+It also misses some functionnalities:
+
+- Add different evaluations (SAT, MAXSAT...)
+- Check import data in a better way (bounds...)
+- Change admin bug page (SAT/OPT...)
+- ...
 
 ## Authors
 
