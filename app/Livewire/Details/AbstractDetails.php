@@ -39,8 +39,8 @@ abstract class AbstractDetails extends Component
             'details',
             static::class,
             $this->evaluation->id,
-            $this->evaluation->updated_at?->timestamp,   // ou un numéro de version
-            md5(serialize($this->filters)),              // ou une méthode cache_key() sur vos filtres
+            $this->evaluation->updated_at?->timestamp,
+            md5(serialize($this->filters)),
             implode(',', collect($this->selected_solvers)->sort()->all()),
         ]);
     }
