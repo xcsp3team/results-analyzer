@@ -5,6 +5,7 @@ namespace App\Livewire\Details;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -126,6 +127,12 @@ abstract class AbstractDetails extends Component
         return $string; // ne commence ni par "min" ni par "max"
     }
 
+    #[On('filters_change')]
+    #[On('initialize_filters')]
+    public function resetPages(): void
+    {
+        $this->page = 1;
+    }
     public function export()
     {
         $this->create_detailed_results();

@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
 class EditEvaluation extends EditRecord
@@ -122,6 +123,7 @@ class EditEvaluation extends EditRecord
                         ->required(),
                 ])->action(function ($record, $data) {
                     ProcessResultsImport::dispatch($data['json_file'], $data['solver_id'], $record, auth()->id());
+                    Cache::flush();
 
                     Notification::make()
                         ->title('Import in progress')
