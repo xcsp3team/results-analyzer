@@ -17,6 +17,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Solvers2RelationManager extends RelationManager
@@ -55,7 +56,7 @@ class Solvers2RelationManager extends RelationManager
             ->recordActions([
                 Action::make("remove")->action(function ($record) {
                     DB::delete("DELETE FROM results WHERE solver_id = ? and benchmark_id in (SELECT id from benchmarks where evaluation_id=?)", [$record->solver_id, $record->evaluation_id]);
-                })
+                })->color('danger')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
