@@ -53,6 +53,10 @@
                             />
                             @break
                         @case(4)
+                            <livewire:information :evaluation="$evaluation"
+                            />
+                            @break
+                        @case(5)
                             <livewire:help :type="$evaluation->type"
                             />
                             @break

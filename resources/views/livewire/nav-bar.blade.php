@@ -15,7 +15,11 @@
                 <li title="Families radar view" class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 2})">
                     @svg('hugeicons-chart-radar')
                 </li>
-                <li title="Help me!" class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 4})">
+
+                <li title="Informations" class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 4})">
+                    @svg('hugeicons-database')
+                </li>
+                <li title="Help me!" class="hover:text-gray-500" x-on:click="$dispatch('view', {view: 5})">
                     @svg('hugeicons-help-circle')
                 </li>
                 <button type="button" x-data="{ theme: Theme.get() }"
