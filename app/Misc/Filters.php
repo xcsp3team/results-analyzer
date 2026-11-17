@@ -15,7 +15,7 @@ class Filters implements Wireable
     public $expression;
     public $category;
     public $enabled;
-    public $name = "Airc";
+    public $name = "";
 
     public function __construct($category, $time_limit = 0, $status = "ALL", $families = [], $constraints = [], $are_forbidden = false, $expression = null, $type = "ALL", $enabled = false, $name = "")
     {

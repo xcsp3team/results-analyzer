@@ -25,7 +25,7 @@ class Benchmark extends Model
 
     public function get_type()
     {
-        if (str_contains(strtoupper($this->type), "MAX"))
+        if (str_contains(strtoupper(substr($this->type, 0, 3)), "MAX"))
             return "MAXIMIZE";
         return "MINIMIZE";
     }
